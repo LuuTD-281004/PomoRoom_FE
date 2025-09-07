@@ -4,11 +4,9 @@ function App() {
 
   return (
     <>
-      <h1>Test Components</h1>
-      <div className="card">
-        
-      </div>
-      
+   <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
     </>
   )
 }
