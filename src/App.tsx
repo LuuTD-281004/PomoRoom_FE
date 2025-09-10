@@ -1,16 +1,13 @@
 import './App.css';
 import Header from '../partials/Header';
+import Footer from '../partials/Footer';
 function App() {
 
   return (
-    <><div>
+    <><><div>
       <Header />
-    </div><>
-        <h1 className="text-3xl font-bold ">
-          Test Component
-        </h1>
-
-      </></>
+    </div>
+    </><Footer /></>
   )
 }
 
