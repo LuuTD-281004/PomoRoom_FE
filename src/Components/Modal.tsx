@@ -21,7 +21,6 @@ const Modal: React.FC<ModalProps> = ({ title, children, onClose, isOpen }) => {
             className="rounded-2xl p-6 w-96 shadow-lg relative"
             style={{ backgroundColor: "#0C1A57" }}
           >
-            {/* Close Icon */}
             <span
               onClick={onClose}
               className="absolute top-3 right-4 text-white text-xl cursor-pointer hover:opacity-80"
@@ -29,12 +28,10 @@ const Modal: React.FC<ModalProps> = ({ title, children, onClose, isOpen }) => {
               ×
             </span>
 
-            {/* Title */}
             <h2 className="text-center text-white font-bold text-2xl mb-4">
               {title}
             </h2>
 
-            {/* Content */}
             <div className="text-white text-sm">{children}</div>
           </motion.div>
         </div>
