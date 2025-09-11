@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../partials/Header";
 import Footer from "../partials/Footer";
 import { Quote } from "lucide-react";
+import Button from "../Components/Button";
 
 const Homepage: React.FC = () => {
   return (
@@ -9,6 +10,21 @@ const Homepage: React.FC = () => {
       <Header/>
 
       <main className="flex-1 pt-20">
+        {/* Section 1 */}
+        <section className="w-full bg-[#E3EEFF] py-12 px-6">
+          <h1
+            style={{ fontFamily: "'Calistoga', cursive", fontSize: "4rem" }}
+            className="font-bold text-[#0C1A57] mt-3 justify-center text-center"
+          >
+            Chào mừng đến với PomoRoom
+          </h1>
+          <div className="flex justify-center mt-6">
+            <Button type="submit" size="wide">
+                THAM GIA PHÒNG
+            </Button>
+          </div>
+        </section>
+
         {/* Section 2 */}
         <section className="w-full bg-white py-16 px-6">
           <h2 className="text-3xl md:text-4xl font-extrabold text-center text-[#0B0D39] mb-8">
