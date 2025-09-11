@@ -1,13 +1,9 @@
 import './App.css';
-import Header from '../partials/Header';
-import Footer from '../partials/Footer';
+import RegisterPage from './Page/ResisterPage';
 function App() {
 
   return (
-    <><><div>
-      <Header />
-    </div>
-    </><Footer /></>
+      <RegisterPage />
   )
 }
 
