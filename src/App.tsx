@@ -1,9 +1,8 @@
 import './App.css';
-import RegisterPage from './Page/ResisterPage';
 function App() {
 
   return (
-      <RegisterPage />
+    <h1>Hello World</h1>
   )
 }
 
