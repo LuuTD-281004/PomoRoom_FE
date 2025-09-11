@@ -1,15 +1,13 @@
 import React from "react";
-import Header from "../partials/Header";
 import Footer from "../partials/Footer";
 import { Quote } from "lucide-react";
 import Button from "../Components/Button";
 
 const Homepage: React.FC = () => {
   return (
-    <div className="w-full min-h-screen flex flex-col bg-white">
-      <Header/>
-
-      <main className="flex-1 pt-20">
+    <div className="w-full min-h-screen flex flex-col bg-white mt-2">      
+      <main className="flex-1">
+        
         {/* Section 1 */}
         <section className="w-full bg-[#E3EEFF] py-12 px-6">
           <h1
