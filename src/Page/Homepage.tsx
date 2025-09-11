@@ -5,11 +5,11 @@ import Button from "../Components/Button";
 
 const Homepage: React.FC = () => {
   return (
-    <div className="w-full min-h-screen flex flex-col bg-white mt-2">      
-      <main className="flex-1">
-        
+    <div className="w-full flex flex-col bg-white ">      
+      <main>
+
         {/* Section 1 */}
-        <section className="w-full bg-[#E3EEFF] py-12 px-6">
+        <section className="w-full bg-white py-12 px-6">
           <h1
             style={{ fontFamily: "'Calistoga', cursive", fontSize: "4rem" }}
             className="font-bold text-[#0C1A57] mt-3 justify-center text-center"
@@ -24,14 +24,14 @@ const Homepage: React.FC = () => {
         </section>
 
         {/* Section 2 */}
-        <section className="w-full bg-white py-16 px-6">
+        <section className="w-full bg-[#E3EEFF] py-16 px-6">
           <h2 className="text-3xl md:text-4xl font-extrabold text-center text-[#0B0D39] mb-8">
             HỌC THEO PHƯƠNG PHÁP <br /> POMODORO LÀ GÌ?
           </h2>
-          <div className="relative w-full bg-[#19C3DC] text-white rounded-2xl p-6 md:p-8 leading-relaxed">
+          <div className="relative w-full bg-white text-[#19C3DC] rounded-2xl p-5 md:p-8 leading-relaxed border-4 border-[#17C1DF]">
             <Quote
               size={28}
-              className="absolute top-4 left-4 text-[#0B0D39]"
+              className="absolute top-2 left-2 text-[#0B0D39] "
               fill="#0B0D39"
             />
             <p className="text-center">
@@ -50,7 +50,7 @@ const Homepage: React.FC = () => {
         </section>
 
         {/* Section 3 */}
-        <section className="w-full bg-[#E3EEFF] py-12 px-6">
+        <section className="w-full bg-white py-12 px-6">
             <div className="max-w-3xl mx-auto">
                 <h2 className="text-4xl font-bold text-center text-[#0C1A57] mb-8">
                 5 BƯỚC THỰC HIỆN MỘT CHU TRÌNH POMODORO
@@ -76,7 +76,7 @@ const Homepage: React.FC = () => {
         </section>
         
         {/* Section 4 */}
-        <section className="w-full bg-white py-12">
+        <section className="w-full bg-[#E3EEFF] py-12">
             <h2 className="text-4xl font-bold text-center text-[#0C1A57] mb-12">
                 LỢI ÍCH VƯỢT TRỘI CỦA PHƯƠNG PHÁP POMODORO
             </h2>

@@ -2,9 +2,13 @@ import React from "react";
 
 const Header: React.FC = () => {
   return (
-    <header className="w-full bg-white shadow-md">
+    <header className="fixed w-full bg-white shadow-md">
       <div className="mx-auto flex items-center gap-2 px-6 py-3">
-        <img src="../src/assets/image/logo.png" alt="logo" className="h-16 w-16 object-contain" />
+        <img
+          src="../src/assets/image/logo.png"
+          alt="logo"
+          className="h-16 w-16 object-contain"
+        />
 
         <h1
           style={{ fontFamily: "'Calistoga', cursive", fontSize: "2rem" }}

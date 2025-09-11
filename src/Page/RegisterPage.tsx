@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Header from "../partials/Header";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import registerImage from "../assets/image/login.png";
@@ -17,12 +16,8 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div>
-      <Header />
-      <br />
-      <br/>
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex flex-1 items-center justify-center mt-14">
         <div className="w-full h-[calc(100vh-80px)] grid grid-cols-2">
-          {/* Cột trái */}
           <div className="flex flex-col justify-center px-20 bg-white">
             <h1 className="text-2xl font-bold mb-2 whitespace-nowrap">
               Đăng ký tài khoản PomoRoom

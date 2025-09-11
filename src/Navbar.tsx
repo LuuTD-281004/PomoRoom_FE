@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
   }, [dropdownOpen]);
 
   return (
-    <nav className="w-full bg-[#0C1A57] text-white px-6 py-4 mt-2">
+    <nav className="w-full bg-[#0C1A57] text-white px-6 py-4 mt-[100px]">
       <ul className="flex justify-between items-center w-full max-w-4xl mx-auto">
         {navItems.map((item) => (
           <li
