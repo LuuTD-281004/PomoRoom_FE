@@ -20,7 +20,7 @@ const Footer: React.FC<FooterProps> = (props) => {
   } = props;
 
   return (
-    <footer className="w-full fixed bottom-0 left-0 bg-[#0C1A57] text-white py-5 px-4 z-40">
+    <footer className="w-full bg-[#0C1A57] text-white py-5 px-4 z-40">
       <div className="max-w-6xl mx-auto">
         {/* Main content */}
         <div className="flex flex-col xl:flex-row justify-between items-center gap-6 xl:gap-12">
