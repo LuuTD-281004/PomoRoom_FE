@@ -6,9 +6,11 @@ import { Outlet } from "react-router-dom";
 const LayoutWithHeader: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <Navbar />
-      <main className="flex-1 pt-[90px]">
+      <div className="fixed top-0 left-0 w-full z-50">
+        <Header />
+        <Navbar />
+      </div>
+      <main className="flex-1 mt-[120px]">
         <Outlet />
       </main>
     </div>
