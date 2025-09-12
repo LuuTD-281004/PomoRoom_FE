@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./Page/Homepage";
 import LoginPage from "./Page/LoginPage";
 import RegisterPage from "./Page/RegisterPage";
+import RankingPage from "./Page/RankingPage";
 import LayoutWithHeader from "./partials/LayoutWithHeader";
 import LayoutAuth from "./partials/LayoutAuth";
 
@@ -13,7 +14,7 @@ function App() {
         <Route element={<LayoutWithHeader />}>
           <Route path="/" element={<Homepage />} />
           <Route path="/rooms" element={<h1>Phòng Pomodoro</h1>} />
-          <Route path="/ranking" element={<h1>Bảng xếp hạng</h1>} />
+          <Route path="/ranking" element={<RankingPage />} />
           <Route path="/ranking/personal" element={<h1>Thành tích cá nhân</h1>} />
           <Route path="/plans" element={<h1>Các gói trải nghiệm</h1>} />
         </Route>
