@@ -26,7 +26,7 @@ const Input: React.FC<InputProps> = ({
   const inputType = isPassword && showPassword ? "text" : type;
 
   return (
-    <div className="flex flex-col gap-1 w-full max-w-md mx-auto p-1">
+    <div className="flex flex-col gap-1 w-full p-1">
       {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
 
       <div className="relative">
