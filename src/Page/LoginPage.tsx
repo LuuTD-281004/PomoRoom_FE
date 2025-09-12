@@ -48,7 +48,7 @@ const LoginPage: React.FC = () => {
             <p className="text-sm text-gray-600 text-center mt-6">
               Bạn chưa có tài khoản ?{" "}
               <a
-                href="/login"
+                href="/register"
                 className="hover:underline"
                 style={{ color: "#6AD5E8" }}
               >
