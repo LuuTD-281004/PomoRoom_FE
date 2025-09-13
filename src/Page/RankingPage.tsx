@@ -1,6 +1,7 @@
 import React from "react";
 import { Flame, Crown } from "lucide-react";
 import avatar from "../assets/image/avatar.png";
+import Footer from "../partials/Footer";
 
 type User = {
   name: string;
@@ -23,6 +24,7 @@ const RankingPage: React.FC = () => {
   };
 
   return (
+    <div>
     <main>
       {/* Section 1 */}
       <section className="w-full min-w-screen flex flex-col bg-[#E3EEFF] items-center justify-center py-16 px-6 mt-15 h-[100px]">
@@ -126,8 +128,12 @@ const RankingPage: React.FC = () => {
             </div>
             ))}
         </div>
-        </section>
-    </main>
+      </section>
+      </main>
+      <div className="w-full h-[20px] bg-[#0C1A57] mb-2" />
+
+      <Footer />
+    </div>
   );
 };
 

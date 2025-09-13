@@ -32,7 +32,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="w-full min-w-screen flex flex-col items-center justify-center">
       <div className="flex flex-1 items-center justify-center mt-14">
         <div className="w-full h-[calc(100vh-80px)] grid grid-cols-2">
           {/* Cột trái */}
