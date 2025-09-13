@@ -2,14 +2,33 @@ import React, { useState } from "react";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
 import loginImage from "../assets/image/login.png";
+import { useAuth } from "../contexts/AuthContext";
 
 const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({ username, password });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setError(null);
+
+    if (!email || !password) {
+      setError("Vui lòng nhập đầy đủ email và mật khẩu.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await login(email, password); // 🔥 call login from context
+    } catch (err) {
+      console.log(err);
+      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -21,16 +40,18 @@ const LoginPage: React.FC = () => {
             <h1 className="text-2xl font-bold mb-2 whitespace-nowrap">
               Chào mừng đến với PomoRoom
             </h1>
-            <p className="text-gray-500 mb-6">Đăng nhập bằng tài khoản của bạn</p>
+            <p className="text-gray-500 mb-6">
+              Đăng nhập bằng tài khoản của bạn
+            </p>
 
-            <form onSubmit={handleRegister} className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <Input
-                label="Tên đăng nhập"
-                placeholder="Tên đăng nhập"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                label="Email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-              
+
               <Input
                 label="Mật Khẩu"
                 type="password"
@@ -39,22 +60,25 @@ const LoginPage: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
 
+              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
               <br />
-              <Button type="submit" size="full">
-                Đăng nhập
+              <Button size="full" disabled={loading} onClick={handleLogin}>
+                {loading ? "Đang đăng nhập..." : "Đăng nhập"}
               </Button>
-            </form>
+            </div>
 
             <p className="text-sm text-gray-600 text-center mt-6">
               Bạn chưa có tài khoản ?{" "}
               <a
-                href="/login"
+                href="/register"
                 className="hover:underline"
                 style={{ color: "#6AD5E8" }}
               >
                 Đăng ký
               </a>
             </p>
+
             <br />
             <div className="w-full h-[1px] bg-[#0C1A57]" />
             <br />
@@ -65,7 +89,7 @@ const LoginPage: React.FC = () => {
           <div className="flex items-center justify-end px-10 py-8">
             <img
               src={loginImage}
-              alt="Register illustration"
+              alt="Login illustration"
               className="object-cover w-140 h-140 rounded-lg"
             />
           </div>

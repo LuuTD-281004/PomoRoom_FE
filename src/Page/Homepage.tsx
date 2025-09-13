@@ -7,7 +7,6 @@ const Homepage: React.FC = () => {
   return (
     <div className="w-full flex flex-col bg-white ">      
       <main>
-
         {/* Section 1 */}
         <section className="w-full bg-white py-12 px-6">
           <h1
