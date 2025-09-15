@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface FooterProps {
   facebookLink?: string;
@@ -10,6 +11,8 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = (props) => {
+  const { t } = useTranslation();
+
   const {
     facebookLink = "https://www.facebook.com/luutd2810",
     instagramLink = "https://www.instagram.com/luutd2810",
@@ -28,7 +31,7 @@ const Footer: React.FC<FooterProps> = (props) => {
           {/* Left side - Social links */}
           <div className="flex flex-col items-center xl:items-start gap-4">
             <h3 className="text-lg lg:text-xl xl:text-2xl font-bold text-center xl:text-left">
-              LIÊN HỆ CHÚNG TÔI TẠI
+              {t("footer.contact_us")}
             </h3>
             
             <div className="flex gap-4 lg:gap-5">
@@ -102,7 +105,7 @@ const Footer: React.FC<FooterProps> = (props) => {
 
         {/* Copyright line */}
         <div className="border-t border-white/20 mt-4 pt-3 text-center">
-          <p className="text-xs lg:text-sm opacity-75">© 2025 Copyright</p>
+          <p className="text-xs lg:text-sm opacity-75">{t("footer.copyright")}</p>
         </div>
       </div>
     </footer>

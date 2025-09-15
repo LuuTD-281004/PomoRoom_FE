@@ -2,8 +2,11 @@ import React from "react";
 import Footer from "../partials/Footer";
 import { Quote } from "lucide-react";
 import Button from "../Components/Button";
+import { useTranslation } from "react-i18next";
 
 const Homepage: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full min-w-screen flex flex-col items-center justify-center mt-15">
       <main>
@@ -14,11 +17,11 @@ const Homepage: React.FC = () => {
               style={{ fontFamily: "'Calistoga', cursive", fontSize: "4rem" }}
               className="font-bold text-[#0C1A57] mt-3"
             >
-              Chào mừng đến với PomoRoom
+              {t("homepage.welcome_title")}
             </h1>
             <div className="flex justify-center mt-6">
               <Button type="submit" size="wide">
-                THAM GIA PHÒNG
+                {t("homepage.join_room")}
               </Button>
             </div>
           </div>
@@ -28,7 +31,7 @@ const Homepage: React.FC = () => {
         <section className="w-full bg-[#E3EEFF] py-16 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-extrabold text-center text-[#0B0D39] mb-8">
-              HỌC THEO PHƯƠNG PHÁP <br /> POMODORO LÀ GÌ?
+              {t("homepage.what_is_pomodoro")}
             </h2>
             <div className="relative w-full bg-white text-[#19C3DC] rounded-2xl p-5 md:p-8 leading-relaxed border-4 border-[#17C1DF]">
               <Quote
@@ -37,11 +40,9 @@ const Homepage: React.FC = () => {
                 fill="#0B0D39"
               />
               <p className="text-center">
-                <span className="font-semibold">Phương pháp Pomodoro</span> hay còn gọi{" "}
-                <span className="italic font-semibold">Phương pháp quả cà chua</span>, 
-                là một kỹ thuật quản lý thời gian đơn giản nhưng cực kỳ hiệu quả, giúp bạn 
-                tăng cường sự tập trung, nâng cao năng suất và duy trì năng lượng tinh thần 
-                một cách bền vững.
+                <span className="font-semibold">{t("homepage.pomodoro_technique")}</span> {t("homepage.known_as")}{" "}
+                <span className="italic font-semibold">{t("homepage.tomato_technique")}</span>, 
+                {t("homepage.pomodoro_description")}
               </p>
               <Quote
                 size={28}
@@ -56,30 +57,30 @@ const Homepage: React.FC = () => {
         <section className="w-full bg-white py-12 px-6">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-[#0C1A57] mb-8">
-              5 BƯỚC THỰC HIỆN MỘT CHU TRÌNH POMODORO
+              {t("homepage.steps_title")}
             </h2>
             <div className="space-y-4">
               <div className="bg-[#426CC2] rounded-[30px] p-4 shadow-lg text-white text-center">
-                <p><strong className="italic">BƯỚC 1.</strong> Xác định một công việc cụ thể bạn cần hoàn thành.</p>
+                <p><strong className="italic">{t("homepage.step1")}</strong> {t("homepage.step1_description")}</p>
               </div>
               <div className="bg-[#77D2E2] rounded-[30px] p-4 shadow-lg text-gray-900 text-center">
-                <p><strong className="italic">BƯỚC 2.</strong> Sử dụng đồng hồ bấm giờ và đặt hẹn{" "} 
-                  <span className="font-semibold">25 phút.</span>
+                <p><strong className="italic">{t("homepage.step2")}</strong>{t("homepage.step2_description")}{" "} 
+                  <span className="font-semibold">{t("homepage.25")}</span>
                 </p>
               </div>
               <div className="bg-[#426CC2] rounded-[30px] p-4 shadow-lg text-white text-center">
-                <p><strong className="italic">BƯỚC 3.</strong> Hãy{" "} 
-                  <span className="font-semibold">tập trung 100%</span> vào công việc đã chọn trong khoảng thời gian này.
+                <p><strong className="italic">{t("homepage.step3")}</strong> {t("homepage.lets")}{" "} 
+                  <span className="font-semibold">{t("homepage.focus")}</span> {t("homepage.step3_description")}
                 </p>
               </div>
               <div className="bg-[#77D2E2] rounded-[30px] p-4 shadow-lg text-gray-900 text-center">
-                <p><strong className="italic">BƯỚC 4.</strong> Khi hết thời gian, hãy đánh dấu một Pomodoro đã hoàn thành và nghỉ ngơi trong{" "} 
-                  <span className="font-semibold">5 phút.</span>
+                <p><strong className="italic">{t("homepage.step4")}</strong> {t("homepage.step4_description")}{" "} 
+                  <span className="font-semibold">{t("homepage.5")}</span>
                 </p>
               </div>
               <div className="bg-[#426CC2] rounded-[30px] p-4 shadow-lg text-white text-center">
-                <p><strong className="italic">BƯỚC 5.</strong> Sau khi hoàn thành 4 Pomodoro, hãy nạp lại năng lượng{" "} 
-                  <span className="font-semibold">từ 15-30 phút</span> trước khi bắt đầu chu trình mới.
+                <p><strong className="italic">{t("homepage.step5")}</strong> {t("homepage.step5_description1")}{" "} 
+                  <span className="font-semibold">{t("homepage.minutes")}</span> {t("homepage.step5_description2")}
                 </p>
               </div>
             </div>
@@ -90,7 +91,7 @@ const Homepage: React.FC = () => {
         <section className="w-full bg-[#E3EEFF] py-12 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-[#0C1A57] mb-12">
-              LỢI ÍCH VƯỢT TRỘI CỦA PHƯƠNG PHÁP POMODORO
+              {t("homepage.benefits_title")}
             </h2>
 
             <div className="space-y-12">
@@ -100,7 +101,7 @@ const Homepage: React.FC = () => {
                 </div>
                 <div className="max-w-[60%] border-4 border-[#17C1DF] p-4">
                   <p className="text-[#17C1DF] italic font-semibold">
-                    Bằng cách làm việc trong các khoảng thời gian ngắn, bạn sẽ dễ dàng duy trì sự tập trung cao độ và tránh được tình trạng quá tải thông tin.
+                    {t("homepage.benefit1")}
                   </p>
                 </div>
               </div>
@@ -108,7 +109,7 @@ const Homepage: React.FC = () => {
               <div className="flex items-center items-stretch justify-end">
                 <div className="max-w-[60%] border-4 border-[#17C1DF] p-4 text-right">
                   <p className="text-[#17C1DF] italic font-semibold">
-                    Việc theo dõi số lượng Pomodoro cần thiết cho mỗi công việc sẽ giúp bạn lập kế hoạch và ước tính thời gian cho các nhiệm vụ trong tương lai một cách chính xác hơn.
+                    {t("homepage.benefit2")}
                   </p>
                 </div>
                 <div className="w-25 h-25 flex items-center justify-center bg-[#17C1DF] text-white text-2xl font-bold">
@@ -122,7 +123,7 @@ const Homepage: React.FC = () => {
                 </div>
                 <div className="max-w-[60%] border-4 border-[#17C1DF] p-4">
                   <p className="text-[#17C1DF] italic font-semibold">
-                    Các khoảng nghỉ ngắn và dài đều đặn giúp não bộ và cơ thể được phục hồi, ngăn ngừa tình trạng mệt mỏi và duy trì năng lượng làm việc bền bỉ.
+                    {t("homepage.benefit3")}
                   </p>
                 </div>
               </div>
@@ -130,7 +131,7 @@ const Homepage: React.FC = () => {
               <div className="flex items-center items-stretch justify-end">
                 <div className="max-w-[60%] border-4 border-[#17C1DF] p-4 text-right">
                   <p className="text-[#17C1DF] italic font-semibold">
-                    Bạn có thể điều chỉnh linh hoạt thời lượng Pomodoro nếu cần (Ví dụ: 50 phút - 10 phút cho công việc sâu) phù hợp với khả năng tập trung của bản thân.
+                    {t("homepage.benefit4")}
                   </p>
                 </div>
                 <div className="w-25 h-25 flex items-center justify-center bg-[#17C1DF] text-white text-2xl font-bold">

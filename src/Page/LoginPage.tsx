@@ -3,9 +3,11 @@ import Input from "../Components/Input";
 import Button from "../Components/Button";
 import loginImage from "../assets/image/login.png";
 import { useAuth } from "../contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
+  const { t } = useTranslation(); 
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,16 +18,16 @@ const LoginPage: React.FC = () => {
     setError(null);
 
     if (!email || !password) {
-      setError("Vui lòng nhập đầy đủ email và mật khẩu.");
+      setError(t("error_required"));
       return;
     }
 
     try {
       setLoading(true);
-      await login(email, password); // 🔥 call login from context
+      await login(email, password); 
     } catch (err) {
       console.log(err);
-      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+      setError(t("error_failed"));
     } finally {
       setLoading(false);
     }
@@ -35,27 +37,24 @@ const LoginPage: React.FC = () => {
     <div className="w-full min-w-screen flex flex-col items-center justify-center">
       <div className="flex flex-1 items-center justify-center mt-14">
         <div className="w-full h-[calc(100vh-80px)] grid grid-cols-2">
-          {/* Cột trái */}
           <div className="flex flex-col justify-center px-20 bg-white">
             <h1 className="text-2xl font-bold mb-2 whitespace-nowrap">
-              Chào mừng đến với PomoRoom
+              {t("welcome")}
             </h1>
-            <p className="text-gray-500 mb-6">
-              Đăng nhập bằng tài khoản của bạn
-            </p>
+            <p className="text-gray-500 mb-6">{t("login_with_account")}</p>
 
             <div className="flex flex-col gap-2">
               <Input
-                label="Email"
-                placeholder="Email"
+                label={t("email")}
+                placeholder={t("email")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
 
               <Input
-                label="Mật Khẩu"
+                label={t("password")}
                 type="password"
-                placeholder="Mật khẩu"
+                placeholder={t("password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -64,25 +63,25 @@ const LoginPage: React.FC = () => {
 
               <br />
               <Button size="full" disabled={loading} onClick={handleLogin}>
-                {loading ? "Đang đăng nhập..." : "Đăng nhập"}
+                {loading ? t("logging_in") : t("login")}
               </Button>
             </div>
 
             <p className="text-sm text-gray-600 text-center mt-6">
-              Bạn chưa có tài khoản ?{" "}
+              {t("no_account")}{" "}
               <a
                 href="/register"
                 className="hover:underline"
                 style={{ color: "#6AD5E8" }}
               >
-                Đăng ký
+                {t("register")}
               </a>
             </p>
 
             <br />
             <div className="w-full h-[1px] bg-[#0C1A57]" />
             <br />
-            <p className="text-gray-500 mb-6">Phương thức đăng nhập khác</p>
+            <p className="text-gray-500 mb-6">{t("other_login")}</p>
           </div>
 
           {/* Cột phải */}

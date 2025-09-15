@@ -1,16 +1,18 @@
 import { NavLink } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const Navbar: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLLIElement | null>(null);
+  const { t } = useTranslation();
 
   const navItems = [
-    { name: "Trang chủ", path: "/" },
-    { name: "Phòng Pomodoro", path: "/rooms" },
-    { name: "Bảng xếp hạng", path: "/ranking", hasDropdown: true },
-    { name: "Các gói trải nghiệm", path: "/plans" },
+    { name: t("navbar.homepage"), path: "/" },
+    { name: t("navbar.room"), path: "/rooms" },
+    { name: t("navbar.rank"), path: "/ranking", hasDropdown: true },
+    { name: t("navbar.experience_packages"), path: "/plans" },
   ];
 
   useEffect(() => {
@@ -85,7 +87,7 @@ const Navbar: React.FC = () => {
                     }
                     onClick={() => setDropdownOpen(false)}
                   >
-                    Thành tích cá nhân
+                    {t("navbar.personal_achievements")}
                   </NavLink>
                 </li>
               </ul>

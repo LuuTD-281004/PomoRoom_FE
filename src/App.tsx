@@ -7,6 +7,7 @@ import RankingPage from "./Page/RankingPage";
 import LayoutWithHeader from "./partials/LayoutWithHeader";
 import LayoutAuth from "./partials/LayoutAuth";
 import { AuthProvider } from "./providers/AuthProvider";
+import "./i18n";
 
 function App() {
   return (

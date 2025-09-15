@@ -3,9 +3,11 @@ import Input from "../Components/Input";
 import Button from "../Components/Button";
 import registerImage from "../assets/image/login.png";
 import { useAuth } from "../contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const RegisterPage: React.FC = () => {
   const { register } = useAuth();
+  const { t } = useTranslation();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ const RegisterPage: React.FC = () => {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError("Mật khẩu và xác nhận mật khẩu không khớp.");
+      setError(t("error_password_mismatch"));
       return;
     }
 
@@ -27,7 +29,7 @@ const RegisterPage: React.FC = () => {
       await register(username, email, password);
     } catch (err: any) {
       console.log(err);
-      setError("Đăng ký thất bại. Vui lòng thử lại.");
+      setError(t("error_register_failed"));
     } finally {
       setLoading(false);
     }
@@ -39,37 +41,38 @@ const RegisterPage: React.FC = () => {
         <div className="w-full h-[calc(100vh-80px)] grid grid-cols-2">
           <div className="flex flex-col justify-center px-20 bg-white">
             <h1 className="text-2xl font-bold mb-2 whitespace-nowrap">
-              Đăng ký tài khoản PomoRoom
+              {t("register_title")}
             </h1>
-            <p className="text-gray-500 mb-6">Tạo tài khoản của bạn</p>
+            <p className="text-gray-500 mb-6">{t("register_subtitle")}</p>
+
             <div className="flex flex-col gap-2">
               <Input
-                label="Tên tài khoản"
-                placeholder="Tên tài khoản"
+                label={t("username")}
+                placeholder={t("username")}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
 
               <Input
-                label="Email"
+                label={t("email")}
                 type="email"
-                placeholder="Email"
+                placeholder={t("email")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
 
               <Input
-                label="Mật Khẩu"
+                label={t("password")}
                 type="password"
-                placeholder="Mật khẩu"
+                placeholder={t("password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
 
               <Input
-                label="Xác nhận mật khẩu"
+                label={t("confirm_password")}
                 type="password"
-                placeholder="Nhập lại mật khẩu"
+                placeholder={t("confirm_password")}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
@@ -77,23 +80,19 @@ const RegisterPage: React.FC = () => {
               {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
               <br />
-              <Button
-                size="full"
-                disabled={loading}
-                onClick={() => handleRegister()} 
-              >
-                {loading ? "Đang đăng ký..." : "Đăng ký"}
+              <Button size="full" disabled={loading} onClick={handleRegister}>
+                {loading ? t("registering") : t("register")}
               </Button>
             </div>
 
             <p className="text-sm text-gray-600 text-center mt-6">
-              Bạn đã có tài khoản ?{" "}
+              {t("have_account")}{" "}
               <a
                 href="/login"
                 className="hover:underline"
                 style={{ color: "#6AD5E8" }}
               >
-                Đăng nhập
+                {t("login")}
               </a>
             </p>
           </div>

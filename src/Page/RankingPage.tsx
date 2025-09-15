@@ -2,6 +2,7 @@ import React from "react";
 import { Flame, Crown } from "lucide-react";
 import avatar from "../assets/image/avatar.png";
 import Footer from "../partials/Footer";
+import { useTranslation } from "react-i18next";
 
 type User = {
   name: string;
@@ -11,9 +12,10 @@ type User = {
 };
 
 const RankingPage: React.FC = () => {
+  const { t } = useTranslation();
   const top3: User[] = [
     { name: "Demos", hours: 50, avatar: avatar, rank: 1 },
-    { name: "Bạn", hours: 40, avatar: avatar, rank: 2 },
+    { name: t("ranking.you"), hours: 40, avatar: avatar, rank: 2 },
     { name: "Raf", hours: 38, avatar: avatar, rank: 3 },
   ];
 
@@ -29,7 +31,7 @@ const RankingPage: React.FC = () => {
       {/* Section 1 */}
       <section className="w-full min-w-screen flex flex-col bg-[#E3EEFF] items-center justify-center py-16 px-6 mt-15 h-[100px]">
         <h1 className="text-4xl md:text-5xl font-bold text-[#0C1A57]">
-          BẢNG XẾP HẠNG TOP 10 CỦA THÁNG
+          {t("ranking.top_10")}
         </h1>
       </section>
 
