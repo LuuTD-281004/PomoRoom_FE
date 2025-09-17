@@ -130,7 +130,20 @@ const RankingPage: React.FC = () => {
             </div>
             ))}
         </div>
-      </section>
+        </section>
+
+        <section className="w-full bg-[#426CC2] py-4 mb-10">
+          <div className="flex justify-center">
+            <div className="flex flex-wrap justify-center gap-30 text-white font-semibold tracking-wide">
+              {Array(6)
+                .fill("POMOROOM")
+                .map((text, i) => (
+                  <span key={i}>{text}</span>
+                ))}
+            </div>
+          </div>
+        </section>
+        
       </main>
       <div className="w-full h-[20px] bg-[#0C1A57] mb-2" />
 
