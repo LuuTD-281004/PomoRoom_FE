@@ -62,5 +62,35 @@
   "footer": {
     "contact_us": "LIÊN HỆ CHÚNG TÔI TẠI",
     "copyright": "© 2025 Bản quyền"
+  },
+  "services": {
+    "title1": "TẬN HƯỞNG TRỌN VẸN",
+    "title2": "CÁC GÓI HẤP DẪN",
+    "subtitle": "Trải nghiệm nhiều tính năng thú vị mà bạn không thể bỏ qua",
+    "feature1": "Thỏa sức sáng tạo phòng học theo ý thích",
+    "feature2": "Tăng số lượng người tham gia trong một phòng",
+    "feature3": "Loại bỏ quảng cáo, tránh làm phiền trong quá trình tham gia",
+    "feature4": "Nâng cấp bản thống kê làm việc chuyên nghiệp",
+    "feature5": "Không bị giới hạn tham gia phòng trong một ngày",
+    "title3": "NHỮNG CÂU HỎI THƯỜNG GẶP"
+  },
+  "faq": {
+    "questionPrefix": "Câu",
+    "q1": {
+      "title": "Nếu ngưng trả phí thì dữ liệu có bị mất không?",
+      "answer": "Không. Dữ liệu vẫn được lưu trữ đầy đủ, nhưng bạn sẽ không thể xem thống kê nâng cao hay tùy chỉnh chi tiết như trước."
+    },
+    "q2": {
+      "title": "Có thể dùng chung gói trả phí với người khác không?",
+      "answer": "Không. Dữ liệu cá nhân được lưu riêng, bạn cần tài khoản riêng để sử dụng."
+    },
+    "q3": {
+      "title": "Mua bản Pro có giúp mình học hiệu quả hơn không?",
+      "answer": "Bản Pro hỗ trợ nhiều công cụ nâng cao: theo dõi quá trình học chi tiết, biểu đồ trực quan, gợi ý lộ trình học phù hợp. Nhờ vậy bạn sẽ dễ dàng tập trung và quản lý thời gian tốt hơn."
+    },
+    "q4": {
+      "title": "Có nên nâng cấp không nếu mình chỉ học 1-2 tiếng mỗi ngày?",
+      "answer": "Không nhất thiết. Nếu bạn học ít, gói miễn phí vẫn đủ. Nhưng bản Pro sẽ mang lại trải nghiệm học tập chuyên sâu và tiện ích lâu dài."
+    }
   }
 }

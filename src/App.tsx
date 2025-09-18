@@ -6,6 +6,7 @@ import RegisterPage from "./Page/RegisterPage";
 import RankingPage from "./Page/RankingPage";
 import LayoutWithHeader from "./partials/LayoutWithHeader";
 import LayoutAuth from "./partials/LayoutAuth";
+import ServicesPage from "./Page/ServicesPage";
 import { AuthProvider } from "./providers/AuthProvider";
 import "./i18n";
 
@@ -22,7 +23,7 @@ function App() {
               path="/ranking/personal"
               element={<h1>Thành tích cá nhân</h1>}
             />
-            <Route path="/plans" element={<h1>Các gói trải nghiệm</h1>} />
+            <Route path="/plans" element={<ServicesPage />} />
           </Route>
 
           <Route element={<LayoutAuth />}>

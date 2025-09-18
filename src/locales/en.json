@@ -63,5 +63,35 @@
   "footer": {
     "contact_us": "CONTACT US AT",
     "copyright": "© 2025 Copyright"
+  },
+  "services": {
+    "title1": "ENJOY COMPLETELY",
+    "title2": "ATTRACTIVE PACKAGES",
+    "subtitle": "Experience many interesting features you can't miss",
+    "feature1": "Customize study rooms freely as you like",
+    "feature2": "Increase the number of participants in a room",
+    "feature3": "Remove ads to avoid interruptions during participation",
+    "feature4": "Upgrade to professional work statistics",
+    "feature5": "No limit on room participation per day",
+    "title3": "Frequently Asked Questions (FAQ)"
+  },
+  "faq": {
+    "questionPrefix": "Question",
+    "q1": {
+      "title": "If I stop paying, will my data be lost?",
+      "answer": "No. Your data will still be stored, but you won’t have access to advanced statistics or customization."
+    },
+    "q2": {
+      "title": "Can I share the paid plan with others?",
+      "answer": "No. Each account requires its own subscription since data is stored individually."
+    },
+    "q3": {
+      "title": "Will upgrading to Pro help me study more effectively?",
+      "answer": "Pro includes advanced tools: detailed tracking, visual charts, and personalized study suggestions. This helps you stay focused and manage time better."
+    },
+    "q4": {
+      "title": "Should I upgrade if I only study 1–2 hours per day?",
+      "answer": "Not necessary. Free plan is enough for light use. Pro is recommended for a more in-depth and long-term learning experience."
+    }
   }
 }
