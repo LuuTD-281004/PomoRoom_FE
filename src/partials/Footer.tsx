@@ -15,7 +15,7 @@ const Footer: React.FC<FooterProps> = (props) => {
 
   const {
     facebookLink = "https://www.facebook.com/luutd2810",
-    instagramLink = "https://www.instagram.com/luutd2810",
+    instagramLink = "https://www.instagram.com/luutd1028",
     tiktokLink = "https://www.tiktok.com/@_luutd2810_",
     phone = "0368870669",
     email = "pomo@gmail.com",

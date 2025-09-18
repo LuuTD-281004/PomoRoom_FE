@@ -1,5 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
+import ReactCountryFlag from "react-country-flag";
 
 const Header: React.FC = () => {
   const { i18n } = useTranslation();
@@ -25,10 +26,22 @@ const Header: React.FC = () => {
             PomoRoom
           </h1>
         </div>
-
-        <button onClick={toggleLanguage} className="text-2xl">
-          {i18n.language === "vi" ? "🇻🇳" : "🇺🇸"}
-        </button>
+        
+        <div
+          onClick={toggleLanguage}
+          className="cursor-pointer transition-transform duration-300 ease-in-out hover:rotate-12"
+        >
+          <ReactCountryFlag
+            countryCode={i18n.language === "vi" ? "VN" : "US"}
+            svg
+            style={{
+              width: "28px",   // tăng một chút cho rõ
+              height: "28px",
+              borderRadius: "50%", // cho cờ tròn
+              objectFit: "cover",
+            }}
+          />
+        </div>
       </div>
 
       <div className="w-full h-[5px] bg-[#0C1A57]" />
