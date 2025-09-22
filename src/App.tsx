@@ -9,10 +9,14 @@ import LayoutAuth from "./partials/LayoutAuth";
 import ServicesPage from "./Page/ServicesPage";
 import { AuthProvider } from "./providers/AuthProvider";
 import "./i18n";
+import PaymentPage from "./Page/PaymentPage";
+import LayoutWithMinimizedHeader from "./partials/LayoutWithMinimizedHeader";
+import { SettingsProvider } from "./providers/SettingsProvider";
 
 function App() {
   return (
     <AuthProvider>
+      <SettingsProvider>
         <Router>
           <Routes>
             <Route element={<LayoutWithHeader />}>
@@ -26,14 +30,18 @@ function App() {
               <Route path="/plans" element={<ServicesPage />} />
             </Route>
 
+            <Route element={<LayoutWithMinimizedHeader />}>
+              <Route path="/packages" element={<PaymentPage />} />
+            </Route>
+
             <Route element={<LayoutAuth />}>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
             </Route>
-
             <Route path="*" element={<h1>404 - Page Not Found</h1>} />
           </Routes>
         </Router>
+      </SettingsProvider>
     </AuthProvider>
   );
 }

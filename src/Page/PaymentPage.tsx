@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
+import http from "@/axios/http";
+import { useSettings } from "@/contexts/SettingsContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
 
 interface PaymentPackage {
   id: string;
@@ -17,12 +21,29 @@ interface PaymentPackage {
 
 export default function PaymentPage() {
   const [packages, setPackages] = useState<PaymentPackage[]>([]);
+  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+  const { settings } = useSettings();
+  const { authenticatedUser } = useAuth();
+  const navigate = useNavigate();
+
+  const fetchPackages = async () => {
+    const response = await http.get("/payment/all-packages");
+    setPackages(response.data.result);
+  };
 
   useEffect(() => {
-    axios.get("/api/payment-packages").then((res) => {
-      setPackages(res.data);
-    });
+    fetchPackages();
   }, []);
+
+  const handleSelectPackage = (pkg: PaymentPackage) => {
+    if (!authenticatedUser) {
+      setShowLoginPrompt(true);
+      return;
+    }
+    setSelectedPrice(pkg.price);
+  };
 
   return (
     <div className="min-h-screen bg-white flex">
@@ -33,19 +54,24 @@ export default function PaymentPage() {
           {packages.map((pkg) => (
             <Card
               key={pkg.id}
-              className="bg-blue-400 text-white rounded-2xl shadow-lg"
+              className="bg-blue-400 text-white rounded-2xl shadow-lg flex flex-col"
             >
               <CardHeader>
                 <CardTitle>{pkg.nameVi}</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="flex flex-col h-full">
                 <p className="text-lg font-semibold">
                   {pkg.price.toLocaleString("vi-VN")}₫/Tháng
                 </p>
                 <p className="text-sm mt-2">{pkg.descriptionVi}</p>
-                <Button className="w-full mt-4 bg-white text-blue-600 hover:bg-gray-100">
-                  Thanh toán
-                </Button>
+                <div className="mt-auto">
+                  <Button
+                    className="w-full bg-white text-blue-600 hover:bg-gray-100"
+                    onClick={() => handleSelectPackage(pkg)}
+                  >
+                    Thanh toán
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -54,17 +80,34 @@ export default function PaymentPage() {
 
       {/* Right Section */}
       <div className="w-1/2 flex flex-col justify-center items-center bg-white p-8">
-        <img
-          src="/qr-code.png"
-          alt="QR Code"
-          className="w-64 h-64 mb-6"
-        />
-        <div className="text-lg text-gray-700 space-y-2">
-          <p><strong>Số tài khoản:</strong> 123456789</p>
-          <p><strong>Ngân hàng:</strong> Vietcombank</p>
-          <p><strong>Tên tài khoản:</strong> NGUYEN VAN A</p>
-        </div>
+        {selectedPrice ? (
+          <img
+            src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${settings?.bankType}&amount=${selectedPrice}&des=${authenticatedUser?.sub}`}
+            alt="QR Code"
+            className="w-64 h-64 mb-6"
+          />
+        ) : (
+          <p className="text-gray-600">Vui lòng chọn gói để hiển thị QR</p>
+        )}
       </div>
+
+      {/* Login Prompt Dialog */}
+      <Dialog open={showLoginPrompt} onOpenChange={setShowLoginPrompt}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Bạn cần đăng nhập</DialogTitle>
+          </DialogHeader>
+          <p className="text-gray-700 mb-4">
+            Vui lòng đăng nhập để tiếp tục thanh toán gói dịch vụ.
+          </p>
+          <Button
+            className="w-full bg-blue-600 text-white hover:bg-blue-700"
+            onClick={() => navigate("/login")}
+          >
+            Đăng nhập
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
