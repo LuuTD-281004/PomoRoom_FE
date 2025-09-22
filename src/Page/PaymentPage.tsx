@@ -87,7 +87,7 @@ export default function PaymentPage() {
       <div className="w-1/2 flex flex-col justify-center items-center bg-white p-8">
         {selectedPrice ? (
           <img
-            src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${settings?.bankType}&amount=${selectedPrice}&des=${authenticatedUser?.email}`}
+            src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${settings?.bankType}&amount=${selectedPrice}&des=${authenticatedUser?.name}`}
             alt="QR Code"
             className="w-64 h-64 mb-6"
           />
