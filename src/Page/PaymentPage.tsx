@@ -5,7 +5,12 @@ import http from "@/axios/http";
 import { useSettings } from "@/contexts/SettingsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/Components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/Components/ui/dialog";
 
 interface PaymentPackage {
   id: string;
@@ -32,7 +37,7 @@ export default function PaymentPage() {
     const response = await http.get("/payment/all-packages");
     setPackages(response.data.result);
   };
-
+  console.log(authenticatedUser?.sub);
   useEffect(() => {
     fetchPackages();
   }, []);
@@ -82,7 +87,7 @@ export default function PaymentPage() {
       <div className="w-1/2 flex flex-col justify-center items-center bg-white p-8">
         {selectedPrice ? (
           <img
-            src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${settings?.bankType}&amount=${selectedPrice}&des=${authenticatedUser?.sub}`}
+            src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${settings?.bankType}&amount=${selectedPrice}&des=${authenticatedUser?.email}`}
             alt="QR Code"
             className="w-64 h-64 mb-6"
           />
