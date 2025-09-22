@@ -13,27 +13,27 @@ import "./i18n";
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route element={<LayoutWithHeader />}>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/rooms" element={<h1>Phòng Pomodoro</h1>} />
-            <Route path="/ranking" element={<RankingPage />} />
-            <Route
-              path="/ranking/personal"
-              element={<h1>Thành tích cá nhân</h1>}
-            />
-            <Route path="/plans" element={<ServicesPage />} />
-          </Route>
+        <Router>
+          <Routes>
+            <Route element={<LayoutWithHeader />}>
+              <Route path="/" element={<Homepage />} />
+              <Route path="/rooms" element={<h1>Phòng Pomodoro</h1>} />
+              <Route path="/ranking" element={<RankingPage />} />
+              <Route
+                path="/ranking/personal"
+                element={<h1>Thành tích cá nhân</h1>}
+              />
+              <Route path="/plans" element={<ServicesPage />} />
+            </Route>
 
-          <Route element={<LayoutAuth />}>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-          </Route>
+            <Route element={<LayoutAuth />}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+            </Route>
 
-          <Route path="*" element={<h1>404 - Page Not Found</h1>} />
-        </Routes>
-      </Router>
+            <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+          </Routes>
+        </Router>
     </AuthProvider>
   );
 }
