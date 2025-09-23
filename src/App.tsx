@@ -9,6 +9,9 @@ import LayoutAuth from "./partials/LayoutAuth";
 import ServicesPage from "./Page/ServicesPage";
 import { AuthProvider } from "./providers/AuthProvider";
 import "./i18n";
+import SetupRoom from "./Page/room/SetupRoom";
+import PrivateRoom from "./Page/room/PrivateRoom";
+import RoomLayout from "./Page/room/layouts/RoomLayout";
 import PaymentPage from "./Page/PaymentPage";
 import LayoutWithMinimizedHeader from "./partials/LayoutWithMinimizedHeader";
 import { SettingsProvider } from "./providers/SettingsProvider";
@@ -21,7 +24,10 @@ function App() {
           <Routes>
             <Route element={<LayoutWithHeader />}>
               <Route path="/" element={<Homepage />} />
-              <Route path="/rooms" element={<h1>Phòng Pomodoro</h1>} />
+              <Route element={<RoomLayout />}>
+                <Route path="/rooms" element={<SetupRoom />} />
+                <Route path="/private-room" element={<PrivateRoom />} />
+              </Route>
               <Route path="/ranking" element={<RankingPage />} />
               <Route
                 path="/ranking/personal"
@@ -29,7 +35,6 @@ function App() {
               />
               <Route path="/plans" element={<ServicesPage />} />
             </Route>
-
             <Route element={<LayoutWithMinimizedHeader />}>
               <Route path="/packages" element={<PaymentPage />} />
             </Route>
