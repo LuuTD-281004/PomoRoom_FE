@@ -11,6 +11,7 @@ import { AuthProvider } from "./providers/AuthProvider";
 import "./i18n";
 import SetupRoom from "./Page/room/SetupRoom";
 import PrivateRoom from "./Page/room/PrivateRoom";
+import RoomLayout from "./Page/room/layouts/RoomLayout";
 
 function App() {
   return (
@@ -19,8 +20,10 @@ function App() {
         <Routes>
           <Route element={<LayoutWithHeader />}>
             <Route path="/" element={<Homepage />} />
-            <Route path="/rooms" element={<SetupRoom />} />
-            <Route path="/private-room" element={<PrivateRoom />} />
+            <Route element={<RoomLayout />}>
+              <Route path="/rooms" element={<SetupRoom />} />
+              <Route path="/private-room" element={<PrivateRoom />} />
+            </Route>
             <Route path="/ranking" element={<RankingPage />} />
             <Route
               path="/ranking/personal"
