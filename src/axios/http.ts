@@ -1,6 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
 import { hideLoading, showLoading } from "../lib/loading-helper";
-import { showNotification } from "../Components/NotificationHelper";
 
 const http: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_SERVER_URL + "/api",
@@ -44,7 +43,7 @@ http.interceptors.response.use(
       if (status === 401) {
         // window.location.href = "/"
       } else if (status === 500) {
-        showNotification.error(
+        console.log(
           "Unexpected error has been occurred",
           "Please try again"
         );
