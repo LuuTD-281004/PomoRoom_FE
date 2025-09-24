@@ -1,7 +1,19 @@
 import { PlayIcon, PauseIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import CancelModal from "./components/CancelModal";
 
 const PrivateRoom = () => {
+    const [showCancel, setShowCancel] = useState(false);
+
+    const handleConfirmExit = () => {
+        console.log("User confirmed exit");
+        setShowCancel(false);
+    };
+
+    const handleCancelClose = () => {
+        setShowCancel(false);
+    };
+
     return (
         <div className="flex-1 flex flex-col items-center justify-center px-4">
             {/* Timer Display */}
@@ -23,10 +35,19 @@ const PrivateRoom = () => {
                 <button className="bg-white px-8 py-3 rounded-lg border border-blue-200 hover:bg-blue-50 transition-colors text-blue-600">
                     Bắt Đầu
                 </button>
-                <button className="bg-white px-8 py-3 rounded-lg border border-blue-200 hover:bg-blue-50 transition-colors text-blue-600">
+                <button
+                    onClick={() => setShowCancel(true)}
+                    className="bg-white px-8 py-3 rounded-lg border border-blue-200 hover:bg-blue-50 transition-colors text-blue-600"
+                >
                     Dừng
                 </button>
             </div>
+
+            <CancelModal
+                isOpen={showCancel}
+                onOK={handleConfirmExit}
+                onCancel={handleCancelClose}
+            />
         </div>
     );
 };
