@@ -52,7 +52,7 @@ const ServicesPage: React.FC = () => {
   return (
     <div>
         <main>
-            <section className="w-full min-w-screen flex flex-col items-center justify-center mt-20 mb-20">
+            <section className="w-full min-w-screen flex flex-col items-center justify-center mt-10 mb-20">
                 <h2 className="text-3xl md:text-4xl font-extrabold text-[#0C1A57] text-center">
                     {t("services.title1")}
                     <br /> {t("services.title2")}

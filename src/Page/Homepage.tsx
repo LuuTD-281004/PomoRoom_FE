@@ -8,7 +8,7 @@ const Homepage: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="w-full min-w-screen flex flex-col items-center justify-center mt-15">
+    <div className="w-full min-w-screen flex flex-col items-center justify-center mt-10">
       <main>
         {/* Section 1 */}
         <section className="w-full min-w-screen flex flex-col items-center justify-center bg-white py-12 px-6">

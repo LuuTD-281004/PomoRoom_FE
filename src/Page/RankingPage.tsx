@@ -29,7 +29,7 @@ const RankingPage: React.FC = () => {
     <div>
     <main>
       {/* Section 1 */}
-      <section className="w-full min-w-screen flex flex-col bg-[#E3EEFF] items-center justify-center py-16 px-6 mt-15 h-[100px]">
+      <section className="w-full min-w-screen flex flex-col bg-[#E3EEFF] items-center justify-center py-16 px-6 mt-5 h-[100px]">
         <h1 className="text-4xl md:text-5xl font-bold text-[#0C1A57]">
           {t("ranking.top_10")}
         </h1>
