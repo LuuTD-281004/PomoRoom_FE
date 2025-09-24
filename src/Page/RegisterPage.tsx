@@ -40,7 +40,7 @@ const RegisterPage: React.FC = () => {
       <div className="flex flex-1 items-center justify-center mt-14">
         <div className="w-full h-[calc(100vh-80px)] grid grid-cols-2">
           <div className="flex flex-col justify-center px-20 bg-white">
-            <h1 className="text-2xl font-bold mb-2 whitespace-nowrap">
+            <h1 className="text-2xl font-bold mb-2 mt-4">
               {t("register_title")}
             </h1>
             <p className="text-gray-500 mb-6">{t("register_subtitle")}</p>
