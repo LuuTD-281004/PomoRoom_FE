@@ -17,10 +17,17 @@ const Header: React.FC = () => {
   const isAuthPage =
     location.pathname === "/login" || location.pathname === "/register";
 
+  const navigateToHome = () => {
+    navigate("/");
+  };
+
   return (
     <header className="fixed w-full bg-white shadow-md">
       <div className="mx-auto flex items-center justify-between px-6 py-3">
-        <div className="flex items-center gap-2">
+        <div 
+          className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity duration-200"
+          onClick={navigateToHome}
+        >
           <img
             src="../src/assets/image/logo.png"
             alt="logo"
@@ -35,7 +42,6 @@ const Header: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Nút chuyển ngôn ngữ */}
           <div
             onClick={toggleLanguage}
             className="cursor-pointer transition-transform duration-300 ease-in-out hover:rotate-12"
@@ -52,7 +58,6 @@ const Header: React.FC = () => {
             />
           </div>
 
-          {/* Nút đăng nhập, ẩn nếu đang ở /login */}
           {!isAuthPage && (
             <Button onClick={() => navigate("/login")}>Đăng nhập</Button>
           )}
