@@ -2,9 +2,11 @@ import { TrophyIcon, UserIcon, BellIcon, ClockIcon, SettingsIcon } from "lucide-
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import PlaylistModal from "../components/PlaylistModal";
+import ThemeModal from "../components/ThemeModal";
 
 const RoomLayout = () => {
     const [showPlaylist, setShowPlaylist] = useState(false);
+    const [showTheme, setShowTheme] = useState(false);
     return (
         <div className="flex h-screen bg-blue-100">
             {/* Left Navigation */}
@@ -48,12 +50,16 @@ const RoomLayout = () => {
                     >
                         <span className="">Nhạc</span>
                     </button>
-                    <Link to="#" className="!text-white text-center p-4 rounded-t-lg -rotate-90 bg-[#0C1A57] hover:text-yellow-400 transition-colors">
+                    <button
+                        onClick={() => setShowTheme(true)}
+                        className="!text-white text-center !p-4 !rounded-none !rounded-t-lg -rotate-90 !bg-[#0C1A57] hover:text-yellow-400 transition-colors"
+                    >
                         <span className="">Giao diện</span>
-                    </Link>
+                    </button>
                 </div>
             </nav>
             <PlaylistModal isOpen={showPlaylist} onClose={() => setShowPlaylist(false)} />
+            <ThemeModal isOpen={showTheme} onClose={() => setShowTheme(false)} />
         </div>
     )
 }
