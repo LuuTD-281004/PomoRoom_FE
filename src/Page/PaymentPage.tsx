@@ -11,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/Components/ui/dialog";
-import Pusher from "pusher-js";
 import { getPusherClient } from "@/lib/pusher";
 
 interface PaymentPackage {
@@ -52,6 +51,7 @@ export default function PaymentPage() {
     const channel = pusherClient.subscribe(
       `private-payment-${authenticatedUser.sub}`
     );
+
     channel.bind("payment-result", (data: any) => {
       console.log("Payment event received:", data);
       setShowSuccessPopup(true);
@@ -79,6 +79,11 @@ export default function PaymentPage() {
       return;
     }
     setSelectedPrice(pkg.price);
+  };
+
+  const handleCloseTransactionConfirmation = async () => {
+    navigate("/");
+    setShowSuccessPopup(false);
   };
 
   return (
@@ -142,7 +147,7 @@ export default function PaymentPage() {
           </p>
           <Button
             className="w-full bg-green-600 text-white hover:bg-green-700"
-            onClick={() => setShowSuccessPopup(false)}
+            onClick={() => handleCloseTransactionConfirmation()}
           >
             Đóng
           </Button>
