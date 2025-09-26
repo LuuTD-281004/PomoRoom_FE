@@ -73,7 +73,27 @@
     "feature3": "Remove ads to avoid interruptions during participation",
     "feature4": "Upgrade to professional work statistics",
     "feature5": "No limit on room participation per day",
-    "title3": "Frequently Asked Questions (FAQ)"
+    "title3": "Frequently Asked Questions (FAQ)",
+    "subtitle2": "GET PREMIUM"
+  },
+  "packages": {
+    "personal": {
+      "title": "Premium Personal",
+      "desc": "Create your own learning space freely"
+    },
+    "group": {
+      "title": "Premium Group",
+      "desc": "Expand your room with up to 10 members"
+    },
+    "plus3": {
+      "title": "Plus 3",
+      "desc": "Expand your room with 3 more members"
+    },
+    "plus10": {
+      "title": "Plus 10",
+      "desc": "Expand your room with 10 more members"
+    },
+    "buyButton": "Buy Package"
   },
   "faq": {
     "questionPrefix": "Question",

@@ -72,7 +72,27 @@
     "feature3": "Loại bỏ quảng cáo, tránh làm phiền trong quá trình tham gia",
     "feature4": "Nâng cấp bản thống kê làm việc chuyên nghiệp",
     "feature5": "Không bị giới hạn tham gia phòng trong một ngày",
-    "title3": "NHỮNG CÂU HỎI THƯỜNG GẶP"
+    "title3": "NHỮNG CÂU HỎI THƯỜNG GẶP",
+    "subtitle2": "SỞ HỮU PREMIUM"
+  },
+  "packages": {
+    "personal": {
+      "title": "Premium Cá Nhân",
+      "desc": "Tự do sáng tạo không gian học của mình"
+    },
+    "group": {
+      "title": "Premium Nhóm",
+      "desc": "Số lượng thành viên trong phòng mở rộng lên tới 10 người."
+    },
+    "plus3": {
+      "title": "Plus 3",
+      "desc": "Số lượng thành viên trong phòng mở rộng thêm 3 người."
+    },
+    "plus10": {
+      "title": "Plus 10",
+      "desc": "Số lượng thành viên trong phòng mở rộng thêm 10 người."
+    },
+    "buyButton": "Mua gói"
   },
   "faq": {
     "questionPrefix": "Câu",

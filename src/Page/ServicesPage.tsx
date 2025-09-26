@@ -1,6 +1,6 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Paintbrush, UserPlus, Ban, BarChart3, Infinity } from "lucide-react";
+import { Paintbrush, UserPlus, Ban, BarChart3, Infinity, User, Users } from "lucide-react";
 import Button from "@/Components/Button";
 import Footer from "@/partials/Footer";
 
@@ -78,6 +78,70 @@ const ServicesPage: React.FC = () => {
                 </div>
             </section>
             
+            <section className="w-full min-w-screen flex flex-col items-center justify-center mt-10 mb-20 px-6">
+  <h2 className="text-3xl md:text-4xl font-extrabold text-[#0C1A57] text-center mb-12">
+    {t("services.subtitle2")}
+  </h2>
+
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 max-w-6xl w-full">
+    {[
+      {
+        key: "personal",
+        price: "39.500Đ/Tháng",
+        icon: <User className="w-6 h-6" />,
+      },
+      {
+        key: "group",
+        price: "349.000Đ/Tháng",
+        icon: <Users className="w-6 h-6" />,
+      },
+      {
+        key: "plus3",
+        price: "105.000Đ/Tháng",
+        icon: <UserPlus className="w-6 h-6" />,
+      },
+      {
+        key: "plus10",
+        price: "329.000Đ/Tháng",
+        icon: <UserPlus className="w-6 h-6" />,
+      },
+    ].map((pkg) => (
+      <div
+        key={pkg.key}
+        className="flex flex-col justify-between items-center w-[280px] h-[350px] p-6 rounded-xl shadow-md bg-gradient-to-b from-[#457FF7] to-[#B3C5EA] text-white"
+      >
+        {/* Block title + line + price */}
+        <div className="flex flex-col items-center space-y-2">
+          <div className="flex items-center space-x-2">
+            <span className="text-xl">{pkg.icon}</span>
+            <h3 className="text-lg md:text-xl font-semibold uppercase">
+              {t(`packages.${pkg.key}.title`)}
+            </h3>
+          </div>
+
+          <div className="w-2/3 h-[2px] bg-white" />
+
+          <p className="text-2xl md:text-3xl font-extrabold">{pkg.price}</p>
+        </div>
+
+        {/* Mô tả */}
+        <p className="text-sm md:text-base font-semibold italic text-center mt-4">
+          {t(`packages.${pkg.key}.desc`)}
+        </p>
+
+        {/* Nút mua */}
+        <a
+          href="/packages"
+          className="mt-6 px-6 py-2 bg-white text-[#0C1A57] font-semibold rounded-full text-center hover:bg-gray-100 transition"
+        >
+          {t("packages.buyButton")}
+        </a>
+      </div>
+    ))}
+  </div>
+</section>
+
+ 
             <div className="flex justify-center mt-6">
               <Button type="submit" size="wide">
                 {t("homepage.join_room")}
