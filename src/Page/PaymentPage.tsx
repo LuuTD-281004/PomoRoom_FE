@@ -49,7 +49,7 @@ export default function PaymentPage() {
     });
 
     const channel = pusherClient.subscribe(
-      `private-payment-${authenticatedUser.sub}`
+      `private-payment-${authenticatedUser.id}`
     );
 
     channel.bind("payment-result", (data: any) => {
@@ -125,7 +125,7 @@ export default function PaymentPage() {
           <img
             src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${
               settings?.bankType
-            }&amount=${selectedPrice}&des=${authenticatedUser?.sub.replace(
+            }&amount=${selectedPrice}&des=${authenticatedUser?.id.replace(
               /-/g,
               ""
             )}`}

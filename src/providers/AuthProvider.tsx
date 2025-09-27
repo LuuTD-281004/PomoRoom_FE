@@ -1,22 +1,27 @@
 import { useEffect, useState } from "react";
-import type { UserTokenData } from "../types/token";
-import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "../contexts/AuthContext";
 import http from "../axios/http";
+import { userLogin, userRegister } from "@/axios/auth";
+import { getUserInfo } from "@/axios/user";
+import type { UserType } from "@/types/user";
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [accessTokenState, setAccessTokenState] = useState<string | null>(null);
-  const [currentUser, setCurrentUser] = useState<UserTokenData | null>(null);
+  const [currentUser, setCurrentUser] = useState<UserType | null>(null);
   const [currentRole, setCurrentRole] = useState<string | null>(null);
+
+  const setUserFunction = async () => {
+    const user = await getUserInfo();
+    setCurrentUser(user);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       setAccessTokenState(token);
-      const user = jwtDecode<UserTokenData>(token);
-      setCurrentUser(user);
+      setUserFunction();
     }
   }, [accessTokenState]);
 
@@ -26,11 +31,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     password: string
   ) => {
     try {
-      const response = await http.post("/auth/register", {
-        username: username,
-        email: email,
-        password: password,
-      });
+      const response = await userRegister(username, email, password);
       if (response.status === 200) {
         window.location.href = "/login";
       }
@@ -42,11 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await http.post("/auth/login", {
-        email: email,
-        password: password,
-      });
-
+      const response = await userLogin(email, password);
       const { accessToken } = response.data.authResult.cookies;
       localStorage.setItem("accessToken", accessToken);
       setAccessTokenState(accessToken);

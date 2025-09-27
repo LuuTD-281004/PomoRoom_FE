@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
-import type { UserTokenData } from "../types/token";
+import type { UserType } from "@/types/user";
 
 interface AuthContextType {
   loginWithGoogle: (googleResponse: any) => Promise<any>;
   login: (email: string, password: string) => Promise<any>;
   register: (username: string, email: string, password: string) => Promise<any>;
   logout: () => Promise<void>;
-  authenticatedUser: UserTokenData | null;
+  authenticatedUser: UserType | null;
   accessToken: string | null;
   currentRoleUsing: string | null;
   setCurrentRoleUsing: any;

@@ -1,5 +1,5 @@
 import Modal from "@/Components/Modal";
-import { Users, UsersIcon } from "lucide-react";
+import { UsersIcon } from "lucide-react";
 
 type Props = {
     isOpen: boolean;
