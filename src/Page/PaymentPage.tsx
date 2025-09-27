@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/Components/ui/dialog";
+import { getPusherClient } from "@/lib/pusher";
 
 interface PaymentPackage {
   id: string;
@@ -28,10 +29,40 @@ export default function PaymentPage() {
   const [packages, setPackages] = useState<PaymentPackage[]>([]);
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const { settings } = useSettings();
-  const { authenticatedUser } = useAuth();
+  const { authenticatedUser, accessToken } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!authenticatedUser) return;
+    const serverUrl = import.meta.env.VITE_SERVER_URL;
+    const pusher = import.meta.env.VITE_PUSHER_AUTH_ENDPOINT;
+    const pusherAuthEndpoint = `${serverUrl}${pusher}`;
+
+    const pusherClient = getPusherClient({
+      appKey: import.meta.env.VITE_APP_KEY,
+      cluster: import.meta.env.VITE_CLUSTER,
+      authEndpoint: pusherAuthEndpoint,
+      authToken: accessToken || "",
+    });
+
+    const channel = pusherClient.subscribe(
+      `private-payment-${authenticatedUser.sub}`
+    );
+
+    channel.bind("payment-result", (data: any) => {
+      console.log("Payment event received:", data);
+      setShowSuccessPopup(true);
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+      pusherClient.disconnect();
+    };
+  }, [authenticatedUser]);
 
   const fetchPackages = async () => {
     const response = await http.get("/payment/all-packages");
@@ -48,6 +79,11 @@ export default function PaymentPage() {
       return;
     }
     setSelectedPrice(pkg.price);
+  };
+
+  const handleCloseTransactionConfirmation = async () => {
+    navigate("/");
+    setShowSuccessPopup(false);
   };
 
   return (
@@ -87,7 +123,12 @@ export default function PaymentPage() {
       <div className="w-1/2 flex flex-col justify-center items-center bg-white p-8">
         {selectedPrice ? (
           <img
-            src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${settings?.bankType}&amount=${selectedPrice}&des=${authenticatedUser?.sub.replace(/-/g, "")}`}
+            src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${
+              settings?.bankType
+            }&amount=${selectedPrice}&des=${authenticatedUser?.sub.replace(
+              /-/g,
+              ""
+            )}`}
             alt="QR Code"
             className="w-64 h-64 mb-6"
           />
@@ -95,6 +136,23 @@ export default function PaymentPage() {
           <p className="text-gray-600">Vui lòng chọn gói để hiển thị QR</p>
         )}
       </div>
+
+      <Dialog open={showSuccessPopup} onOpenChange={setShowSuccessPopup}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Thanh toán thành công!</DialogTitle>
+          </DialogHeader>
+          <p className="text-gray-700 mb-4">
+            Cảm ơn bạn, giao dịch của bạn đã được xác nhận.
+          </p>
+          <Button
+            className="w-full bg-green-600 text-white hover:bg-green-700"
+            onClick={() => handleCloseTransactionConfirmation()}
+          >
+            Đóng
+          </Button>
+        </DialogContent>
+      </Dialog>
 
       {/* Login Prompt Dialog */}
       <Dialog open={showLoginPrompt} onOpenChange={setShowLoginPrompt}>
