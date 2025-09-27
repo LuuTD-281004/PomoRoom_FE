@@ -5,7 +5,7 @@ type ButtonProps = {
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
-  size?: "default" | "wide" | "full";
+  size?: "default" | "wide" | "full" | "small";
   color?: "gradient" | "gray";
   className?: string;
 };
@@ -35,6 +35,7 @@ const Button: React.FC<ButtonProps> = ({
     default: "w-auto min-w-[120px]",
     wide: "w-auto min-w-[160px]",
     full: "w-full",
+    small: "w-auto min-w-[80px]",
   };
 
   return (
