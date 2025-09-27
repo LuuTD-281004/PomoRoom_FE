@@ -9,7 +9,7 @@ export type UserRole = {
     updatedAt: string;
 };
 
-export type User = {
+export type UserType = {
     id: string;
     username: string;
     email: string;
@@ -19,6 +19,7 @@ export type User = {
     userRoles?: UserRole[];
     createdAt?: string;
     updatedAt?: string;
+    avatarUrl?: string;
     messages?: Message[];
     conversations?: Conversation[];
 };

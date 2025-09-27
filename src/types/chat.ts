@@ -1,9 +1,9 @@
-import type { User } from "./user";
+import type { UserType } from "./user";
 
 export type Message = {
   id: string;
   content: string;
-  sender: User;
+  sender: UserType;
   isRead: boolean;
   createdAt: string;
   updatedAt: string;
@@ -13,7 +13,7 @@ export type Participant = {
   id: string;
   createdAt: string;
   updatedAt: string;
-  user: User;
+  user: UserType;
 };
 
 export type Conversation = {
