@@ -112,5 +112,102 @@
       "title": "Có nên nâng cấp không nếu mình chỉ học 1-2 tiếng mỗi ngày?",
       "answer": "Không nhất thiết. Nếu bạn học ít, gói miễn phí vẫn đủ. Nhưng bản Pro sẽ mang lại trải nghiệm học tập chuyên sâu và tiện ích lâu dài."
     }
+  },
+  "cancelModal": {
+    "message": "Bạn có muốn thoát khi chưa hết thời gian chứ ?",
+    "exit": "Thoát",
+    "stay": "Ở lại"
+  },
+  "joinRoomModal": {
+    "title": "THAM GIA VÀO NHÓM",
+    "public": "Công khai",
+    "createRoom": "Tạo phòng",
+    "private": "Riêng tư",
+    "findRoom": "Tìm phòng",
+    "codePlaceholder": "Mã Code",
+    "submit": "Tìm",
+    "helper": "Chọn phòng công khai để tham gia, hoặc tạo phòng mới."
+  },
+  "playlistModal": {
+    "title": "DANH SÁCH NHẠC",
+    "addFavorite": "Thêm nhạc yêu thích của bạn",
+    "youtubePlaceholder": "Liên kết từ Youtube",
+    "search": "Tìm",
+    "default": "♪ Mặc định",
+    "play": "Play",
+    "volume": "ÂM LƯỢNG",
+    "music": "Nhạc",
+    "sound": "Âm thanh",
+    "ambients": "ÂM THANH",
+    "ambientsDesc": "Chọn âm thanh bạn yêu thích",
+    "ambientOptions": ["Mưa rơi", "Lò sưởi", "Gió nhẹ", "Thư viện"]
+  },
+  "starExchange": "Trạm đổi sao",
+  "tabs": {
+    "theme": "Chủ đề",
+    "effect": "Hiệu ứng",
+    "avatar": "Avatar"
+  },
+  "items": {
+    "deepOcean": "Đại dương sâu",
+    "christmas": "Noel",
+    "peachBlossom": "Hoa đào",
+    "autumnForest": "Rừng thu",
+    "sunset": "Hoàng hôn",
+    "universe": "Vũ trụ",
+    "frozen": "Băng giá",
+    "earlySun": "Nắng sớm"
+  },
+  "themeModal": {
+    "title": "GIAO DIỆN",
+    "mainColor": "Màu chủ đạo",
+    "custom": "Tùy chỉnh",
+    "staticBg": "Chọn nền tĩnh",
+    "dynamicBg": "Chọn nền động",
+    "decorations": "TRANG TRÍ",
+    "effect": "Hiệu ứng",
+    "starColors": {
+      "pink": "Hồng",
+      "orange": "Cam",
+      "yellow": "Vàng",
+      "cyan": "Xanh nước",
+      "blue": "Xanh dương",
+      "purple": "Tím"
+    },
+    "decorationItems": {
+      "leaf": "Lá rơi",
+      "petals": "Cánh hoa rơi",
+      "rain": "Mưa rơi",
+      "sun": "Nắng"
+    }
+  },
+  "welcomeRoom": {
+    "line1": "Chào mừng",
+    "line2": "đến với",
+    "appName": "PomoRoom"
+  },
+  "roomLayout": {
+    "account": "Tài khoản",
+    "history": "Lịch sử",
+    "notifications": "Thông báo",
+    "vip": "VVip",
+    "settings": "Cài đặt",
+    "starExchange": "Trạm đổi sao",
+    "music": "Nhạc",
+    "theme": "Giao diện"
+  },
+  "setup": {
+    "focus": "Tập trung",
+    "short_break": "Nghỉ ngắn",
+    "long_break": "Nghỉ dài",
+    "minutes": "{{count}} phút",
+    "private_room": "Phòng cá nhân",
+    "group_room": "Phòng nhóm",
+    "greeting": "Ngày mới tốt lành nhé."
+  },
+  "privateRoom": {
+    "music_label": "🎵 Tiếng mưa lofi chill 1 giờ không ngừng",
+    "start": "Bắt đầu",
+    "stop": "Dừng"
   }
 }

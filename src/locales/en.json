@@ -113,5 +113,102 @@
       "title": "Should I upgrade if I only study 1–2 hours per day?",
       "answer": "Not necessary. Free plan is enough for light use. Pro is recommended for a more in-depth and long-term learning experience."
     }
+  },
+  "cancelModal": {
+    "message": "Do you want to exit before the time is up?",
+    "exit": "Exit",
+    "stay": "Stay"
+  },
+  "joinRoomModal": {
+    "title": "JOIN A GROUP",
+    "public": "Public",
+    "createRoom": "Create Room",
+    "private": "Private",
+    "findRoom": "Find Room",
+    "codePlaceholder": "Code",
+    "submit": "Submit",
+    "helper": "Choose a public room to join, or create a new one."
+  },
+  "playlistModal": {
+    "title": "PLAYLIST",
+    "addFavorite": "Add your favorite music",
+    "youtubePlaceholder": "Youtube link",
+    "search": "Search",
+    "default": "♪ Default",
+    "play": "Play",
+    "volume": "VOLUME",
+    "music": "Music",
+    "sound": "Sound",
+    "ambients": "AMBIENTS",
+    "ambientsDesc": "Choose your favorite ambient sound",
+    "ambientOptions": ["Rain", "Fireplace", "Breeze", "Library"]
+  },
+  "starExchange": "Star Exchange Station",
+  "tabs": {
+    "theme": "Theme",
+    "effect": "Effect",
+    "avatar": "Avatar"
+  },
+  "items": {
+    "deepOcean": "Deep Ocean",
+    "christmas": "Christmas",
+    "peachBlossom": "Peach Blossom",
+    "autumnForest": "Autumn Forest",
+    "sunset": "Sunset",
+    "universe": "Universe",
+    "frozen": "Frozen",
+    "earlySun": "Morning Sun"
+  },
+  "themeModal": {
+    "title": "THEME",
+    "mainColor": "Main color",
+    "custom": "Custom",
+    "staticBg": "Choose static background",
+    "dynamicBg": "Choose dynamic background",
+    "decorations": "DECORATION",
+    "effect": "Effect",
+    "starColors": {
+      "pink": "Pink",
+      "orange": "Orange",
+      "yellow": "Yellow",
+      "cyan": "Cyan",
+      "blue": "Blue",
+      "purple": "Purple"
+    },
+    "decorationItems": {
+      "leaf": "Falling leaves",
+      "petals": "Falling petals",
+      "rain": "Rain",
+      "sun": "Sunlight"
+    }
+  },
+  "welcomeRoom": {
+    "line1": "Welcome",
+    "line2": "to",
+    "appName": "PomoRoom"
+  },
+  "roomLayout": {
+    "account": "Account",
+    "history": "History",
+    "notifications": "Notifications",
+    "vip": "VIP",
+    "settings": "Settings",
+    "starExchange": "Star Exchange Station",
+    "music": "Music",
+    "theme": "Theme"
+  },
+  "setup": {
+    "focus": "Focus",
+    "short_break": "Short Break",
+    "long_break": "Long Break",
+    "minutes": "{{count}} minutes",
+    "private_room": "Private Room",
+    "group_room": "Group Room",
+    "greeting": "Good morning! Have a nice day."
+  },
+  "privateRoom": {
+    "music_label": "🎵 Lofi rain sounds 1 hour non-stop",
+    "start": "Start",
+    "stop": "Stop"
   }
 }
