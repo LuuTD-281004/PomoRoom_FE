@@ -15,37 +15,40 @@ import RoomLayout from "./Page/room/layouts/RoomLayout";
 import PaymentPage from "./Page/PaymentPage";
 import LayoutWithMinimizedHeader from "./partials/LayoutWithMinimizedHeader";
 import { SettingsProvider } from "./providers/SettingsProvider";
+import { RoomSetupProvider } from "./providers/RoomSetupProvider";
 
 function App() {
   return (
     <AuthProvider>
       <SettingsProvider>
-        <Router>
-          <Routes>
-            <Route element={<LayoutWithHeader />}>
-              <Route path="/" element={<Homepage />} />
-              <Route element={<RoomLayout />}>
-                <Route path="/rooms" element={<SetupRoom />} />
-                <Route path="/private-room" element={<PrivateRoom />} />
+        <RoomSetupProvider>
+          <Router>
+            <Routes>
+              <Route element={<LayoutWithHeader />}>
+                <Route path="/" element={<Homepage />} />
+                <Route element={<RoomLayout />}>
+                  <Route path="/rooms" element={<SetupRoom />} />
+                  <Route path="/private-room" element={<PrivateRoom />} />
+                </Route>
+                <Route path="/ranking" element={<RankingPage />} />
+                <Route
+                  path="/ranking/personal"
+                  element={<h1>Thành tích cá nhân</h1>}
+                />
+                <Route path="/plans" element={<ServicesPage />} />
               </Route>
-              <Route path="/ranking" element={<RankingPage />} />
-              <Route
-                path="/ranking/personal"
-                element={<h1>Thành tích cá nhân</h1>}
-              />
-              <Route path="/plans" element={<ServicesPage />} />
-            </Route>
-            <Route element={<LayoutWithMinimizedHeader />}>
-              <Route path="/packages" element={<PaymentPage />} />
-            </Route>
+              <Route element={<LayoutWithMinimizedHeader />}>
+                <Route path="/packages" element={<PaymentPage />} />
+              </Route>
 
-            <Route element={<LayoutAuth />}>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-            </Route>
-            <Route path="*" element={<h1>404 - Page Not Found</h1>} />
-          </Routes>
-        </Router>
+              <Route element={<LayoutAuth />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+              </Route>
+              <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+            </Routes>
+          </Router>
+        </RoomSetupProvider>
       </SettingsProvider>
     </AuthProvider>
   );
