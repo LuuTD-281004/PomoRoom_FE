@@ -3,11 +3,14 @@ import { useTranslation } from "react-i18next";
 import ReactCountryFlag from "react-country-flag";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "./../Components/Button";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserDropdown } from "@/Components/UserDropdown";
 
 const Header: React.FC = () => {
   const { i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const { authenticatedUser } = useAuth();
 
   const toggleLanguage = () => {
     const newLang = i18n.language === "vi" ? "en" : "vi";
@@ -24,7 +27,7 @@ const Header: React.FC = () => {
   return (
     <header className="fixed w-full bg-white shadow-md">
       <div className="mx-auto flex items-center justify-between px-6 py-3">
-        <div 
+        <div
           className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity duration-200"
           onClick={navigateToHome}
         >
@@ -58,8 +61,14 @@ const Header: React.FC = () => {
             />
           </div>
 
-          {!isAuthPage && (
-            <Button onClick={() => navigate("/login")}>Đăng nhập</Button>
+          {authenticatedUser ? (
+            <UserDropdown user={authenticatedUser} />
+          ) : (
+            <>
+              {!isAuthPage && (
+                <Button onClick={() => navigate("/login")}>Đăng nhập</Button>
+              )}
+            </>
           )}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import Modal from "@/Components/Modal";
-import Button from "@/Components/Button"; // import component button
+import Button from "@/Components/Button"; 
 import { UsersIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
