@@ -15,7 +15,8 @@ import PaymentPage from "./Page/PaymentPage";
 import LayoutWithMinimizedHeader from "./partials/LayoutWithMinimizedHeader";
 import { SettingsProvider } from "./providers/SettingsProvider";
 import { RoomSetupProvider } from "./providers/RoomSetupProvider";
-import HomePage from "./Page/HomePage";
+import HomePage from "./Page/Homepage";
+import ScrollToTop from "./Components/ScrollToTop";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <SettingsProvider>
         <RoomSetupProvider>
           <Router>
+            <ScrollToTop />
             <Routes>
               <Route element={<LayoutWithHeader />}>
                 <Route path="/" element={<HomePage />} />
