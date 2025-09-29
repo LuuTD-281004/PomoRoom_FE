@@ -4,14 +4,17 @@ import CancelModal from "./components/CancelModal";
 import { useRoomSetup } from "@/contexts/RoomSetupContext";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Button from "@/Components/Button"; 
+import Button from "@/Components/Button";
+import { createPersonalRoom } from "@/axios/room";
 
 const PrivateRoom = () => {
   const { setup } = useRoomSetup();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const initialSeconds = setup?.focusMinutes ? setup.focusMinutes * 60 : 25 * 60;
+  const initialSeconds = setup?.focusMinutes
+    ? setup.focusMinutes * 60
+    : 25 * 60;
   const [remaining, setRemaining] = useState<number>(initialSeconds);
   const [running, setRunning] = useState(false);
   const [showCancel, setShowCancel] = useState(false);
@@ -58,7 +61,16 @@ const PrivateRoom = () => {
     };
   }, [running]);
 
-  const handleStart = () => setRunning(true);
+  const handleStart = async () => {
+    const response = await createPersonalRoom(
+      setup.shortBreakMinutes,
+      setup.longBreakMinutes,
+      setup.focusMinutes
+    );
+    if (response) {
+      setRunning(true);
+    }
+  };
 
   const handleStop = () => setShowCancel(true);
   const handleConfirmExit = () => {
@@ -69,7 +81,9 @@ const PrivateRoom = () => {
   };
   const handleCancelClose = () => setShowCancel(false);
 
-  const mm = Math.floor(remaining / 60).toString().padStart(2, "0");
+  const mm = Math.floor(remaining / 60)
+    .toString()
+    .padStart(2, "0");
   const ss = (remaining % 60).toString().padStart(2, "0");
 
   return (
