@@ -36,8 +36,8 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-w-screen flex flex-col items-center justify-center">
-      <div className="flex flex-1 items-center justify-center mt-14">
+    <div className="w-full min-w-screen bg-white flex flex-col items-center justify-center">
+      <div className="flex flex-1 items-center bg-white justify-center mt-14">
         <div className="w-full h-[calc(100vh-80px)] grid grid-cols-2">
           <div className="flex flex-col justify-center px-20 bg-white">
             <h1 className="text-2xl font-bold mb-2 mt-4">
@@ -97,8 +97,7 @@ const RegisterPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Cột phải */}
-          <div className="flex items-center justify-end px-10 py-8">
+          <div className="flex items-center bg-white justify-end px-10 py-8">
             <img
               src={registerImage}
               alt="Register illustration"
