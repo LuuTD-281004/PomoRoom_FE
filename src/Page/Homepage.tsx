@@ -10,7 +10,7 @@ import banner3 from "../assets/image/bannerHomepage/banner3.jpg";
 import banner4 from "../assets/image/bannerHomepage/banner4.jpg";
 
 const HomePage: React.FC = () => {
-  const { t } = useTranslation();
+const { t } = useTranslation();
 const banners = [banner1, banner2, banner3, banner4];
 
   const [current, setCurrent] = useState(0);

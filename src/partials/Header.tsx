@@ -8,6 +8,7 @@ import { UserDropdown } from "@/Components/UserDropdown";
 
 const Header: React.FC = () => {
   const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const { authenticatedUser } = useAuth();
@@ -66,7 +67,9 @@ const Header: React.FC = () => {
           ) : (
             <>
               {!isAuthPage && (
-                <Button onClick={() => navigate("/login")}>Đăng nhập</Button>
+                  <Button onClick={() => navigate("/login")}>
+                    {t("login")}
+                  </Button>
               )}
             </>
           )}
