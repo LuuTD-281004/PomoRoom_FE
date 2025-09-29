@@ -4,32 +4,35 @@ export async function createRoom(
   name: string,
   roomType: number,
   shortRestTime: number,
-  longRestTime: number
+  longRestTime: number,
+  focusTime: number
 ) {
-    const response = await http.post("/rooms/create-room", {
+  const response = await http.post("/rooms/create-room", {
     name: name,
     roomType: roomType,
     shortRestTime: shortRestTime,
     longRestTime: longRestTime,
+    focusTime: focusTime,
   });
 
   return response.data.result;
 }
 
 export async function createPersonalRoom(
-  page: number = 1,
-  limit: number = 10,
-  sortBy: string = "username",
-  order: "ASC" | "DESC" = "ASC"
+  shortRestTime: number,
+  longRestTime: number,
+  focusTime: number
 ) {
   const response = await http.post("/rooms/create-personal-room", {
-    params: {
-      page,
-      limit,
-      sortBy,
-      order,
-    },
+    shortRestTime: shortRestTime,
+    longRestTime: longRestTime,
+    focusTime: focusTime,
   });
 
+  return response.data.result;
+}
+
+export async function getCurrentWorkingPersonalRoom() {
+  const response = await http.get("/rooms/current-working-personal-room");
   return response.data.result;
 }
