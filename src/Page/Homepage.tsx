@@ -1,16 +1,77 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../partials/Footer";
 import { Quote } from "lucide-react";
 import Button from "../Components/Button";
 import { useTranslation } from "react-i18next";
 
+import banner1 from "../assets/image/bannerHomepage/banner1.jpg";
+import banner2 from "../assets/image/bannerHomepage/banner2.jpg";
+import banner3 from "../assets/image/bannerHomepage/banner3.jpg";
+import banner4 from "../assets/image/bannerHomepage/banner4.jpg";
+
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
+const banners = [banner1, banner2, banner3, banner4];
 
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % banners.length);
+    }, 3000); 
+    return () => clearInterval(interval);
+  }, [banners.length]);
+
+  const nextSlide = () => setCurrent((prev) => (prev + 1) % banners.length);
+  const prevSlide = () =>
+    setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
   return (
     <div className="w-full min-w-screen flex flex-col items-center justify-center mt-10">
       <main>
         {/* Section 1 */}
+        <section className="relative w-full overflow-hidden">
+          <div
+            className="flex transition-transform duration-700 ease-in-out"
+            style={{ transform: `translateX(-${current * 100}%)` }}
+          >
+            {banners.map((banner, index) => (
+              <img
+                key={index}
+                src={banner}
+                alt={`banner-${index}`}
+                className="w-full h-[350px] object-cover flex-shrink-0"
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={prevSlide}
+            className="absolute top-1/2 left-4 -translate-y-1/2 bg-opacity-50 text-white px-3 py-2 rounded-full"
+          >
+            ❮
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute top-1/2 right-4 -translate-y-1/2 bg-opacity-50 text-white px-3 py-2 rounded-full"
+          >
+            ❯
+          </button>
+
+          {/* Dots */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+            {banners.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrent(index)}
+                className={`w-3 h-3 rounded-full ${
+                  current === index ? "bg-white" : "bg-gray-400"
+                }`}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Section 2 */}
         <section className="w-full min-w-screen flex flex-col items-center justify-center bg-white py-12 px-6">
           <div className="w-full mx-auto text-center">
             <h1
@@ -27,7 +88,7 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* Section 2 */}
+        {/* Section 3 */}
         <section className="w-full bg-[#E3EEFF] py-16 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-extrabold text-center text-[#0B0D39] mb-8">
@@ -53,7 +114,7 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* Section 3 */}
+        {/* Section 4 */}
         <section className="w-full bg-white py-12 px-6">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-[#0C1A57] mb-8">
@@ -87,7 +148,7 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        {/* Section 4 */}
+        {/* Section 5 */}
         <section className="w-full bg-[#E3EEFF] py-12 px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center text-[#0C1A57] mb-12">
