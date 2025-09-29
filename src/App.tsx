@@ -1,6 +1,5 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Homepage from "./Page/HomePage";
 import LoginPage from "./Page/LoginPage";
 import RegisterPage from "./Page/RegisterPage";
 import RankingPage from "./Page/RankingPage";
@@ -16,6 +15,7 @@ import PaymentPage from "./Page/PaymentPage";
 import LayoutWithMinimizedHeader from "./partials/LayoutWithMinimizedHeader";
 import { SettingsProvider } from "./providers/SettingsProvider";
 import { RoomSetupProvider } from "./providers/RoomSetupProvider";
+import HomePage from "./Page/HomePage";
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
           <Router>
             <Routes>
               <Route element={<LayoutWithHeader />}>
-                <Route path="/" element={<Homepage />} />
+                <Route path="/" element={<HomePage />} />
                 <Route element={<RoomLayout />}>
                   <Route path="/rooms" element={<SetupRoom />} />
                   <Route path="/private-room" element={<PrivateRoom />} />

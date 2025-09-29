@@ -4,7 +4,7 @@ import { Quote } from "lucide-react";
 import Button from "../Components/Button";
 import { useTranslation } from "react-i18next";
 
-const Homepage: React.FC = () => {
+const HomePage: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -149,4 +149,4 @@ const Homepage: React.FC = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;
