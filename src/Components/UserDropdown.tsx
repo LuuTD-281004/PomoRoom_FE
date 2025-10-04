@@ -7,10 +7,11 @@ import {
   DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/Components/ui/avatar";
-import { LogOut, User } from "lucide-react";
+import { ClockIcon, LogOut, SettingsIcon, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { UserType } from "@/types/user";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 interface UserDropdownProps {
   user: UserType;
@@ -19,6 +20,7 @@ interface UserDropdownProps {
 export function UserDropdown({ user }: UserDropdownProps) {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <DropdownMenu>
@@ -45,13 +47,22 @@ export function UserDropdown({ user }: UserDropdownProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => navigate("/profile")}>
           <User className="mr-2 h-4 w-4" />
-          <span>Hồ sơ</span>
+          <span>{t("roomLayout.account")}</span>
         </DropdownMenuItem>
+        <DropdownMenuItem>
+          <ClockIcon className="mr-2 h-4 w-4" />
+          <span>{t("roomLayout.history")}</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <SettingsIcon className="mr-2 h-4 w-4" />
+          <span>{t("roomLayout.settings")}</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => logout()}
         >
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Đăng xuất</span>
+          <span>{t("logout")}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

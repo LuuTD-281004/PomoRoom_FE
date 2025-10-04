@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button from "./../Components/Button";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserDropdown } from "@/Components/UserDropdown";
+import { BellIcon } from "lucide-react";
 
 const Header: React.FC = () => {
   const { i18n } = useTranslation();
@@ -63,13 +64,19 @@ const Header: React.FC = () => {
           </div>
 
           {authenticatedUser ? (
-            <UserDropdown user={authenticatedUser} />
+            <>
+
+              <button className="hover:bg-accent p-2 rounded-sm">
+                <BellIcon className="size-5" />
+              </button>
+              <UserDropdown user={authenticatedUser} />
+            </>
           ) : (
             <>
               {!isAuthPage && (
-                  <Button onClick={() => navigate("/login")}>
-                    {t("login")}
-                  </Button>
+                <Button onClick={() => navigate("/login")}>
+                  {t("login")}
+                </Button>
               )}
             </>
           )}

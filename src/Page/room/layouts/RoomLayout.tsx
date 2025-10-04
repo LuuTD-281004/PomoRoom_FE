@@ -25,46 +25,6 @@ const RoomLayout = () => {
   }
   return (
     <div className="flex h-screen bg-blue-100">
-      <nav className="w-20 bg-[#0C1A57] top-60 fixed flex flex-col h-fit items-center rounded-r-lg space-y-8">
-        <div className="flex flex-col">
-          <Link
-            to="#"
-            className="p-2 py-6 flex border-b border-white flex-col gap-1 items-center !text-white hover:text-yellow-400 transition-colors"
-          >
-            <UserIcon size={24} />
-            <span className="text-xs">{t("roomLayout.account")}</span>
-          </Link>
-          <Link
-            to="#"
-            className="p-2 py-6 flex border-b border-white flex-col gap-1 items-center !text-white hover:text-yellow-400 transition-colors"
-          >
-            <ClockIcon size={24} />
-            <span className="text-xs">{t("roomLayout.history")}</span>
-          </Link>
-          <Link
-            to="#"
-            className="p-2 py-6 flex border-b border-white flex-col gap-1 items-center !text-white hover:text-yellow-400 transition-colors"
-          >
-            <BellIcon size={24} />
-            <span className="text-xs">{t("roomLayout.notifications")}</span>
-          </Link>
-          <Link
-            to="#"
-            className="p-2 py-6 flex border-b border-white flex-col gap-1 items-center !text-white hover:text-yellow-400 transition-colors"
-          >
-            <TrophyIcon size={24} className="text-yellow-300" />
-            <span className="text-xs">{t("roomLayout.vip")}</span>
-          </Link>
-          <Link
-            to="#"
-            className="p-2 py-6 flex flex-col gap-1 items-center !text-white hover:text-yellow-400 transition-colors"
-          >
-            <SettingsIcon size={24} />
-            <span className="text-xs">{t("roomLayout.settings")}</span>
-          </Link>
-        </div>
-      </nav>
-
       <div className="fixed flex items-center gap-4 top-40 p-4 right-5 ">
         <div className="flex bg-white items-center h-fit gap-2 border-2 text-[#0C1A57] font-medium border-[#0C1A57] p-1 px-5 rounded-md">
           <svg
