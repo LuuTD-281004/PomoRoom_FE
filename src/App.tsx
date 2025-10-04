@@ -33,10 +33,6 @@ function App() {
                   <Route path="/private-room" element={<PrivateRoom />} />
                 </Route>
                 <Route path="/ranking" element={<RankingPage />} />
-                <Route
-                  path="/ranking/personal"
-                  element={<h1>Thành tích cá nhân</h1>}
-                />
                 <Route path="/plans" element={<ServicesPage />} />
               </Route>
               <Route element={<LayoutWithMinimizedHeader />}>

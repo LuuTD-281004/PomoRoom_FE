@@ -14,10 +14,10 @@ const Footer: React.FC<FooterProps> = (props) => {
   const { t } = useTranslation();
 
   const {
-    facebookLink = "https://www.facebook.com/luutd2810",
+    facebookLink = "https://www.facebook.com/people/Pomoroom/61581370064797/",
     tiktokLink = "https://www.tiktok.com/@_luutd2810_",
-    phone = "0368870669",
-    email = "pomo@gmail.com",
+    phone = "0368870665",
+    email = "insyncpomo@gmail.com",
     location = "Hồ Chí Minh - Việt Nam"
   } = props;
 
