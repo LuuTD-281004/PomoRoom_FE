@@ -15,7 +15,7 @@ export async function createRoom(
     focusTime: focusTime,
   });
 
-  return response.data.result;
+  return response;
 }
 
 export async function createPersonalRoom(
@@ -29,10 +29,20 @@ export async function createPersonalRoom(
     focusTime: focusTime,
   });
 
-  return response.data.result;
+  return response;
 }
 
 export async function getCurrentWorkingPersonalRoom() {
   const response = await http.get("/rooms/current-working-personal-room");
-  return response.data.result;
+  return response;
+}
+
+export async function updateRoomStatus() {
+  const response = await http.put("/rooms/update-room-status");
+  return response;  
+}
+
+export async function stopPersonalRoom() {
+  const response = await http.put("/rooms/stop-personal-room");
+  return response;
 }
