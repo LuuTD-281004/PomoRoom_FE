@@ -37,6 +37,11 @@ export async function getCurrentWorkingPersonalRoom() {
   return response;
 }
 
+export async function updateRoomStatus() {
+  const response = await http.put("/rooms/update-room-status");
+  return response;  
+}
+
 export async function stopPersonalRoom() {
   const response = await http.put("/rooms/stop-personal-room");
   return response;

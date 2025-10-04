@@ -9,12 +9,15 @@ import {
   createPersonalRoom,
   getCurrentWorkingPersonalRoom,
   stopPersonalRoom,
+  updateRoomStatus,
 } from "@/axios/room";
 import { RemovePersonalRoomModal } from "./components/RemovePersonalRoomModal";
+import type { PersonalRoom } from "@/types/room";
+import { RoomStatus } from "@/enum/room-status";
 
-const FOCUS_OPTIONS = [15, 25, 50];
-const SHORT_BREAK_OPTIONS = [3, 5, 10];
-const LONG_BREAK_OPTIONS = [10, 15, 20];
+const FOCUS_OPTIONS = [1, 5, 15, 25, 50];
+const SHORT_BREAK_OPTIONS = [1, 3, 5, 10];
+const LONG_BREAK_OPTIONS = [1, 10, 15, 20];
 
 const SetupRoom = () => {
   const { setup, setSetup } = useRoomSetup();
@@ -31,21 +34,22 @@ const SetupRoom = () => {
   const [showCancel, setShowCancel] = useState(false);
   const intervalRef = useRef<number | null>(null);
 
-  const fetchCurrentRoom = async () => {
+  const updateCurrentElapse = async (personalRoom: PersonalRoom) => {
     try {
-      const response = await getCurrentWorkingPersonalRoom();
-      if (response.status === 200 && response.data?.result) {
-        const room = response.data.result;
-        const focusDuration = (room.focusTime ?? setup.focusMinutes) * 60; // total seconds
+      if (personalRoom) {
+        const room: PersonalRoom = personalRoom;
+        let duration = room.focusTime * 60; // total seconds
+        if (personalRoom.roomStatus === RoomStatus.ON_REST) {
+          duration = room.shortRestTime * 60;
+        } else if (personalRoom.roomStatus === RoomStatus.ON_LONG_REST) {
+          duration = room.longRestTime * 60;
+        }
 
-        // Convert UTC time to UTC+7 (add 7 hours)
-        const updatedAtUtc = new Date(room.updatedAt);
-        const updatedAtLocal = updatedAtUtc.getTime() + 7 * 60 * 60 * 1000;
-
+        const updatedAt = new Date(room.updatedAt).getTime();
         const now = Date.now();
-        const elapsed = Math.floor((now - updatedAtLocal) / 1000);
-        const remainingTime = Math.max(focusDuration - elapsed, 0);
-        console.log(elapsed, remainingTime);
+
+        const elapsed = Math.floor((now - updatedAt) / 1000);
+        const remainingTime = Math.max(duration - elapsed, 0);
         setIsPrivate(true);
         setRemaining(remainingTime);
         setRunning(remainingTime > 0);
@@ -55,50 +59,86 @@ const SetupRoom = () => {
     }
   };
 
+  const updateRoom = async () => {
+    try {
+      const response = await updateRoomStatus();
+      if (response.status === 200) {
+        const personalRoom: PersonalRoom = response.data.result;
+        await updateCurrentElapse(personalRoom);
+      }
+    } catch (error) {
+      console.error("Error updating room status:", error);
+      setIsPrivate(false);
+      setRemaining(setup.focusMinutes * 60);
+      setRunning(false);
+    }
+  };
+
+  const fetchCurrentRoom = async () => {
+    try {
+      const response = await getCurrentWorkingPersonalRoom();
+      if (response.status === 200) {
+        const room: PersonalRoom = response.data.result;
+        let duration = room.focusTime * 60; // total seconds
+        if (room.roomStatus === RoomStatus.ON_REST) {
+          duration = room.shortRestTime * 60;
+        } else if (room.roomStatus === RoomStatus.ON_LONG_REST) {
+          duration = room.longRestTime * 60;
+        }
+        const updatedAt = new Date(room.updatedAt).getTime();
+        const now = Date.now();
+        const elapsed = Math.floor((now - updatedAt) / 1000);
+        const remainingTime = Math.max(duration - elapsed, 0);
+
+        if (remainingTime <= 0) {
+          // already expired, update the room status first
+          await updateRoom();
+          return;
+        }
+        await updateCurrentElapse(room);
+      } else {
+        setIsPrivate(false);
+        setRemaining(setup.focusMinutes * 60);
+        setRunning(false);
+      }
+    } catch (error) {
+      console.error("Error fetching current working room:", error);
+      setIsPrivate(false);
+    }
+  };
+
   useEffect(() => {
     fetchCurrentRoom();
   }, []);
 
-  // Reset timer when setup changes
-  // useEffect(() => {
-  //   const secs = (setup?.focusMinutes ?? 25) * 60;
-  //   setRemaining(secs);
-  //   setRunning(false);
-  //   if (intervalRef.current) {
-  //     window.clearInterval(intervalRef.current);
-  //     intervalRef.current = null;
-  //   }
-  // }, [setup]);
-
   useEffect(() => {
-    if (running) {
-      intervalRef.current = window.setInterval(() => {
-        setRemaining((r) => {
-          if (r <= 1) {
-            // finished
-            if (intervalRef.current) {
-              window.clearInterval(intervalRef.current);
-              intervalRef.current = null;
-            }
-            setRunning(false);
-            return 0;
-          }
-          return r - 1;
-        });
-      }, 1000);
-    } else {
-      if (intervalRef.current) {
-        window.clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
+    if (!running || remaining <= 0) return;
+
+    if (intervalRef.current) {
+      window.clearInterval(intervalRef.current);
     }
+
+    intervalRef.current = window.setInterval(() => {
+      setRemaining((r) => {
+        if (r <= 1) {
+          window.clearInterval(intervalRef.current!);
+          intervalRef.current = null;
+          setTimeout(() => {
+            updateRoom();
+          }, 200);
+          return 0;
+        }
+        return r - 1;
+      });
+    }, 1000);
+
     return () => {
       if (intervalRef.current) {
         window.clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
     };
-  }, [running]);
+  }, [running, remaining]);
 
   const handleRemoveOldRoom = async () => {
     setPendingStart(true);
@@ -111,7 +151,9 @@ const SetupRoom = () => {
           setup.longBreakMinutes,
           setup.focusMinutes
         );
-        if (response?.status === 200) {
+
+        await updateCurrentElapse(response.data.result);
+        if (response.status === 200) {
           setIsPrivate(true);
           setRunning(true);
         }
@@ -133,6 +175,7 @@ const SetupRoom = () => {
       );
 
       if (response.status === 200) {
+        await updateCurrentElapse(response.data.result);
         setIsPrivate(true);
         setRunning(true);
       } else if (response.status === 422) {
@@ -157,11 +200,6 @@ const SetupRoom = () => {
     // setRemaining((setup?.focusMinutes ?? 25) * 60);
   };
   const handleCancelClose = () => setShowCancel(false);
-
-  const mm = Math.floor(remaining / 60)
-    .toString()
-    .padStart(2, "0");
-  const ss = (remaining % 60).toString().padStart(2, "0");
 
   // -------------------------
   // VIEW 1: Setup Mode
@@ -279,7 +317,10 @@ const SetupRoom = () => {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4">
       <div className="text-8xl font-bold mb-8 text-white bg-blue-400/80 px-20 py-10 rounded-lg">
-        {mm}:{ss}
+        {Math.floor(remaining / 60)
+          .toString()
+          .padStart(2, "0")}
+        :{(remaining % 60).toString().padStart(2, "0")}
       </div>
 
       {/* Music Controls */}
