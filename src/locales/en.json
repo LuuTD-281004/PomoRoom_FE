@@ -2,6 +2,7 @@
   "welcome": "Welcome to PomoRoom",
   "login": "Login",
   "login_with_account": "Login with your account",
+  "logout": "Logout",
   "email": "Email",
   "password": "Password",
   "logging_in": "Logging in...",

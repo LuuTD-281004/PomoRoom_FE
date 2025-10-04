@@ -2,6 +2,7 @@
   "welcome": "Chào mừng đến với PomoRoom",
   "login": "Đăng nhập",
   "login_with_account": "Đăng nhập bằng tài khoản của bạn",
+  "logout": "Đăng xuất",
   "email": "Email",
   "password": "Mật khẩu",
   "logging_in": "Đang đăng nhập...",
