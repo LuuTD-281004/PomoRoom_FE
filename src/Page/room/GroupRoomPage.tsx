@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import Pusher from "pusher-js";
 import { useParams } from "react-router-dom";
 import { getPusherClient } from "@/lib/pusher";
 import { useAuth } from "@/contexts/AuthContext";

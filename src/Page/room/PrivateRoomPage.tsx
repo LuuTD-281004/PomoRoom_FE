@@ -3,7 +3,11 @@ import { PlayIcon, PauseIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Button from "@/Components/Button";
 import CancelModal from "./components/CancelModal";
-import { getCurrentWorkingPersonalRoom, updateRoomStatus, stopPersonalRoom } from "@/axios/room";
+import {
+  getCurrentWorkingPersonalRoom,
+  updateRoomStatus,
+  stopPersonalRoom,
+} from "@/axios/room";
 import type { PersonalRoom } from "@/types/room";
 import { RoomStatus } from "@/enum/room-status";
 
@@ -42,6 +46,17 @@ const PrivateRoomPage = () => {
     }
   };
 
+  const updateRoom = async () => {
+    try {
+      const response = await updateRoomStatus();
+      if (response.status === 200 && response.data?.result) {
+        await updateCurrentElapse(response.data.result);
+      }
+    } catch (err) {
+      console.error("Error update room:", err);
+    }
+  };
+
   useEffect(() => {
     fetchCurrentRoom();
   }, []);
@@ -55,7 +70,7 @@ const PrivateRoomPage = () => {
         if (r <= 1) {
           clearInterval(intervalRef.current!);
           intervalRef.current = null;
-          setTimeout(() => updateRoomStatus(), 200);
+          setTimeout(() => updateRoom(), 200);
           return 0;
         }
         return r - 1;
@@ -78,8 +93,10 @@ const PrivateRoomPage = () => {
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4">
       <div className="text-8xl font-bold mb-8 text-white bg-blue-400/80 px-20 py-10 rounded-lg">
-        {Math.floor(remaining / 60).toString().padStart(2, "0")}:
-        {(remaining % 60).toString().padStart(2, "0")}
+        {Math.floor(remaining / 60)
+          .toString()
+          .padStart(2, "0")}
+        :{(remaining % 60).toString().padStart(2, "0")}
       </div>
 
       <div className="flex items-center gap-4 bg-white/80 px-6 py-3 rounded-lg">
@@ -95,11 +112,21 @@ const PrivateRoomPage = () => {
       </div>
 
       <div className="flex gap-4 mt-8">
-        <Button onClick={() => setRunning(true)} color="gray" size="wide" disabled={running}>
+        <Button
+          onClick={() => setRunning(true)}
+          color="gray"
+          size="wide"
+          disabled={running}
+        >
           {t("privateRoom.start")}
         </Button>
 
-        <Button onClick={handleStop} color="gray" size="wide" disabled={!running}>
+        <Button
+          onClick={handleStop}
+          color="gray"
+          size="wide"
+          disabled={!running}
+        >
           {t("privateRoom.stop")}
         </Button>
       </div>
