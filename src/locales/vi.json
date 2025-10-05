@@ -127,7 +127,11 @@
     "findRoom": "Tìm phòng",
     "codePlaceholder": "Mã Code",
     "submit": "Tìm",
-    "helper": "Chọn phòng công khai để tham gia, hoặc tạo phòng mới."
+    "helper": "Chọn phòng công khai để tham gia, hoặc tạo phòng mới.",
+    "noRooms": "Không có phòng nào khả dụng",
+    "searchPlaceholder": "Tìm kiếm phòng...",
+    "createRoomPlaceholder": "Tên phòng...",
+    "createButton": "Tạo"
   },
   "playlistModal": {
     "title": "DANH SÁCH NHẠC",

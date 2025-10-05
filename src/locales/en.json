@@ -128,7 +128,11 @@
     "findRoom": "Find Room",
     "codePlaceholder": "Code",
     "submit": "Submit",
-    "helper": "Choose a public room to join, or create a new one."
+    "helper": "Choose a public room to join, or create a new one.",
+    "noRooms": "No available rooms",
+    "searchPlaceholder": "Search rooms...",
+    "createRoomPlaceholder": "Room name...",
+    "createButton": "Create"
   },
   "playlistModal": {
     "title": "PLAYLIST",

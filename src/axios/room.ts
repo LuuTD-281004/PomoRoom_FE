@@ -1,3 +1,4 @@
+import type { Room } from "@/types/room";
 import http from "./http";
 
 export async function createRoom(
@@ -15,6 +16,42 @@ export async function createRoom(
     focusTime: focusTime,
   });
 
+  return response;
+}
+
+export async function getAllRooms(
+  page: number = 1,
+  limit: number = 10,
+  sortBy: string = "username",
+  order: "ASC" | "DESC" = "ASC",
+  search?: string
+) {
+  const response = await http.get<{
+    message: string;
+    result: {
+      data: Room[];
+      pagination: {
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+  }>("/rooms/all-rooms", {
+    params: {
+      page,
+      limit,
+      sortBy,
+      order,
+      ...(search ? { search } : {}),
+    },
+  });
+
+  return response.data;
+}
+
+export async function getRoomByCode(code: string) {
+  const response = await http.get(`/rooms/room-by-code/${code}`);
   return response;
 }
 
@@ -39,7 +76,7 @@ export async function getCurrentWorkingPersonalRoom() {
 
 export async function updateRoomStatus() {
   const response = await http.put("/rooms/update-room-status");
-  return response;  
+  return response;
 }
 
 export async function stopPersonalRoom() {
