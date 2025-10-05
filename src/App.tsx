@@ -8,8 +8,7 @@ import LayoutAuth from "./partials/LayoutAuth";
 import ServicesPage from "./Page/ServicesPage";
 import { AuthProvider } from "./providers/AuthProvider";
 import "./i18n";
-import SetupRoom from "./Page/room/SetupRoom";
-import PrivateRoom from "./Page/room/PrivateRoom";
+import SetupRoomPage from "./Page/room/SetupRoomPage";
 import RoomLayout from "./Page/room/layouts/RoomLayout";
 import PaymentPage from "./Page/PaymentPage";
 import LayoutWithMinimizedHeader from "./partials/LayoutWithMinimizedHeader";
@@ -17,6 +16,7 @@ import { SettingsProvider } from "./providers/SettingsProvider";
 import { RoomSetupProvider } from "./providers/RoomSetupProvider";
 import HomePage from "./Page/Homepage";
 import ScrollToTop from "./Components/ScrollToTop";
+import PrivateRoomPage from "./Page/room/PrivateRoomPage";
 
 function App() {
   return (
@@ -29,8 +29,8 @@ function App() {
               <Route element={<LayoutWithHeader />}>
                 <Route path="/" element={<HomePage />} />
                 <Route element={<RoomLayout />}>
-                  <Route path="/rooms" element={<SetupRoom />} />
-                  <Route path="/private-room" element={<PrivateRoom />} />
+                  <Route path="/rooms" element={<SetupRoomPage />} />
+                  <Route path="/private-room" element={<PrivateRoomPage />} />
                 </Route>
                 <Route path="/ranking" element={<RankingPage />} />
                 <Route path="/plans" element={<ServicesPage />} />
