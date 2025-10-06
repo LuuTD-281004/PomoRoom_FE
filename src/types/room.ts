@@ -11,7 +11,7 @@ export type PersonalRoom = {
   updatedAt: string;
 };
 
-export type Room = {
+export type GroupRoom = {
   id: string;
   roomType: number;
   roomStatus: number;
@@ -26,4 +26,33 @@ export type Room = {
   messageCount: number;
   createdAt: Date;
   updatedAt: Date;
+  participants: Participant[];
+  messages: Message[];
 };
+
+export interface Participant {
+  id: string;
+  userId: string;
+  createdAt: Date;
+  user: UserParticipant | null;
+}
+
+export interface UserParticipant {
+  id: string;
+  username: string;
+  email: string;
+  isPremium: boolean;
+  createdAt: Date;
+}
+
+export interface Message {
+  id: string;
+  content: string;
+  createdAt: Date;
+  sender: Sender | null;
+}
+
+export interface Sender {
+  id: string;
+  name: string;
+}

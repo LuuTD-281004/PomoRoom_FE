@@ -1,4 +1,4 @@
-import type { Room } from "@/types/room";
+import type { GroupRoom } from "@/types/room";
 import http from "./http";
 
 export async function createRoom(
@@ -29,7 +29,7 @@ export async function getAllRooms(
   const response = await http.get<{
     message: string;
     result: {
-      data: Room[];
+      data: GroupRoom[];
       pagination: {
         total: number;
         page: number;
@@ -66,6 +66,11 @@ export async function createPersonalRoom(
     focusTime: focusTime,
   });
 
+  return response;
+}
+
+export async function getGroupRoomById(roomId: string) {
+  const response = await http.get(`/rooms/current-working-room/${roomId}`);
   return response;
 }
 

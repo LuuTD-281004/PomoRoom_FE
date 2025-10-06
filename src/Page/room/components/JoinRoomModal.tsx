@@ -4,7 +4,7 @@ import { SearchIcon, UsersIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { createRoom, getAllRooms } from "@/axios/room";
-import type { Room } from "@/types/room";
+import type { GroupRoom } from "@/types/room";
 import { RoomType } from "@/enum/room-type";
 import { useRoomSetup } from "@/contexts/RoomSetupContext";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ type Props = {
 export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const { setup } = useRoomSetup();
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<GroupRoom[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
