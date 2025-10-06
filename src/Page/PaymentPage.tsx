@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
+import { Card } from "@/Components/ui/card";
 import { Button } from "@/Components/ui/button";
 import http from "@/axios/http";
 import { useSettings } from "@/contexts/SettingsContext";
@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from "@/Components/ui/dialog";
 import { getPusherClient } from "@/lib/pusher";
+import { User, Users, UserPlus } from "lucide-react";
 
 interface PaymentPackage {
   id: string;
@@ -86,57 +87,80 @@ export default function PaymentPage() {
     setShowSuccessPopup(false);
   };
 
+  // Optional: icon map for visual consistency
+  const icons = [<User />, <Users />, <UserPlus />, <UserPlus />];
+
   return (
-    <div className="min-h-screen bg-white flex">
-      {/* Left Section */}
-      <div className="w-1/2 bg-blue-500 p-8 text-white">
-        <h1 className="text-2xl font-bold mb-6">THANH TOÁN GÓI</h1>
-        <div className="grid grid-cols-2 gap-4">
-          {packages.map((pkg) => (
-            <Card
-              key={pkg.id}
-              className="bg-blue-400 text-white rounded-2xl shadow-lg flex flex-col"
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-[#0C1A57] text-center mb-12">
+        Chọn gói thanh toán
+      </h2>
+
+      {/* Grid hiển thị các gói */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 max-w-6xl w-full justify-center">
+        {packages.map((pkg, index) => (
+          <Card
+            key={pkg.id}
+            className="flex flex-col justify-between items-center w-[280px] h-[350px] p-6 rounded-2xl shadow-md bg-gradient-to-b from-[#457FF7] to-[#B3C5EA] text-white"
+          >
+            {/* Tên + icon + giá */}
+            <div className="flex flex-col items-center space-y-2">
+              <div className="flex items-center space-x-2">
+                <span className="text-xl">{icons[index % icons.length]}</span>
+                <h3 className="text-lg md:text-xl font-semibold uppercase">
+                  {pkg.nameVi}
+                </h3>
+              </div>
+
+              <div className="w-2/3 h-[2px] bg-white" />
+
+              <p className="text-2xl md:text-3xl font-extrabold">
+                {pkg.price.toLocaleString("vi-VN")}₫/Tháng
+              </p>
+            </div>
+
+            {/* Mô tả */}
+            <p className="text-sm md:text-base font-medium italic text-center mt-4 px-2">
+              {pkg.descriptionVi}
+            </p>
+
+            {/* Nút thanh toán */}
+            <Button
+              className="mt-6 px-6 py-2 bg-white text-[#0C1A57] font-semibold rounded-full text-center hover:bg-gray-100 transition"
+              onClick={() => handleSelectPackage(pkg)}
             >
-              <CardHeader>
-                <CardTitle>{pkg.nameVi}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col h-full">
-                <p className="text-lg font-semibold">
-                  {pkg.price.toLocaleString("vi-VN")}₫/Tháng
-                </p>
-                <p className="text-sm mt-2">{pkg.descriptionVi}</p>
-                <div className="mt-auto">
-                  <Button
-                    className="w-full bg-white text-blue-600 hover:bg-gray-100"
-                    onClick={() => handleSelectPackage(pkg)}
-                  >
-                    Thanh toán
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              Thanh toán
+            </Button>
+          </Card>
+        ))}
       </div>
 
-      {/* Right Section */}
-      <div className="w-1/2 flex flex-col justify-center items-center bg-white p-8">
+      {/* Hiển thị QR */}
+      <div className="mt-16 flex flex-col items-center justify-center">
         {selectedPrice ? (
-          <img
-            src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${
-              settings?.bankType
-            }&amount=${selectedPrice}&des=${authenticatedUser?.id.replace(
-              /-/g,
-              ""
-            )}`}
-            alt="QR Code"
-            className="w-64 h-64 mb-6"
-          />
+          <>
+            <img
+              src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${
+                settings?.bankType
+              }&amount=${selectedPrice}&des=${authenticatedUser?.id.replace(
+                /-/g,
+                ""
+              )}`}
+              alt="QR Code"
+              className="w-64 h-64 mb-6 rounded-xl border shadow-md"
+            />
+            <p className="text-gray-700 font-semibold">
+              Quét mã QR để hoàn tất thanh toán
+            </p>
+          </>
         ) : (
-          <p className="text-gray-600">Vui lòng chọn gói để hiển thị QR</p>
+          <p className="text-gray-600 italic">
+            Vui lòng chọn gói để hiển thị mã QR
+          </p>
         )}
       </div>
 
+      {/* Popup thanh toán thành công */}
       <Dialog open={showSuccessPopup} onOpenChange={setShowSuccessPopup}>
         <DialogContent>
           <DialogHeader>
@@ -147,14 +171,14 @@ export default function PaymentPage() {
           </p>
           <Button
             className="w-full bg-green-600 text-white hover:bg-green-700"
-            onClick={() => handleCloseTransactionConfirmation()}
+            onClick={handleCloseTransactionConfirmation}
           >
             Đóng
           </Button>
         </DialogContent>
       </Dialog>
 
-      {/* Login Prompt Dialog */}
+      {/* Yêu cầu đăng nhập */}
       <Dialog open={showLoginPrompt} onOpenChange={setShowLoginPrompt}>
         <DialogContent>
           <DialogHeader>
