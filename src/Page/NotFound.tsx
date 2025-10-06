@@ -13,7 +13,6 @@ const NotFound: React.FC = () => {
         backgroundPosition: "center",
       }}
     >
-      {/* Lớp overlay làm mờ nền để chữ nổi bật hơn */}
       <div className="absolute inset-0 bg-black/50" />
 
       <div className="relative z-10 text-center px-4">
