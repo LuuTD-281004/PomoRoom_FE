@@ -10,7 +10,7 @@ const LayoutWithHeader: React.FC = () => {
         <Header />
         <Navbar />
       </div>
-      <main className="flex-1 pt-[156px]">
+      <main className="flex-1 pt-[136px]">
         <Outlet />
       </main>
     </div>

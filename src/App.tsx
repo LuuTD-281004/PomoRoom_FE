@@ -17,6 +17,7 @@ import { RoomSetupProvider } from "./providers/RoomSetupProvider";
 import HomePage from "./Page/Homepage";
 import ScrollToTop from "./Components/ScrollToTop";
 import PrivateRoomPage from "./Page/room/PrivateRoomPage";
+import NotFound from "./Page/NotFound";
 
 function App() {
   return (
@@ -43,7 +44,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
               </Route>
-              <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
         </RoomSetupProvider>

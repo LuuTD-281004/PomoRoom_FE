@@ -36,11 +36,11 @@ const Header: React.FC = () => {
           <img
             src="../src/assets/image/logo.png"
             alt="logo"
-            className="h-16 w-16 object-contain"
+            className="h-10 w-10 object-contain"
           />
           <h1
-            style={{ fontFamily: "'Calistoga', cursive", fontSize: "2rem" }}
-            className="font-bold text-[#0C1A57] mt-3"
+            style={{ fontFamily: "'Calistoga', cursive", fontSize: "1.5rem" }}
+            className="font-bold text-[#0C1A57] mt-2"
           >
             PomoRoom
           </h1>

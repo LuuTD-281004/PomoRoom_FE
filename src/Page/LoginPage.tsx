@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
-import loginImage from "../assets/image/login.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import defaultBackground from "../assets/image/defaultBackground.png";
+import Header from "../partials/Header";
 
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +17,6 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async () => {
     setError(null);
-
     if (!email || !password) {
       setError(t("error_required"));
       return;
@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
 
     try {
       setLoading(true);
-      await login(email, password); 
+      await login(email, password);
     } catch (err) {
       console.log(err);
       setError(t("error_failed"));
@@ -34,63 +34,59 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-w-screen bg-white flex flex-col items-center justify-center">
-      <div className="flex flex-1 items-center justify-center mt-14">
-        <div className="w-full h-[calc(100vh-80px)] grid grid-cols-2">
-          <div className="flex flex-col justify-center px-20 bg-white">
-            <h1 className="text-2xl font-bold mb-2 mt-4">
-              {t("welcome")}
-            </h1>
-            <p className="text-gray-500 mb-6">{t("login_with_account")}</p>
+    <div className="fixed inset-0 flex flex-col">
+      <Header />
 
-            <div className="flex flex-col gap-2">
-              <Input
-                label={t("email")}
-                placeholder={t("email")}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+      <div
+        className="flex-1 flex items-center justify-center bg-cover bg-center bg-no-repeat mt-15"
+        style={{
+          backgroundImage: `url(${defaultBackground})`,
+        }}
+      >
+        <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-10 w-full max-w-md text-center">
+          <h1 className="text-3xl font-bold mb-2 text-[#0C1A57]">
+            {t("welcome")}
+          </h1>
+          <p className="text-gray-600 mb-6">{t("login_with_account")}</p>
 
-              <Input
-                label={t("password")}
-                type="password"
-                placeholder={t("password")}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+          <div className="flex flex-col gap-3 text-left">
+            <Input
+              label={t("email")}
+              placeholder={t("email")}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            <Input
+              label={t("password")}
+              type="password"
+              placeholder={t("password")}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-              <br />
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+            <div className="text-center">
               <Button size="full" disabled={loading} onClick={handleLogin}>
                 {loading ? t("logging_in") : t("login")}
               </Button>
             </div>
-
-            <p className="text-sm text-gray-600 text-center mt-6">
-              {t("no_account")}{" "}
-              <a
-                href="/register"
-                className="hover:underline"
-                style={{ color: "#6AD5E8" }}
-              >
-                {t("register")}
-              </a>
-            </p>
-
-            <br />
-            <div className="w-full h-[1px] bg-[#0C1A57]" />
-            <br />
-            <p className="text-gray-500 mb-6">{t("other_login")}</p>
           </div>
 
-          <div className="flex items-center bg-white justify-end px-10 py-8">
-            <img
-              src={loginImage}
-              alt="Login illustration"
-              className="object-cover w-140 h-140 rounded-lg"
-            />
-          </div>
+          <p className="text-sm text-gray-600 mt-6">
+            {t("no_account")}{" "}
+            <a
+              href="/register"
+              className="text-[#6AD5E8] hover:underline italic font-medium"
+            >
+              {t("register")}
+            </a>
+          </p>
+
+          <div className="my-6 w-full h-[1px] bg-[#0C1A57]/30" />
+
+          <p className="text-gray-500">{t("other_login")}</p>
         </div>
       </div>
     </div>

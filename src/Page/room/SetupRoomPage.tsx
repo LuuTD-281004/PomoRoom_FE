@@ -91,71 +91,102 @@ const SetupRoomPage = () => {
   // -------------------------------
   return (
     <>
-      <main className="flex-1 flex flex-col items-center justify-center px-4">
+      <main className="flex-1 flex flex-col items-center mb-30">
         {/* Timer Display */}
         <div className="text-8xl font-bold mb-8 text-white bg-blue-400/80 px-20 py-10 rounded-lg">
           {String(setup.focusMinutes).padStart(2, "0")}:00
         </div>
 
-        {/* Timer Controls */}
-        <div className="flex gap-8 mb-8">
+        <div className="flex gap-8 mb-8 justify-center flex-wrap">
+          {/* Focus Time */}
           <div className="text-center">
-            <p className="text-blue-600 font-medium mb-2">{t("setup.focus")}</p>
-            <select
-              className="bg-white px-4 py-2 rounded-lg border border-blue-200"
-              value={setup.focusMinutes}
-              onChange={(e) =>
-                setSetup({ focusMinutes: Number(e.target.value) })
-              }
-            >
-              {FOCUS_OPTIONS.map((m) => (
-                <option key={m} value={m}>
-                  {t("setup.minutes", { count: m })}
-                </option>
-              ))}
-            </select>
+            <p className="text-white font-medium mb-2">{t("setup.focus")}</p>
+            <div className="relative inline-block">
+              <select
+                className="appearance-none bg-white text-gray-700 font-medium px-4 py-2 pr-8 rounded-lg border border-blue-200 shadow-sm 
+                          focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition hover:border-blue-300 hover:shadow-md"
+                value={setup.focusMinutes}
+                onChange={(e) => setSetup({ focusMinutes: Number(e.target.value) })}
+              >
+                {FOCUS_OPTIONS.map((m) => (
+                  <option key={m} value={m}>
+                    {t("setup.minutes", { count: m })}
+                  </option>
+                ))}
+              </select>
+
+              {/* Custom icon mũi tên */}
+              <svg
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400 pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
 
+          {/* Short Break */}
           <div className="text-center">
-            <p className="text-blue-600 font-medium mb-2">
-              {t("setup.short_break")}
-            </p>
-            <select
-              className="bg-white px-4 py-2 rounded-lg border border-blue-200"
-              value={setup.shortBreakMinutes}
-              onChange={(e) =>
-                setSetup({ shortBreakMinutes: Number(e.target.value) })
-              }
-            >
-              {SHORT_BREAK_OPTIONS.map((m) => (
-                <option key={m} value={m}>
-                  {t("setup.minutes", { count: m })}
-                </option>
-              ))}
-            </select>
+            <p className="text-white font-medium mb-2">{t("setup.short_break")}</p>
+            <div className="relative inline-block">
+              <select
+                className="appearance-none bg-white text-gray-700 font-medium px-4 py-2 pr-8 rounded-lg border border-blue-200 shadow-sm 
+                          focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition hover:border-blue-300 hover:shadow-md"
+                value={setup.shortBreakMinutes}
+                onChange={(e) => setSetup({ shortBreakMinutes: Number(e.target.value) })}
+              >
+                {SHORT_BREAK_OPTIONS.map((m) => (
+                  <option key={m} value={m}>
+                    {t("setup.minutes", { count: m })}
+                  </option>
+                ))}
+              </select>
+
+              <svg
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400 pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
 
+          {/* Long Break */}
           <div className="text-center">
-            <p className="text-blue-600 font-medium mb-2">
-              {t("setup.long_break")}
-            </p>
-            <select
-              className="bg-white px-4 py-2 rounded-lg border border-blue-200"
-              value={setup.longBreakMinutes}
-              onChange={(e) =>
-                setSetup({ longBreakMinutes: Number(e.target.value) })
-              }
-            >
-              {LONG_BREAK_OPTIONS.map((m) => (
-                <option key={m} value={m}>
-                  {t("setup.minutes", { count: m })}
-                </option>
-              ))}
-            </select>
+            <p className="text-white font-medium mb-2">{t("setup.long_break")}</p>
+            <div className="relative inline-block">
+              <select
+                className="appearance-none bg-white text-gray-700 font-medium px-4 py-2 pr-8 rounded-lg border border-blue-200 shadow-sm 
+                          focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition hover:border-blue-300 hover:shadow-md"
+                value={setup.longBreakMinutes}
+                onChange={(e) => setSetup({ longBreakMinutes: Number(e.target.value) })}
+              >
+                {LONG_BREAK_OPTIONS.map((m) => (
+                  <option key={m} value={m}>
+                    {t("setup.minutes", { count: m })}
+                  </option>
+                ))}
+              </select>
+
+              <svg
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400 pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
         </div>
 
-        {/* Room Selection */}
         <div className="flex gap-4">
           <button
             onClick={handleStartPrivate}
@@ -173,8 +204,7 @@ const SetupRoomPage = () => {
           </button>
         </div>
 
-        {/* Quote */}
-        <p className="text-gray-600 italic mt-8">
+        <p className="text-white font-bold italic mt-8">
           {t("setup.greeting", { name: "tên bạn" })}
         </p>
       </main>

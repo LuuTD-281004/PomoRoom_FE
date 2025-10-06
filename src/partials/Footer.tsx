@@ -15,7 +15,7 @@ const Footer: React.FC<FooterProps> = (props) => {
 
   const {
     facebookLink = "https://www.facebook.com/people/Pomoroom/61581370064797/",
-    tiktokLink = "https://www.tiktok.com/@_luutd2810_",
+    tiktokLink = "https://www.tiktok.com/@pomoroom2025?_t=ZS-90KLKzkIZkn&_r=1",
     phone = "0368870665",
     email = "insyncpomo@gmail.com",
     location = "Hồ Chí Minh - Việt Nam"
