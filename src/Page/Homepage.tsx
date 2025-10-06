@@ -26,7 +26,7 @@ const banners = [banner1, banner2, banner3, banner4];
   const prevSlide = () =>
     setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
   return (
-    <div className="w-full min-w-screen flex flex-col items-center justify-center mt-10">
+    <div className="w-full min-w-screen flex flex-col items-center justify-center mt-5">
       <main>
         {/* Section 1 */}
         <section className="relative w-full overflow-hidden">

@@ -7,12 +7,12 @@ const Navbar: React.FC = () => {
   const navItems = [
     { name: t("navbar.homepage"), path: "/" },
     { name: t("navbar.room"), path: "/rooms" },
-    { name: t("navbar.rank"), path: "/ranking" }, // bỏ hasDropdown
+    { name: t("navbar.rank"), path: "/ranking" },
     { name: t("navbar.experience_packages"), path: "/plans" },
   ];
 
   return (
-    <nav className="w-full bg-[#0C1A57] text-white px-6 py-4 mt-[100px]">
+    <nav className="w-full bg-[#0C1A57] text-white px-6 py-4 mt-[80px]">
       <ul className="flex justify-between items-center w-full max-w-4xl mx-auto">
         {navItems.map((item) => (
           <li key={item.name} className="relative">

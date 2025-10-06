@@ -7,7 +7,7 @@ export const WelcomeRoom = () => {
 
   return (
     <div
-      className="relative flex items-center justify-center h-[calc(102vh-170px)] text-white"
+      className="relative flex items-center justify-center min-h-screen text-white"
       style={{
         backgroundImage: `url(${defaultBackground})`,
         backgroundSize: "cover",
@@ -21,7 +21,7 @@ export const WelcomeRoom = () => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -10, scale: 0.98 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
-        className="relative z-10 text-center font-[Calistoga] text-6xl sm:text-7xl md:text-9xl lg:text-9xl leading-tight drop-shadow-lg"
+        className="relative z-10 text-center font-[Calistoga] text-6xl sm:text-7xl md:text-9xl lg:text-9xl leading-tight drop-shadow-lg mb-30"
       >
         {t("welcomeRoom.line1")}
         <br />

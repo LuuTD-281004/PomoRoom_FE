@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Input from "../Components/Input";
 import Button from "../Components/Button";
-import registerImage from "../assets/image/login.png";
 import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
+import defaultBackground from "../assets/image/defaultBackground.png"; // dùng nền giống LoginPage
+import Header from "../partials/Header";
 
 const RegisterPage: React.FC = () => {
   const { register } = useAuth();
@@ -18,7 +19,6 @@ const RegisterPage: React.FC = () => {
 
   const handleRegister = async () => {
     setError(null);
-
     if (password !== confirmPassword) {
       setError(t("error_password_mismatch"));
       return;
@@ -36,74 +36,71 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-w-screen bg-white flex flex-col items-center justify-center">
-      <div className="flex flex-1 items-center bg-white justify-center mt-14">
-        <div className="w-full h-[calc(100vh-80px)] grid grid-cols-2">
-          <div className="flex flex-col justify-center px-20 bg-white">
-            <h1 className="text-2xl font-bold mb-2 mt-4">
-              {t("register_title")}
-            </h1>
-            <p className="text-gray-500 mb-6">{t("register_subtitle")}</p>
+    <div className="fixed inset-0 flex flex-col">
+      <Header />
 
-            <div className="flex flex-col gap-2">
-              <Input
-                label={t("username")}
-                placeholder={t("username")}
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
+      <div
+        className="flex-1 flex items-center justify-center bg-cover bg-center bg-no-repeat mt-15"
+        style={{
+          backgroundImage: `url(${defaultBackground})`,
+        }}
+      >
+        <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl p-10 w-full max-w-lg text-center">
+          <h1 className="text-3xl font-bold mb-2 text-[#0C1A57]">
+            {t("register_title")}
+          </h1>
+          <p className="text-gray-600 mb-6">{t("register_subtitle")}</p>
 
-              <Input
-                label={t("email")}
-                type="email"
-                placeholder={t("email")}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+          <div className="flex flex-col gap-3 text-left">
+            <Input
+              label={t("username")}
+              placeholder={t("username")}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
 
-              <Input
-                label={t("password")}
-                type="password"
-                placeholder={t("password")}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <Input
+              label={t("email")}
+              type="email"
+              placeholder={t("email")}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-              <Input
-                label={t("confirm_password")}
-                type="password"
-                placeholder={t("confirm_password")}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
+            <Input
+              label={t("password")}
+              type="password"
+              placeholder={t("password")}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-              {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            <Input
+              label={t("confirm_password")}
+              type="password"
+              placeholder={t("confirm_password")}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
 
-              <br />
+            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+            <div className="text-center mt-4">
               <Button size="full" disabled={loading} onClick={handleRegister}>
                 {loading ? t("registering") : t("register")}
               </Button>
             </div>
-
-            <p className="text-sm text-gray-600 text-center mt-6">
-              {t("have_account")}{" "}
-              <a
-                href="/login"
-                className="hover:underline"
-                style={{ color: "#6AD5E8" }}
-              >
-                {t("login")}
-              </a>
-            </p>
           </div>
 
-          <div className="flex items-center bg-white justify-end px-10 py-8">
-            <img
-              src={registerImage}
-              alt="Register illustration"
-              className="object-cover w-140 h-140 rounded-lg"
-            />
-          </div>
+          <p className="text-sm text-gray-600 mt-6">
+            {t("have_account")}{" "}
+            <a
+              href="/login"
+              className="text-[#6AD5E8] hover:underline italic font-medium"
+            >
+              {t("login")}
+            </a>
+          </p>
         </div>
       </div>
     </div>
