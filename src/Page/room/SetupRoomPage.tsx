@@ -1,5 +1,5 @@
-import { useState, useEffect  } from "react";
-import { UserIcon, UsersIcon} from "lucide-react";
+import { useState, useEffect } from "react";
+import { UserIcon, UsersIcon } from "lucide-react";
 import { JoinRoomModal } from "./components/JoinRoomModal";
 import { useRoomSetup } from "@/contexts/RoomSetupContext";
 import { useTranslation } from "react-i18next";
@@ -11,7 +11,7 @@ import {
 import { RemovePersonalRoomModal } from "./components/RemovePersonalRoomModal";
 import { useNavigate } from "react-router-dom";
 
-const FOCUS_OPTIONS = [1, 5, 15, 25, 50];
+const FOCUS_OPTIONS = [1, 25, 50];
 const SHORT_BREAK_OPTIONS = [1, 3, 5, 10];
 const LONG_BREAK_OPTIONS = [1, 10, 15, 20];
 

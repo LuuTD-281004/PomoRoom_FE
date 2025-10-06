@@ -20,6 +20,7 @@ export type UserType = {
     createdAt?: string;
     updatedAt?: string;
     avatarUrl?: string;
+    userStar: number;
     messages?: Message[];
     conversations?: Conversation[];
 };
