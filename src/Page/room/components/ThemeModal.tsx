@@ -121,38 +121,6 @@ export const ThemeModal: React.FC<Props> = ({ isOpen, onClose }) => {
               </div>
             </div>
           </div>
-
-          {/* Divider vertical */}
-          <div className="w-px bg-white/40" />
-
-          {/* Right column */}
-          <div className="w-80 pl-5">
-            <div className="flex items-center justify-between mb-4">
-              <div className="text-white text-lg font-semibold">
-                {t("themeModal.decorations")}
-              </div>
-              <div className="text-sm text-yellow-300 flex items-center gap-2">
-                <span>👑</span>
-                <span>{t("themeModal.effect")}</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              {DECORATIONS.map((d) => (
-                <div
-                  key={d}
-                  className="flex items-center gap-3 bg-white/5 rounded p-3"
-                >
-                  <div className="w-12 h-12 rounded-md bg-white/10 flex items-center justify-center text-xs text-white/80">
-                    img
-                  </div>
-                  <div className="text-xs text-white">
-                    {t(`themeModal.decorationItems.${d}`)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </Modal>
