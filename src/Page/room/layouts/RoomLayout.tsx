@@ -5,11 +5,13 @@ import ThemeModal from "../components/ThemeModal";
 import { WelcomeRoom } from "../components/WelcomeRoom";
 import StarExchangeModal from "../components/StarExchangeModal";
 import { useTranslation } from "react-i18next";
-import defaultBackground from "../../../assets/image/defaultBackground.png"; 
+import defaultBackground from "../../../assets/image/defaultBackground.png";
+import { useAuth } from "@/contexts/AuthContext";
 
 const RoomLayout = () => {
-  const [showPlaylist, setShowPlaylist] = useState(false);
+  const { authenticatedUser } = useAuth();
   const [showTheme, setShowTheme] = useState(false);
+  const [showPlaylist, setShowPlaylist] = useState(false);
   const [showStarExchange, setShowStarExchange] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
 
@@ -49,7 +51,7 @@ const RoomLayout = () => {
               stroke="#FFE414"
             />
           </svg>
-          100
+          {authenticatedUser?.userStar || 0}
         </div>
         <div
           onClick={() => setShowStarExchange(true)}
