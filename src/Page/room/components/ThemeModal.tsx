@@ -11,7 +11,6 @@ type Props = {
 const STATIC_PREVIEWS = [1, 2, 3];
 const DYNAMIC_PREVIEWS = [1, 2, 3];
 
-const DECORATIONS = ["leaf", "petals", "rain", "sun"];
 const STARS = [
   { color: "#FF7A7A", key: "pink" },
   { color: "#FFCF7A", key: "orange" },
