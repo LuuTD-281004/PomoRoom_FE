@@ -55,3 +55,16 @@ export function getPusherClient(config: PusherConfig): Pusher {
 
   return pusherClientInstance;
 }
+
+export function subscribeToChannel(pusher: Pusher, channelName: string) {
+  const existing = pusher.channel(channelName);
+  return existing ?? pusher.subscribe(channelName);
+}
+
+export function cleanupChannel(pusher: Pusher, channelName: string) {
+  const channel = pusher.channel(channelName);
+  if (channel) {
+    channel.unbind_all();
+    pusher.unsubscribe(channelName);
+  }
+}

@@ -1,14 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPusherClient } from "@/lib/pusher";
 import { useAuth } from "@/contexts/AuthContext";
-import { getGroupRoomById } from "@/axios/room";
+import { getGroupRoomById, leaveRoom } from "@/axios/room";
 import { RoomStatus } from "@/enum/room-status";
 import type { GroupRoom } from "@/types/room";
 
 export default function GroupRoomPage() {
   const { roomId } = useParams();
-
   const { authenticatedUser, accessToken } = useAuth();
   const [members, setMembers] = useState<any[]>([]);
   const [status, setStatus] = useState<number>(RoomStatus.ON_WORKING);
@@ -17,19 +17,43 @@ export default function GroupRoomPage() {
   const [running, setRunning] = useState(false);
   const intervalRef = useRef<number | null>(null);
   const [currentRoom, setCurrentRoom] = useState<GroupRoom | null>(null);
+
   const fetchRoom = async () => {
     try {
       if (!roomId) return;
       const response = await getGroupRoomById(roomId);
+      if (response.data.result == null) {
+        window.location.href = "/rooms";
+      }
       if (response.status === 200 && response.data.result) {
         const room: GroupRoom = response.data.result;
+
+        const roomMembers = (room.participants || [])
+          .filter((p) => p.user != null)
+          .map((p) => ({
+            id: p.userId,
+            username: p.user?.username,
+          }));
+        console.log(room);
+        setMembers(roomMembers);
         setCurrentRoom(room);
         updateRemainingTime(room);
       }
     } catch (err) {
       console.error("Error fetching room:", err);
+      window.location.href = "/rooms";
     }
   };
+
+  const handleQuit = async (userId: string) => {
+    if (!currentRoom || !authenticatedUser) return;
+    try {
+      await leaveRoom(userId);
+    } catch (err) {
+      console.error("Error leaving room:", err);
+    }
+  };
+
   const updateRemainingTime = (room: GroupRoom) => {
     let duration = room.focusTime * 60;
     if (room.roomStatus === RoomStatus.ON_REST)
@@ -85,35 +109,59 @@ export default function GroupRoomPage() {
 
     const channel = pusherClient.subscribe(`presence-room-${roomId}`);
 
+    // Built-in presence events
+    channel.bind("pusher:subscription_succeeded", (members: any) => {
+      const list: any = [];
+      members.each((member: any) => {
+        list.push({ id: member.id, username: member.info.name });
+      });
+      setMembers(list);
+    });
+
     channel.bind("pusher:member_added", (member: any) => {
-      setMembers((prev) => [...prev, member.info]);
+      console.log("Member joined:", member);
+      setMembers((prev) => [
+        ...prev,
+        { id: member.id, username: member.info.name },
+      ]);
     });
 
     channel.bind("pusher:member_removed", (member: any) => {
+      console.log("Member left:", member);
+      handleQuit(member.id);
       setMembers((prev) => prev.filter((m) => m.id !== member.id));
     });
 
-    if (currentRoom != null) {
-      channel.bind("room_status_changed", (data: any) => {
-        console.log("Room status changed:", data);
-        setStatus(parseInt(data.status));
-        setCycle(data.cycle);
-        setRemaining(
-          parseInt(data.status) === RoomStatus.ON_WORKING
-            ? currentRoom.focusTime * 60
-            : data.cycle === 4
-            ? currentRoom.longRestTime * 60
-            : currentRoom.shortRestTime * 60
-        );
-        setRunning(true);
-      });
-    }
+    channel.bind("room_status_changed", (data: any) => {
+      console.log("Room status changed:", data);
+      setStatus(parseInt(data.status));
+      setCycle(data.cycle);
+      setRemaining(parseInt(data.remaining) / 1000);
+      setRunning(true);
+    });
 
     return () => {
       pusherClient.unsubscribe(`presence-room-${roomId}`);
       pusherClient.disconnect();
     };
   }, [roomId, authenticatedUser]);
+
+  const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
+    if (!currentRoom) return;
+
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/rooms/leave/${
+      authenticatedUser?.id
+    }`;
+    const data = JSON.stringify({ userId: authenticatedUser?.id });
+    navigator.sendBeacon(url, data);
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [roomId, authenticatedUser, currentRoom]);
 
   useEffect(() => {
     fetchRoom();
@@ -147,12 +195,9 @@ export default function GroupRoomPage() {
       <div className="bg-white/80 rounded-lg p-4 w-full max-w-md">
         <h3 className="font-semibold mb-2 text-gray-800">👥 Online Members</h3>
         <ul className="list-disc pl-5 space-y-1 text-gray-700">
-          {currentRoom &&
-            currentRoom?.participants &&
-            currentRoom?.participants.map &&
-            currentRoom?.participants.map((participant) => (
-              <li key={participant.id}>{participant.user?.username}</li>
-            ))}
+          {members &&
+            members.map &&
+            members.map((member) => <li key={member.id}>{member.username}</li>)}
         </ul>
       </div>
     </div>

@@ -88,3 +88,13 @@ export async function stopPersonalRoom() {
   const response = await http.put("/rooms/stop-personal-room");
   return response;
 }
+
+export async function leaveRoom(userId: string) {
+  const response = await http.post(`/rooms/leave/${userId}`);
+  return response;
+}
+
+export async function joinRoom(roomId: string) {
+  const response = await http.post(`/rooms/join/${roomId}`);
+  return response;
+}
