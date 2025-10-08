@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from "@/Components/Modal";
 import { useTranslation } from "react-i18next";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 type Props = {
   isOpen: boolean;
@@ -15,12 +16,10 @@ const TRACKS = [
   { title: "Bloom", artist: "ODESZA", duration: "3:50" },
 ];
 
+const STATIC_PREVIEWS = [1, 2, 3, 4, 5, 6];
+
 export const PlaylistModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const { t } = useTranslation();
-
-  const ambientOptions = t("playlistModal.ambientOptions", {
-    returnObjects: true,
-  }) as string[];
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("playlistModal.title")}>
@@ -76,46 +75,33 @@ export const PlaylistModal: React.FC<Props> = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <div className="w-80 flex flex-col">
-            <div className="bg-[#072147] rounded-tr-lg p-5 text-white border-b border-white/30">
-              <h4 className="text-lg font-semibold text-center mb-3 border-b border-white/20 pb-2">
-                {t("playlistModal.volume")}
-              </h4>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm text-slate-300">
-                    {t("playlistModal.music")}
-                  </label>
-                  <input type="range" min={0} max={100} defaultValue={30} className="w-full" />
+          <div className="flex-1 bg-[#072147] rounded-r-lg p-6 text-white">
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-lg font-semibold">
+                  {t("themeModal.staticBg")}
                 </div>
-                <div>
-                  <label className="text-sm text-slate-300">
-                    {t("playlistModal.sound")}
-                  </label>
-                  <input type="range" min={0} max={100} defaultValue={50} className="w-full" />
+                <div className="flex items-center gap-2 text-sm text-white/80">
+                  <button className="bg-white/10 rounded flex items-center justify-center p-1">
+                    <ArrowLeft className="!text-[#0C1A57] size-4" />
+                  </button>
+                  <button className="bg-white/10 rounded flex items-center justify-center p-1">
+                    <ArrowRight className="!text-[#0C1A57] size-4" />
+                  </button>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-[#072147] p-5 text-white border-b border-white/30 flex-1">
-              <h4 className="text-lg font-semibold text-center mb-3 border-b border-white/20 pb-2">
-                {t("playlistModal.ambients")}
-              </h4>
-              <p className="text-sm text-slate-300 text-center mb-3">
-                {t("playlistModal.ambientsDesc")}
-              </p>
-
-              <div className="grid grid-cols-2 gap-3">
-                {ambientOptions.map((name) => (
+              <div className="grid grid-cols-2 gap-4">
+                {STATIC_PREVIEWS.map((p) => (
                   <button
-                    key={name}
-                    className="flex flex-col items-center gap-2 bg-white/5 rounded-md p-3 hover:bg-white/10 transition"
+                    key={`static-${p}`}
+                    className="bg-white/5 rounded-lg w-full h-32 p-2 flex flex-col items-center gap-2 hover:scale-[1.02] transition"
                   >
-                    <div className="text-sm text-[#0C1A57]">{name}</div>
+                    <div className="w-full h-full bg-gradient-to-br from-sky-300/20 to-sky-100/20 rounded-md" />
                   </button>
                 ))}
               </div>
-            </div>           
+            </div>
           </div>
         </div>
       </div>

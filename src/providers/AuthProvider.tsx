@@ -11,7 +11,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [accessTokenState, setAccessTokenState] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<UserType | null>(null);
   const [currentRole, setCurrentRole] = useState<string | null>(null);
-
+  
   const setUserFunction = async () => {
     const user = await getUserInfo();
     setCurrentUser(user);
