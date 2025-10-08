@@ -146,23 +146,6 @@ export default function GroupRoomPage() {
     };
   }, [roomId, authenticatedUser]);
 
-  const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
-    if (!currentRoom) return;
-
-    const url = `${import.meta.env.VITE_SERVER_URL}/api/rooms/leave/${
-      authenticatedUser?.id
-    }`;
-    const data = JSON.stringify({ userId: authenticatedUser?.id });
-    navigator.sendBeacon(url, data);
-  };
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [roomId, authenticatedUser, currentRoom]);
-
   useEffect(() => {
     fetchRoom();
   }, [roomId]);
