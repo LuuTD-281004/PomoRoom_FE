@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Flame, Crown } from "lucide-react";
 import Footer from "../partials/Footer";
 import avatarDefault from "../assets/image/avatar.png";
@@ -193,9 +194,11 @@ const RankingPage: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex justify-center">
+                    <Link to="/rooms">
                     <Button type="submit" size="wide">
                       {t("homepage.join_room")}
                     </Button>
+                  </Link>
                   </div>
             </section>
           )

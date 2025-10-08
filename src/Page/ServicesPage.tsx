@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Paintbrush, UserPlus, Ban, BarChart3, Infinity, User, Users } from "lucide-react";
+import { Link } from "react-router-dom";
 import Button from "@/Components/Button";
 import Footer from "@/partials/Footer";
 
@@ -142,9 +143,11 @@ const ServicesPage: React.FC = () => {
             </section>
 
             <div className="flex justify-center mt-6">
-              <Button type="submit" size="wide">
-                {t("homepage.join_room")}
-              </Button>
+              <Link to="/rooms">
+                <Button type="submit" size="wide">
+                  {t("homepage.join_room")}
+                </Button>
+              </Link>
             </div>
             
           <section className="w-full min-w-screen flex flex-col items-center justify-center mt-10 mb-10 px-6">

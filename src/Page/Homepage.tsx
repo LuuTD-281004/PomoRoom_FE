@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Footer from "../partials/Footer";
 import { Quote } from "lucide-react";
 import Button from "../Components/Button";
@@ -81,9 +82,11 @@ const banners = [banner1, banner2, banner3, banner4];
               {t("homepage.welcome_title")}
             </h1>
             <div className="flex justify-center mt-6">
-              <Button type="submit" size="wide">
-                {t("homepage.join_room")}
-              </Button>
+              <Link to="/rooms">
+                <Button type="submit" size="wide">
+                  {t("homepage.join_room")}
+                </Button>
+              </Link>
             </div>
           </div>
         </section>
