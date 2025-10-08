@@ -18,6 +18,7 @@ import HomePage from "./Page/Homepage";
 import ScrollToTop from "./Components/ScrollToTop";
 import PrivateRoomPage from "./Page/room/PrivateRoomPage";
 import NotFound from "./Page/NotFound";
+import ProfilePage from "./Page/ProfilePage";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
               <Route element={<LayoutAuth />}>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
