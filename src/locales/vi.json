@@ -1,0 +1,218 @@
+{
+  "welcome": "Chào mừng đến với PomoRoom",
+  "login": "Đăng nhập",
+  "login_with_account": "Đăng nhập bằng tài khoản của bạn",
+  "logout": "Đăng xuất",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "logging_in": "Đang đăng nhập...",
+  "no_account": "Bạn chưa có tài khoản?",
+  "register": "Đăng ký",
+  "other_login": "Phương thức đăng nhập khác",
+  "error_required": "Vui lòng nhập đầy đủ email và mật khẩu.",
+  "error_failed": "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.",
+  "error_password_mismatch": "Mật khẩu và xác nhận mật khẩu không khớp.",
+  "register_title": "Đăng ký tài khoản PomoRoom",
+  "register_subtitle": "Tạo tài khoản của bạn",
+  "username": "Tên tài khoản",
+  "confirm_password": "Xác nhận mật khẩu",
+  "error_register_failed": "Đăng ký thất bại. Vui lòng thử lại.",
+  "registering": "Đang đăng ký...",
+  "have_account": "Bạn đã có tài khoản?",
+  "homepage": {
+    "welcome_title": "Chào mừng đến với PomoRoom",
+    "join_room": "THAM GIA PHÒNG",
+    "what_is_pomodoro": "HỌC THEO PHƯƠNG PHÁP POMODORO LÀ GÌ?",
+    "pomodoro_technique": "Phương pháp Pomodoro",
+    "known_as": "hay còn gọi",
+    "tomato_technique": "Phương pháp quả cà chua",
+    "pomodoro_description": " là một kỹ thuật quản lý thời gian đơn giản nhưng cực kỳ hiệu quả, giúp bạn tăng cường sự tập trung, nâng cao năng suất và duy trì năng lượng tinh thần một cách bền vững.",
+    "steps_title": "5 BƯỚC THỰC HIỆN MỘT CHU TRÌNH POMODORO",
+    "step1": "BƯỚC 1.",
+    "step1_description": "Xác định một công việc cụ thể bạn cần hoàn thành.",
+    "step2": "BƯỚC 2.",
+    "step2_description": " Sử dụng đồng hồ bấm giờ và đặt hẹn",
+    "25": "25 phút.",
+    "step3": "BƯỚC 3.",
+    "lets": "Hãy",
+    "focus": "tập trung 100%",
+    "step3_description": "vào công việc đã chọn trong khoảng thời gian này.",
+    "step4": "BƯỚC 4.",
+    "step4_description": "Khi hết thời gian, hãy đánh dấu một Pomodoro đã hoàn thành và nghỉ ngơi trong",
+    "5": "5 phút.",
+    "step5": "BƯỚC 5.",
+    "step5_description1": "Sau khi hoàn thành 4 Pomodoro, hãy nghỉ dài hơn từ",
+    "minutes": "15-30 phút",
+    "step5_description2": "trước khi bắt đầu chu trình mới.",
+    "benefits_title": "LỢI ÍCH VƯỢT TRỘI CỦA PHƯƠNG PHÁP POMODORO",
+    "benefit1": "Bằng cách làm việc trong các khoảng thời gian ngắn, bạn sẽ dễ dàng duy trì sự tập trung cao độ và tránh tình trạng quá tải thông tin.",
+    "benefit2": "Việc theo dõi số lượng Pomodoro cho mỗi nhiệm vụ giúp bạn lập kế hoạch và ước tính thời gian cho các công việc trong tương lai chính xác hơn.",
+    "benefit3": "Các khoảng nghỉ ngắn và dài đều đặn giúp não bộ và cơ thể phục hồi, ngăn ngừa kiệt sức và duy trì năng lượng làm việc bền bỉ.",
+    "benefit4": "Bạn có thể linh hoạt điều chỉnh thời lượng Pomodoro nếu cần (Ví dụ: 50 phút – 10 phút cho công việc sâu) để phù hợp với khả năng tập trung của bản thân."
+  },
+  "navbar": {
+    "homepage": "Trang chủ",
+    "room": "Phòng Pomodoro",
+    "rank": "Bảng xếp hạng",
+    "experience_packages": "Các gói trải nghiệm"
+  },
+  "ranking": {
+    "top_10": "BẢNG XẾP HẠNG TOP 10 CỦA THÁNG",
+    "you": "Bạn"
+  },
+  "footer": {
+    "contact_us": "LIÊN HỆ CHÚNG TÔI TẠI",
+    "copyright": "© 2025 Bản quyền"
+  },
+  "services": {
+    "title1": "TẬN HƯỞNG TRỌN VẸN",
+    "title2": "CÁC GÓI HẤP DẪN",
+    "subtitle": "Trải nghiệm nhiều tính năng thú vị mà bạn không thể bỏ qua",
+    "feature1": "Thỏa sức sáng tạo phòng học theo ý thích",
+    "feature2": "Tăng số lượng người tham gia trong một phòng",
+    "feature3": "Loại bỏ quảng cáo, tránh làm phiền trong quá trình tham gia",
+    "feature4": "Nâng cấp bản thống kê làm việc chuyên nghiệp",
+    "feature5": "Không bị giới hạn tham gia phòng trong một ngày",
+    "title3": "NHỮNG CÂU HỎI THƯỜNG GẶP",
+    "subtitle2": "SỞ HỮU PREMIUM"
+  },
+  "packages": {
+    "personal": {
+      "title": "Premium Cá Nhân",
+      "desc": "Tự do sáng tạo không gian học của mình"
+    },
+    "group": {
+      "title": "Premium Nhóm",
+      "desc": "Số lượng thành viên trong phòng mở rộng lên tới 10 người."
+    },
+    "plus3": {
+      "title": "Plus 3",
+      "desc": "Số lượng thành viên trong phòng mở rộng thêm 3 người."
+    },
+    "plus10": {
+      "title": "Plus 10",
+      "desc": "Số lượng thành viên trong phòng mở rộng thêm 10 người."
+    },
+    "buyButton": "Mua gói"
+  },
+  "faq": {
+    "questionPrefix": "Câu",
+    "q1": {
+      "title": "Nếu ngưng trả phí thì dữ liệu có bị mất không?",
+      "answer": "Không. Dữ liệu vẫn được lưu trữ đầy đủ, nhưng bạn sẽ không thể xem thống kê nâng cao hay tùy chỉnh chi tiết như trước."
+    },
+    "q2": {
+      "title": "Có thể dùng chung gói trả phí với người khác không?",
+      "answer": "Không. Dữ liệu cá nhân được lưu riêng, bạn cần tài khoản riêng để sử dụng."
+    },
+    "q3": {
+      "title": "Mua bản Pro có giúp mình học hiệu quả hơn không?",
+      "answer": "Bản Pro hỗ trợ nhiều công cụ nâng cao: theo dõi quá trình học chi tiết, biểu đồ trực quan, gợi ý lộ trình học phù hợp. Nhờ vậy bạn sẽ dễ dàng tập trung và quản lý thời gian tốt hơn."
+    },
+    "q4": {
+      "title": "Có nên nâng cấp không nếu mình chỉ học 1-2 tiếng mỗi ngày?",
+      "answer": "Không nhất thiết. Nếu bạn học ít, gói miễn phí vẫn đủ. Nhưng bản Pro sẽ mang lại trải nghiệm học tập chuyên sâu và tiện ích lâu dài."
+    }
+  },
+  "cancelModal": {
+    "message": "Bạn có muốn thoát khi chưa hết thời gian chứ ?",
+    "exit": "Thoát",
+    "stay": "Ở lại"
+  },
+  "joinRoomModal": {
+    "title": "THAM GIA VÀO NHÓM",
+    "public": "Công khai",
+    "createRoom": "Tạo phòng",
+    "private": "Riêng tư",
+    "findRoom": "Tìm phòng",
+    "codePlaceholder": "Mã Code",
+    "submit": "Tìm",
+    "helper": "Chọn phòng công khai để tham gia, hoặc tạo phòng mới.",
+    "noRooms": "Không có phòng nào khả dụng",
+    "searchPlaceholder": "Tìm kiếm phòng...",
+    "createRoomPlaceholder": "Tên phòng...",
+    "createButton": "Tạo"
+  },
+  "playlistModal": {
+    "title": "DANH SÁCH NHẠC",
+    "addFavorite": "Thêm nhạc yêu thích của bạn",
+    "youtubePlaceholder": "Liên kết từ Youtube",
+    "search": "Tìm",
+    "default": "♪ Mặc định",
+    "play": "Play",
+    "volume": "ÂM LƯỢNG",
+    "music": "Nhạc",
+    "sound": "Âm thanh",
+    "ambients": "ÂM THANH",
+    "ambientsDesc": "Chọn âm thanh bạn yêu thích",
+    "ambientOptions": ["Mưa rơi", "Lò sưởi", "Gió nhẹ", "Thư viện"]
+  },
+  "starExchange": "Trạm đổi sao",
+  "tabs": {
+    "theme": "Chủ đề",
+    "effect": "Hiệu ứng",
+    "avatar": "Avatar"
+  },
+  "items": {
+    "deepOcean": "Đại dương sâu",
+    "christmas": "Noel",
+    "peachBlossom": "Hoa đào",
+    "autumnForest": "Rừng thu",
+    "sunset": "Hoàng hôn",
+    "universe": "Vũ trụ",
+    "frozen": "Băng giá",
+    "earlySun": "Nắng sớm"
+  },
+  "themeModal": {
+    "title": "GIAO DIỆN",
+    "mainColor": "Màu chủ đạo",
+    "custom": "Tùy chỉnh",
+    "staticBg": "Chọn nền tĩnh",
+    "dynamicBg": "Chọn nền động",
+    "decorations": "TRANG TRÍ",
+    "effect": "Hiệu ứng",
+    "starColors": {
+      "pink": "Hồng",
+      "orange": "Cam",
+      "yellow": "Vàng",
+      "cyan": "Xanh nước",
+      "blue": "Xanh dương",
+      "purple": "Tím"
+    },
+    "decorationItems": {
+      "leaf": "Lá rơi",
+      "petals": "Cánh hoa rơi",
+      "rain": "Mưa rơi",
+      "sun": "Nắng"
+    }
+  },
+  "welcomeRoom": {
+    "line1": "Chào mừng",
+    "line2": "đến với",
+    "appName": "PomoRoom"
+  },
+  "roomLayout": {
+    "account": "Tài khoản",
+    "history": "Lịch sử",
+    "notifications": "Thông báo",
+    "vip": "VVip",
+    "settings": "Cài đặt",
+    "starExchange": "Trạm đổi sao",
+    "music": "Nhạc",
+    "theme": "Giao diện"
+  },
+  "setup": {
+    "focus": "Tập trung",
+    "short_break": "Nghỉ ngắn",
+    "long_break": "Nghỉ dài",
+    "minutes": "{{count}} phút",
+    "private_room": "Phòng cá nhân",
+    "group_room": "Phòng nhóm",
+    "greeting": "Ngày mới tốt lành nhé"
+  },
+  "privateRoom": {
+    "music_label": "🎵 Tiếng mưa lofi chill 1 giờ không ngừng",
+    "start": "Bắt đầu",
+    "stop": "Dừng"
+  }
+}

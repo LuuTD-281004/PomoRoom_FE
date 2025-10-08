@@ -1,0 +1,219 @@
+{
+  "welcome": "Welcome to PomoRoom",
+  "login": "Login",
+  "login_with_account": "Login with your account",
+  "logout": "Logout",
+  "email": "Email",
+  "password": "Password",
+  "logging_in": "Logging in...",
+  "no_account": "Don't have an account?",
+  "register": "Register",
+  "other_login": "Other login methods",
+  "error_required": "Please enter both email and password.",
+  "error_failed": "Login failed. Please check your credentials.",
+  "register_title": "Register a PomoRoom Account",
+  "register_subtitle": "Create your account",
+  "username": "Username",
+  "confirm_password": "Confirm password",
+  "error_password_mismatch": "Password and confirm password do not match.",
+  "error_register_failed": "Registration failed. Please try again.",
+  "registering": "Registering...",
+  "have_account": "Already have an account?",
+  "homepage": {
+    "welcome_title": "Welcome to PomoRoom",
+    "join_room": "JOIN ROOM",
+    "what_is_pomodoro": "WHAT IS THE POMODORO TECHNIQUE?",
+    "pomodoro_technique": "The Pomodoro Technique",
+    "known_as": "also known as",
+    "tomato_technique": "the Tomato Technique",
+    "pomodoro_description": "is a simple yet extremely effective time management method that helps you increase focus, improve productivity, and sustain mental energy.",
+    "steps_title": "5 STEPS TO IMPLEMENT A POMODORO CYCLE",
+    "step1": "STEP 1.",
+    "step1_description": "Identify a specific task you need to complete.",
+    "step2": "STEP 2.",
+    "step2_description": " Use a timer and set it for",
+    "25": "25 minutes.",
+    "step3": "STEP 3.",
+    "lets": "Let's",
+    "focus": "focus 100%",
+    "step3_description": "on the chosen task during this time.",
+    "step4": "STEP 4.",
+    "step4_description": "When the time is up, mark one Pomodoro as complete and take a break of",
+    "5": "5 minutes.",
+    "step5": "STEP 5.",
+    "step5_description1": "After completing 4 Pomodoros, take a longer break of",
+    "minutes": "15–30 minutes",
+    "step5_description2": "before starting a new cycle.",
+    "benefits_title": "THE OUTSTANDING BENEFITS OF THE POMODORO TECHNIQUE",
+    "benefit1": "By working in short intervals, you can easily maintain high levels of focus and avoid information overload.",
+    "benefit2": "Tracking the number of Pomodoros for each task helps you plan and estimate time for future tasks more accurately.",
+    "benefit3": "Regular short and long breaks allow your brain and body to recover, preventing burnout and sustaining work energy.",
+    "benefit4": "You can flexibly adjust the Pomodoro duration if needed (e.g., 50 minutes – 10 minutes for deep work) to suit your focus ability."
+  },
+  "navbar": {
+    "homepage": "Homepage",
+    "room": "Pomodoro Room",
+    "rank": "Rank",
+    "experience_packages": "Experience packages",
+    "personal_achievements": "Personal achievements"
+  },
+  "ranking": {
+    "top_10": "TOP 10 RANKING OF THE MONTH",
+    "you": "You"
+  },
+  "footer": {
+    "contact_us": "CONTACT US AT",
+    "copyright": "© 2025 Copyright"
+  },
+  "services": {
+    "title1": "ENJOY COMPLETELY",
+    "title2": "ATTRACTIVE PACKAGES",
+    "subtitle": "Experience many interesting features you can't miss",
+    "feature1": "Customize study rooms freely as you like",
+    "feature2": "Increase the number of participants in a room",
+    "feature3": "Remove ads to avoid interruptions during participation",
+    "feature4": "Upgrade to professional work statistics",
+    "feature5": "No limit on room participation per day",
+    "title3": "Frequently Asked Questions (FAQ)",
+    "subtitle2": "GET PREMIUM"
+  },
+  "packages": {
+    "personal": {
+      "title": "Premium Personal",
+      "desc": "Create your own learning space freely"
+    },
+    "group": {
+      "title": "Premium Group",
+      "desc": "Expand your room with up to 10 members"
+    },
+    "plus3": {
+      "title": "Plus 3",
+      "desc": "Expand your room with 3 more members"
+    },
+    "plus10": {
+      "title": "Plus 10",
+      "desc": "Expand your room with 10 more members"
+    },
+    "buyButton": "Buy Package"
+  },
+  "faq": {
+    "questionPrefix": "Question",
+    "q1": {
+      "title": "If I stop paying, will my data be lost?",
+      "answer": "No. Your data will still be stored, but you won’t have access to advanced statistics or customization."
+    },
+    "q2": {
+      "title": "Can I share the paid plan with others?",
+      "answer": "No. Each account requires its own subscription since data is stored individually."
+    },
+    "q3": {
+      "title": "Will upgrading to Pro help me study more effectively?",
+      "answer": "Pro includes advanced tools: detailed tracking, visual charts, and personalized study suggestions. This helps you stay focused and manage time better."
+    },
+    "q4": {
+      "title": "Should I upgrade if I only study 1–2 hours per day?",
+      "answer": "Not necessary. Free plan is enough for light use. Pro is recommended for a more in-depth and long-term learning experience."
+    }
+  },
+  "cancelModal": {
+    "message": "Do you want to exit before the time is up?",
+    "exit": "Exit",
+    "stay": "Stay"
+  },
+  "joinRoomModal": {
+    "title": "JOIN A GROUP",
+    "public": "Public",
+    "createRoom": "Create Room",
+    "private": "Private",
+    "findRoom": "Find Room",
+    "codePlaceholder": "Code",
+    "submit": "Submit",
+    "helper": "Choose a public room to join, or create a new one.",
+    "noRooms": "No available rooms",
+    "searchPlaceholder": "Search rooms...",
+    "createRoomPlaceholder": "Room name...",
+    "createButton": "Create"
+  },
+  "playlistModal": {
+    "title": "PLAYLIST",
+    "addFavorite": "Add your favorite music",
+    "youtubePlaceholder": "Youtube link",
+    "search": "Search",
+    "default": "♪ Default",
+    "play": "Play",
+    "volume": "VOLUME",
+    "music": "Music",
+    "sound": "Sound",
+    "ambients": "AMBIENTS",
+    "ambientsDesc": "Choose your favorite ambient sound",
+    "ambientOptions": ["Rain", "Fireplace", "Breeze", "Library"]
+  },
+  "starExchange": "Star Exchange Station",
+  "tabs": {
+    "theme": "Theme",
+    "effect": "Effect",
+    "avatar": "Avatar"
+  },
+  "items": {
+    "deepOcean": "Deep Ocean",
+    "christmas": "Christmas",
+    "peachBlossom": "Peach Blossom",
+    "autumnForest": "Autumn Forest",
+    "sunset": "Sunset",
+    "universe": "Universe",
+    "frozen": "Frozen",
+    "earlySun": "Morning Sun"
+  },
+  "themeModal": {
+    "title": "THEME",
+    "mainColor": "Main color",
+    "custom": "Custom",
+    "staticBg": "Choose static background",
+    "dynamicBg": "Choose dynamic background",
+    "decorations": "DECORATION",
+    "effect": "Effect",
+    "starColors": {
+      "pink": "Pink",
+      "orange": "Orange",
+      "yellow": "Yellow",
+      "cyan": "Cyan",
+      "blue": "Blue",
+      "purple": "Purple"
+    },
+    "decorationItems": {
+      "leaf": "Falling leaves",
+      "petals": "Falling petals",
+      "rain": "Rain",
+      "sun": "Sunlight"
+    }
+  },
+  "welcomeRoom": {
+    "line1": "Welcome",
+    "line2": "to",
+    "appName": "PomoRoom"
+  },
+  "roomLayout": {
+    "account": "Account",
+    "history": "History",
+    "notifications": "Notifications",
+    "vip": "VIP",
+    "settings": "Settings",
+    "starExchange": "Star Exchange Station",
+    "music": "Music",
+    "theme": "Theme"
+  },
+  "setup": {
+    "focus": "Focus",
+    "short_break": "Short Break",
+    "long_break": "Long Break",
+    "minutes": "{{count}} minutes",
+    "private_room": "Private Room",
+    "group_room": "Group Room",
+    "greeting": "Wishing you a great time ahead"
+  },
+  "privateRoom": {
+    "music_label": "🎵 Lofi rain sounds 1 hour non-stop",
+    "start": "Start",
+    "stop": "Stop"
+  }
+}
