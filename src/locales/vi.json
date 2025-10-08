@@ -131,7 +131,8 @@
     "noRooms": "Không có phòng nào khả dụng",
     "searchPlaceholder": "Tìm kiếm phòng...",
     "createRoomPlaceholder": "Tên phòng...",
-    "createButton": "Tạo"
+    "createButton": "Tạo",
+    "loading": "Đang tìm kiếm"
   },
   "playlistModal": {
     "title": "DANH SÁCH NHẠC",

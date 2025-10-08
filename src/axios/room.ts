@@ -1,4 +1,4 @@
-import type { Room } from "@/types/room";
+import type { GroupRoom } from "@/types/room";
 import http from "./http";
 
 export async function createRoom(
@@ -29,7 +29,7 @@ export async function getAllRooms(
   const response = await http.get<{
     message: string;
     result: {
-      data: Room[];
+      data: GroupRoom[];
       pagination: {
         total: number;
         page: number;
@@ -69,6 +69,11 @@ export async function createPersonalRoom(
   return response;
 }
 
+export async function getGroupRoomById(roomId: string) {
+  const response = await http.get(`/rooms/current-working-room/${roomId}`);
+  return response;
+}
+
 export async function getCurrentWorkingPersonalRoom() {
   const response = await http.get("/rooms/current-working-personal-room");
   return response;
@@ -81,5 +86,15 @@ export async function updateRoomStatus() {
 
 export async function stopPersonalRoom() {
   const response = await http.put("/rooms/stop-personal-room");
+  return response;
+}
+
+export async function leaveRoom(userId: string) {
+  const response = await http.post(`/rooms/leave/${userId}`);
+  return response;
+}
+
+export async function joinRoom(roomId: string) {
+  const response = await http.post(`/rooms/join/${roomId}`);
   return response;
 }

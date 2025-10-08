@@ -132,7 +132,8 @@
     "noRooms": "No available rooms",
     "searchPlaceholder": "Search rooms...",
     "createRoomPlaceholder": "Room name...",
-    "createButton": "Create"
+    "createButton": "Create",
+    "loading": "Loading"
   },
   "playlistModal": {
     "title": "PLAYLIST",

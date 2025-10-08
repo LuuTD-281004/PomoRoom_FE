@@ -18,6 +18,7 @@ import HomePage from "./Page/Homepage";
 import ScrollToTop from "./Components/ScrollToTop";
 import PrivateRoomPage from "./Page/room/PrivateRoomPage";
 import NotFound from "./Page/NotFound";
+import GroupRoomPage from "./Page/room/GroupRoomPage";
 import ProfilePage from "./Page/ProfilePage";
 
 function App() {
@@ -33,6 +34,10 @@ function App() {
                 <Route element={<RoomLayout />}>
                   <Route path="/rooms" element={<SetupRoomPage />} />
                   <Route path="/private-room" element={<PrivateRoomPage />} />
+                  <Route
+                    path="/group-room/:roomId"
+                    element={<GroupRoomPage />}
+                  />
                 </Route>
                 <Route path="/ranking" element={<RankingPage />} />
                 <Route path="/plans" element={<ServicesPage />} />

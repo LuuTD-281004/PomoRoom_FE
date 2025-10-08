@@ -3,11 +3,12 @@ import Button from "@/Components/Button";
 import { SearchIcon, UsersIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { createRoom, getAllRooms } from "@/axios/room";
-import type { Room } from "@/types/room";
+import { createRoom, getAllRooms, joinRoom } from "@/axios/room";
+import type { GroupRoom } from "@/types/room";
 import { RoomType } from "@/enum/room-type";
 import { useRoomSetup } from "@/contexts/RoomSetupContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 type Props = {
   isOpen: boolean;
@@ -17,7 +18,7 @@ type Props = {
 export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const { setup } = useRoomSetup();
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<GroupRoom[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
@@ -66,6 +67,24 @@ export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
     }
   };
 
+  const handleJoinRoom = async (room: GroupRoom) => {
+    try {
+      const response = await joinRoom(room.id);
+
+      if (response.status === 200 && response.data) {
+        const roomId = response.data.result.id;
+        navigate(`/group-room/${roomId}`);
+      } else if (response.status === 400) {
+        toast.warning("You cannot join this room.");
+      } else {
+        console.error("Failed to create room:", response);
+      }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err: any) {
+      toast.warning("You cannot join this room.");
+    }
+  };
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
     setPage(1); // reset to first page when searching
@@ -79,7 +98,6 @@ export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
     if (page < totalPages) setPage((p) => p + 1);
   };
 
-  console.log(roomName);
   return (
     <Modal
       isOpen={isOpen}
@@ -123,6 +141,7 @@ export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
                 {rooms.map((r) => (
                   <button
                     key={r.id}
+                    onClick={() => handleJoinRoom(r)}
                     className="flex flex-col items-center bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition"
                   >
                     <div className="w-full h-16 bg-gradient-to-br from-sky-200 to-sky-100 rounded-md mb-2 overflow-hidden flex items-center justify-center">
