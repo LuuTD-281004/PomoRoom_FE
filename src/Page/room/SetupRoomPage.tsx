@@ -26,7 +26,7 @@ const SetupRoomPage = () => {
   const [showJoinModal, setShowJoinModal] = useState(false);
 
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
-  const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
+  const [_selectedTrack, setSelectedTrack] = useState<string | null>(null);
 
   const handleTrackSelected = async (track: string) => {
     setSelectedTrack(track);
