@@ -147,7 +147,8 @@
     "sound": "Sound",
     "ambients": "AMBIENTS",
     "ambientsDesc": "Choose your favorite ambient sound",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "invalid": "Invalid YouTube link"
   },
   "starExchange": "Star Exchange Station",
   "tabs": {
@@ -213,8 +214,9 @@
     "greeting": "Wishing you a great time ahead"
   },
   "privateRoom": {
-    "music_label": "🎵 Lofi rain sounds 1 hour non-stop",
     "start": "Start",
-    "stop": "Stop"
+    "stop": "Stop",
+    "focus": "Focusing",
+    "break": "On Break"
   }
 }

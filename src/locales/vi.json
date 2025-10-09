@@ -146,7 +146,8 @@
     "sound": "Âm thanh",
     "ambients": "ÂM THANH",
     "ambientsDesc": "Chọn âm thanh bạn yêu thích",
-    "confirm": "Xác nhận"
+    "confirm": "Xác nhận",
+    "invalid": "Liên kết YouTube không hợp lệ"
   },
   "starExchange": "Trạm đổi sao",
   "tabs": {
@@ -212,8 +213,9 @@
     "greeting": "Ngày mới tốt lành nhé"
   },
   "privateRoom": {
-    "music_label": "🎵 Tiếng mưa lofi chill 1 giờ không ngừng",
     "start": "Bắt đầu",
-    "stop": "Dừng"
+    "stop": "Dừng",
+    "focus": "Đang tập trung",
+    "break": "Thời gian nghỉ"
   }
 }
