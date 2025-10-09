@@ -26,12 +26,12 @@ type Track = {
 };
 
 const TRACKS: Track[] = [
-  { title: "Estro", file: "/sounds/bensoundEstro.mp3", artist: "Bensound", duration: "2:59" },
-  { title: "Healing", file: "/sounds/healing.mp3", artist: "Unknown", duration: "3:12" },
-  { title: "June Time", file: "/sounds/juneTime.mp3", artist: "Unknown", duration: "2:45" },
-  { title: "Natural Sleep", file: "/sounds/naturalSleepMusic.mp3", artist: "Unknown", duration: "4:01" },
-  { title: "Rain", file: "/sounds/rain.mp3", artist: "Unknown", duration: "3:30" },
-  { title: "Solo Piano", file: "/sounds/soloPiano.mp3", artist: "Unknown", duration: "3:15" },
+  { title: "Estro", file: "/sounds/bensoundEstro.mp3", artist: "", duration: "3:12" },
+  { title: "Healing", file: "/sounds/healing.mp3", artist: "", duration: "3:52" },
+  { title: "June Time", file: "/sounds/juneTime.mp3", artist: "", duration: "2:36" },
+  { title: "Natural Sleep", file: "/sounds/naturalSleepMusic.mp3", artist: "", duration: "2:18" },
+  { title: "Rain", file: "/sounds/rain.mp3", artist: "", duration: "1:20" },
+  { title: "Solo Piano", file: "/sounds/soloPiano.mp3", artist: "", duration: "1:03" },
 ];
 
 const STATIC_PREVIEWS = [1, 2, 3, 4, 5, 6];
