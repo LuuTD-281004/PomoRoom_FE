@@ -147,7 +147,7 @@
     "sound": "Sound",
     "ambients": "AMBIENTS",
     "ambientsDesc": "Choose your favorite ambient sound",
-    "ambientOptions": ["Rain", "Fireplace", "Breeze", "Library"]
+    "confirm": "Confirm"
   },
   "starExchange": "Star Exchange Station",
   "tabs": {

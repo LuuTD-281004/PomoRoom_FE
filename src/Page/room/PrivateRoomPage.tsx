@@ -3,11 +3,7 @@ import { PlayIcon, PauseIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Button from "@/Components/Button";
 import CancelModal from "./components/CancelModal";
-import {
-  getCurrentWorkingPersonalRoom,
-  updateRoomStatus,
-  stopPersonalRoom,
-} from "@/axios/room";
+import { getCurrentWorkingPersonalRoom, updateRoomStatus, stopPersonalRoom } from "@/axios/room";
 import type { PersonalRoom } from "@/types/room";
 import { RoomStatus } from "@/enum/room-status";
 
@@ -16,7 +12,29 @@ const PrivateRoomPage = () => {
   const [remaining, setRemaining] = useState(0);
   const [running, setRunning] = useState(false);
   const [showCancel, setShowCancel] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [trackTitle, setTrackTitle] = useState<string>(""); // 🆕 thêm tên bài nhạc
+  const [isPlaying, setIsPlaying] = useState(false);
   const intervalRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const file = localStorage.getItem("selectedTrackFile");
+    const title = localStorage.getItem("selectedTrackTitle");
+    setTrackTitle(title || "Unknown");
+
+    if (file) {
+      const existing = window.__CURRENT_AUDIO;
+      if (existing) {
+        setAudio(existing);
+        setIsPlaying(!existing.paused);
+      } else {
+        const newAudio = new Audio(file);
+        newAudio.loop = true;
+        setAudio(newAudio);
+        newAudio.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+      }
+    }
+  }, []);
 
   const updateCurrentElapse = async (personalRoom: PersonalRoom) => {
     if (!personalRoom) return;
@@ -86,56 +104,49 @@ const PrivateRoomPage = () => {
   const handleConfirmExit = async () => {
     setShowCancel(false);
     setRunning(false);
+    if (audio) audio.pause();
     await stopPersonalRoom();
-    window.location.href = "/rooms"; // back to setup
+    window.location.href = "/rooms";
+  };
+
+  const togglePlayPause = () => {
+    if (!audio) return;
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      audio.play();
+      setIsPlaying(true);
+    }
   };
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-4">
       <div className="text-8xl font-bold mb-8 text-white bg-blue-400/80 px-20 py-10 rounded-lg">
-        {Math.floor(remaining / 60)
-          .toString()
-          .padStart(2, "0")}
-        :{(remaining % 60).toString().padStart(2, "0")}
+        {Math.floor(remaining / 60).toString().padStart(2, "0")}:
+        {(remaining % 60).toString().padStart(2, "0")}
       </div>
 
-      <div className="flex items-center gap-4 bg-white/80 px-6 py-3 rounded-lg">
-        <span className="text-gray-700">{t("privateRoom.music_label")}</span>
-        <div className="flex gap-2">
-          <button className="p-1">
-            <PlayIcon size={20} />
-          </button>
-          <button className="p-1">
-            <PauseIcon size={20} />
-          </button>
-        </div>
+      <div className="flex flex-col items-center bg-white/80 px-6 py-3 rounded-lg">
+        <span className="text-gray-700 text-sm mb-1">
+          🎵 {trackTitle || "Không có nhạc"}
+        </span>
+        <button className="p-1" onClick={togglePlayPause}>
+          {isPlaying ? <PauseIcon size={20} /> : <PlayIcon size={20} />}
+        </button>
       </div>
 
       <div className="flex gap-4 mt-8">
-        <Button
-          onClick={() => setRunning(true)}
-          color="gray"
-          size="wide"
-          disabled={running}
-        >
+        <Button onClick={() => setRunning(true)} color="gray" size="wide" disabled={running}>
           {t("privateRoom.start")}
         </Button>
 
-        <Button
-          onClick={handleStop}
-          color="gray"
-          size="wide"
-          disabled={!running}
-        >
+        <Button onClick={handleStop} color="gray" size="wide" disabled={!running}>
           {t("privateRoom.stop")}
         </Button>
       </div>
 
-      <CancelModal
-        isOpen={showCancel}
-        onOK={handleConfirmExit}
-        onCancel={() => setShowCancel(false)}
-      />
+      <CancelModal isOpen={showCancel} onOK={handleConfirmExit} onCancel={() => setShowCancel(false)} />
     </div>
   );
 };

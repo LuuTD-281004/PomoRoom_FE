@@ -146,7 +146,7 @@
     "sound": "Âm thanh",
     "ambients": "ÂM THANH",
     "ambientsDesc": "Chọn âm thanh bạn yêu thích",
-    "ambientOptions": ["Mưa rơi", "Lò sưởi", "Gió nhẹ", "Thư viện"]
+    "confirm": "Xác nhận"
   },
   "starExchange": "Trạm đổi sao",
   "tabs": {
