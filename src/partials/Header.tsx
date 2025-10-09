@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button from "./../Components/Button";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserDropdown } from "@/Components/UserDropdown";
-import logo from "../assets/image/logo.png";
+import logo from "../../public/logo.png";
 
 const Header: React.FC = () => {
   const { i18n } = useTranslation();
