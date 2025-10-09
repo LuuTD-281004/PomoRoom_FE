@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import PlaylistModal from "../components/PlaylistModal";
-import ThemeModal from "../components/ThemeModal";
 import { WelcomeRoom } from "../components/WelcomeRoom";
 import StarExchangeModal from "../components/StarExchangeModal";
 import { useTranslation } from "react-i18next";
 import defaultBackground from "../../../assets/image/defaultBackground.png";
-import { useAuth } from "@/contexts/AuthContext";
 
 const RoomLayout = () => {
-  const { authenticatedUser } = useAuth();
-  const [showTheme, setShowTheme] = useState(false);
-  const [showPlaylist, setShowPlaylist] = useState(false);
   const [showStarExchange, setShowStarExchange] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
 
@@ -37,22 +31,6 @@ const RoomLayout = () => {
       }}
     >
       <div className="fixed flex items-center gap-4 top-40 p-4 right-5">
-        <div className="flex bg-white items-center h-fit gap-2 border-2 text-[#0C1A57] font-medium border-[#0C1A57] p-1 px-5 rounded-md shadow-md">
-          <svg
-            width="22"
-            height="22"
-            viewBox="0 0 22 22"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M20.3536 8.04257L14.358 7.1301L11.6778 1.44017C11.6046 1.28438 11.4841 1.15827 11.3354 1.08161C10.9623 0.888733 10.5089 1.04947 10.3223 1.44017L7.64213 7.1301L1.64652 8.04257C1.48122 8.0673 1.33009 8.1489 1.21438 8.27254C1.07449 8.4231 0.99741 8.62566 1.00007 8.8357C1.00272 9.04575 1.0849 9.24609 1.22855 9.39272L5.56645 13.8215L4.5416 20.0753C4.51757 20.2207 4.53294 20.3703 4.58598 20.5071C4.63901 20.6439 4.72759 20.7624 4.84166 20.8492C4.95573 20.9359 5.09074 20.9875 5.23137 20.998C5.37199 21.0085 5.51262 20.9775 5.63729 20.9086L11 17.9561L16.3628 20.9086C16.5092 20.9902 16.6792 21.0174 16.8422 20.9877C17.2531 20.9135 17.5293 20.5055 17.4585 20.0753L16.4336 13.8215L20.7715 9.39272C20.8896 9.27156 20.9675 9.1133 20.9912 8.9402C21.0549 8.50746 20.7668 8.10686 20.3536 8.04257Z"
-              fill="#FFE414"
-              stroke="#FFE414"
-            />
-          </svg>
-          {authenticatedUser?.userStar || 0}
-        </div>
         <div
           onClick={() => setShowStarExchange(true)}
           className="text-xs cursor-pointer text-center h-fit font-medium text-white"
@@ -81,26 +59,6 @@ const RoomLayout = () => {
       <main className="flex-1 w-full flex items-center justify-center">
         <Outlet />
       </main>
-
-      <nav className="flex flex-col fixed bottom-10 -right-5">
-        <div className="flex flex-col space-y-20">
-          <button
-            onClick={() => setShowPlaylist(true)}
-            className="!text-white text-center !p-4 !rounded-none !rounded-t-lg -rotate-90 !bg-[#0C1A57] hover:text-yellow-400 transition-colors"
-          >
-            <span>{t("roomLayout.music")}</span>
-          </button>
-          <button
-            onClick={() => setShowTheme(true)}
-            className="!text-white text-center !p-4 !rounded-none !rounded-t-lg -rotate-90 !bg-[#0C1A57] hover:text-yellow-400 transition-colors"
-          >
-            <span>{t("roomLayout.theme")}</span>
-          </button>
-        </div>
-      </nav>
-
-      <PlaylistModal isOpen={showPlaylist} onClose={() => setShowPlaylist(false)} />
-      <ThemeModal isOpen={showTheme} onClose={() => setShowTheme(false)} />
       <StarExchangeModal
         isOpen={showStarExchange}
         onClose={() => setShowStarExchange(false)}

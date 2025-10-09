@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "@/Components/Modal";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -6,20 +6,57 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
+  onTrackSelect: (track: string) => void;
 };
 
 const TRACKS = [
-  { title: "River Flows in You", artist: "Yiruma", duration: "3:04" },
-  { title: "The Ludlows", artist: "James Horner", duration: "5:50" },
-  { title: "Clair de Lune", artist: "Claude Debussy", duration: "5:02" },
-  { title: "Moonlight Sonata", artist: "Ludwig van Beethoven", duration: "5:32" },
-  { title: "Bloom", artist: "ODESZA", duration: "3:50" },
+  {
+    title: "Estro",
+    file: "/sounds/bensoundEstro.mp3",
+    artist: "Bensound",
+    duration: "2:59",
+  },
+  {
+    title: "Healing",
+    file: "/sounds/healing.mp3",
+    artist: "Unknown",
+    duration: "3:12",
+  },
+  {
+    title: "June Time",
+    file: "/sounds/juneTime.mp3",
+    artist: "Unknown",
+    duration: "2:45",
+  },
+  {
+    title: "Natural Sleep",
+    file: "/sounds/naturalSleepMusic.mp3",
+    artist: "Unknown",
+    duration: "4:01",
+  },
+  {
+    title: "Rain",
+    file: "/sounds/rain.mp3",
+    artist: "Unknown",
+    duration: "3:30",
+  },
+  {
+    title: "Soft Piano",
+    file: "/sounds/softPiano.mp3",
+    artist: "Unknown",
+    duration: "3:15",
+  },
 ];
 
 const STATIC_PREVIEWS = [1, 2, 3, 4, 5, 6];
 
-export const PlaylistModal: React.FC<Props> = ({ isOpen, onClose }) => {
+export const PlaylistModal: React.FC<Props> = ({
+  isOpen,
+  onClose,
+  onTrackSelect,
+}) => {
   const { t } = useTranslation();
+  const [previewTrack, setPreviewTrack] = useState<string | null>(null);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("playlistModal.title")}>
@@ -59,19 +96,43 @@ export const PlaylistModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       thumbnail
                     </div>
                     <div className="text-left">
-                      <div className="font-medium text-white">{tItem.title}</div>
-                      <div className="text-slate-300 text-xs">{tItem.artist}</div>
+                      <div className="font-medium text-white">
+                        {tItem.title}
+                      </div>
+                      <div className="text-slate-300 text-xs">
+                        {tItem.artist}
+                      </div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <div className="text-slate-300 text-xs">{tItem.duration}</div>
-                    <button className="text-xs text-[#0C1A57] bg-white/10 px-3 py-1 rounded-md">
+                    <div className="text-slate-300 text-xs">
+                      {tItem.duration}
+                    </div>
+                    <button
+                      className="text-xs text-[#0C1A57] bg-white/10 px-3 py-1 rounded-md"
+                      onClick={() => setPreviewTrack(tItem.file)}
+                    >
                       {t("playlistModal.play")}
+                    </button>
+                    <button
+                      className="text-xs text-green-700 bg-green-100 px-3 py-1 rounded-md"
+                      onClick={() => onTrackSelect(tItem.file)}
+                    >
+                      Chọn nhạc
                     </button>
                   </div>
                 </div>
               ))}
+              {previewTrack && (
+                <audio
+                  src={previewTrack}
+                  autoPlay
+                  controls
+                  onEnded={() => setPreviewTrack(null)}
+                  className="w-full mt-2"
+                />
+              )}
             </div>
           </div>
 
