@@ -33,7 +33,7 @@ const Header: React.FC = () => {
           onClick={navigateToHome}
         >
           <img
-            src="../src/assets/image/logo.png"
+            src="public/logo.png"
             alt="logo"
             className="h-10 w-10 object-contain"
           />
