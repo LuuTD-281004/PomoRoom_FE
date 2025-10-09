@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Modal from "@/Components/Modal";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Props = {
   isOpen: boolean;
@@ -19,6 +20,7 @@ const SAMPLE_ITEMS = [
 ];
 
 export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
+  const {authenticatedUser} = useAuth()
   const [tab, setTab] = useState<"theme" | "effect" | "avatar">("theme");
   const { t } = useTranslation();
 
@@ -73,7 +75,7 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 {t(`tabs.${tab}`)}
               </h3>
               <div className="flex bg-white items-center gap-2 border-2 text-[#0C1A57] font-medium border-[#0C1A57] p-1 px-5 rounded-md">
-                ⭐ <span>{100}</span>
+                ⭐ <span>{authenticatedUser?.userStar || 0}</span>
               </div>
             </div>
 

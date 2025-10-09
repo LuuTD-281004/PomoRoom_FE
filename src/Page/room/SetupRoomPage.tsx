@@ -10,6 +10,7 @@ import {
 } from "@/axios/room";
 import { RemovePersonalRoomModal } from "./components/RemovePersonalRoomModal";
 import { useNavigate } from "react-router-dom";
+import PlaylistModal from "./components/PlaylistModal";
 
 const FOCUS_OPTIONS = [1, 25, 50];
 const SHORT_BREAK_OPTIONS = [1, 3, 5, 10];
@@ -23,6 +24,33 @@ const SetupRoomPage = () => {
   const [showRemoveOldRoom, setShowRemoveOldRoom] = useState(false);
   const [pendingStart, setPendingStart] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
+
+  const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+  const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
+
+  const handleTrackSelected = async (track: string) => {
+    setSelectedTrack(track);
+    setShowPlaylistModal(false);
+    // Sau khi chọn nhạc, tạo phòng cá nhân như cũ
+    try {
+      const response = await createPersonalRoom(
+        setup.shortBreakMinutes,
+        setup.longBreakMinutes,
+        setup.focusMinutes
+      );
+      if (response.status === 200) {
+        // Có thể truyền selectedTrack qua localStorage/context nếu cần dùng ở PrivateRoomPage
+        navigate("/private-room");
+      } else if (response.status === 422) {
+        setShowRemoveOldRoom(true);
+      }
+    } catch (error: any) {
+      console.error("Error creating personal room:", error);
+      if (error?.response?.status === 422) {
+        setShowRemoveOldRoom(true);
+      }
+    }
+  };
 
   // -------------------------------
   // Redirect if user already has a room
@@ -66,24 +94,7 @@ const SetupRoomPage = () => {
   };
 
   const handleStartPrivate = async () => {
-    try {
-      const response = await createPersonalRoom(
-        setup.shortBreakMinutes,
-        setup.longBreakMinutes,
-        setup.focusMinutes
-      );
-
-      if (response.status === 200) {
-        navigate("/private-room");
-      } else if (response.status === 422) {
-        setShowRemoveOldRoom(true);
-      }
-    } catch (error: any) {
-      console.error("Error creating personal room:", error);
-      if (error?.response?.status === 422) {
-        setShowRemoveOldRoom(true);
-      }
-    }
+    setShowPlaylistModal(true);
   };
 
   // -------------------------------
@@ -106,7 +117,9 @@ const SetupRoomPage = () => {
                 className="appearance-none bg-white text-gray-700 font-medium px-4 py-2 pr-8 rounded-lg border border-blue-200 shadow-sm 
                           focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition hover:border-blue-300 hover:shadow-md"
                 value={setup.focusMinutes}
-                onChange={(e) => setSetup({ focusMinutes: Number(e.target.value) })}
+                onChange={(e) =>
+                  setSetup({ focusMinutes: Number(e.target.value) })
+                }
               >
                 {FOCUS_OPTIONS.map((m) => (
                   <option key={m} value={m}>
@@ -123,20 +136,29 @@ const SetupRoomPage = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </div>
           </div>
 
           {/* Short Break */}
           <div className="text-center">
-            <p className="text-white font-medium mb-2">{t("setup.short_break")}</p>
+            <p className="text-white font-medium mb-2">
+              {t("setup.short_break")}
+            </p>
             <div className="relative inline-block">
               <select
                 className="appearance-none bg-white text-gray-700 font-medium px-4 py-2 pr-8 rounded-lg border border-blue-200 shadow-sm 
                           focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition hover:border-blue-300 hover:shadow-md"
                 value={setup.shortBreakMinutes}
-                onChange={(e) => setSetup({ shortBreakMinutes: Number(e.target.value) })}
+                onChange={(e) =>
+                  setSetup({ shortBreakMinutes: Number(e.target.value) })
+                }
               >
                 {SHORT_BREAK_OPTIONS.map((m) => (
                   <option key={m} value={m}>
@@ -152,20 +174,29 @@ const SetupRoomPage = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </div>
           </div>
 
           {/* Long Break */}
           <div className="text-center">
-            <p className="text-white font-medium mb-2">{t("setup.long_break")}</p>
+            <p className="text-white font-medium mb-2">
+              {t("setup.long_break")}
+            </p>
             <div className="relative inline-block">
               <select
                 className="appearance-none bg-white text-gray-700 font-medium px-4 py-2 pr-8 rounded-lg border border-blue-200 shadow-sm 
                           focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition hover:border-blue-300 hover:shadow-md"
                 value={setup.longBreakMinutes}
-                onChange={(e) => setSetup({ longBreakMinutes: Number(e.target.value) })}
+                onChange={(e) =>
+                  setSetup({ longBreakMinutes: Number(e.target.value) })
+                }
               >
                 {LONG_BREAK_OPTIONS.map((m) => (
                   <option key={m} value={m}>
@@ -181,7 +212,12 @@ const SetupRoomPage = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
               </svg>
             </div>
           </div>
@@ -208,6 +244,12 @@ const SetupRoomPage = () => {
           {t("setup.greeting", { name: "tên bạn" })}
         </p>
       </main>
+
+      <PlaylistModal
+        isOpen={showPlaylistModal}
+        onClose={() => setShowPlaylistModal(false)}
+        onTrackSelect={handleTrackSelected}
+      />
 
       <JoinRoomModal
         isOpen={showJoinModal}
