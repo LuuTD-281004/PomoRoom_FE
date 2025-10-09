@@ -20,43 +20,46 @@ import PrivateRoomPage from "./Page/room/PrivateRoomPage";
 import NotFound from "./Page/NotFound";
 import GroupRoomPage from "./Page/room/GroupRoomPage";
 import ProfilePage from "./Page/ProfilePage";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
-    <AuthProvider>
-      <SettingsProvider>
-        <RoomSetupProvider>
-          <Router>
-            <ScrollToTop />
-            <Routes>
-              <Route element={<LayoutWithHeader />}>
-                <Route path="/" element={<HomePage />} />
-                <Route element={<RoomLayout />}>
-                  <Route path="/rooms" element={<SetupRoomPage />} />
-                  <Route path="/private-room" element={<PrivateRoomPage />} />
-                  <Route
-                    path="/group-room/:roomId"
-                    element={<GroupRoomPage />}
-                  />
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <AuthProvider>
+        <SettingsProvider>
+          <RoomSetupProvider>
+            <Router>
+              <ScrollToTop />
+              <Routes>
+                <Route element={<LayoutWithHeader />}>
+                  <Route path="/" element={<HomePage />} />
+                  <Route element={<RoomLayout />}>
+                    <Route path="/rooms" element={<SetupRoomPage />} />
+                    <Route path="/private-room" element={<PrivateRoomPage />} />
+                    <Route
+                      path="/group-room/:roomId"
+                      element={<GroupRoomPage />}
+                    />
+                  </Route>
+                  <Route path="/ranking" element={<RankingPage />} />
+                  <Route path="/plans" element={<ServicesPage />} />
                 </Route>
-                <Route path="/ranking" element={<RankingPage />} />
-                <Route path="/plans" element={<ServicesPage />} />
-              </Route>
-              <Route element={<LayoutWithMinimizedHeader />}>
-                <Route path="/packages" element={<PaymentPage />} />
-              </Route>
+                <Route element={<LayoutWithMinimizedHeader />}>
+                  <Route path="/packages" element={<PaymentPage />} />
+                </Route>
 
-              <Route element={<LayoutAuth />}>
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Router>
-        </RoomSetupProvider>
-      </SettingsProvider>
-    </AuthProvider>
+                <Route element={<LayoutAuth />}>
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Router>
+          </RoomSetupProvider>
+        </SettingsProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 }
 

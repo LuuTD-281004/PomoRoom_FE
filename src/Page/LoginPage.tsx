@@ -5,10 +5,15 @@ import { useAuth } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import defaultBackground from "../assets/image/defaultBackground.png";
 import Header from "../partials/Header";
+import { GoogleLogin } from "@react-oauth/google"
 
 const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const { t } = useTranslation();
+
+  const handleGoogleLogin = async (response: any) => {
+    await loginWithGoogle(response);
+  };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -86,7 +91,8 @@ const LoginPage: React.FC = () => {
 
           <div className="my-6 w-full h-[1px] bg-[#0C1A57]/30" />
 
-          <p className="text-gray-500">{t("other_login")}</p>
+          <p className="text-gray-500 mb-4">{t("other_login")}</p>
+          <GoogleLogin text="continue_with" onSuccess={handleGoogleLogin} />
         </div>
       </div>
     </div>
