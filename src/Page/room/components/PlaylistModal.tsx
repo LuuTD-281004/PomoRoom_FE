@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { PlayIcon, PauseIcon } from "lucide-react";
+import React, { useState, useRef } from "react";
 import Modal from "@/Components/Modal";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -50,6 +51,17 @@ const TRACKS = [
 
 const STATIC_PREVIEWS = [1, 2, 3, 4, 5, 6];
 
+function formatTime(sec: number) {
+  if (!isFinite(sec)) return "00:00";
+  const m = Math.floor(sec / 60)
+    .toString()
+    .padStart(2, "0");
+  const s = Math.floor(sec % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${m}:${s}`;
+}
+
 export const PlaylistModal: React.FC<Props> = ({
   isOpen,
   onClose,
@@ -57,6 +69,52 @@ export const PlaylistModal: React.FC<Props> = ({
 }) => {
   const { t } = useTranslation();
   const [previewTrack, setPreviewTrack] = useState<string | null>(null);
+  const [audioProgress, setAudioProgress] = useState(0);
+  const [audioDuration, setAudioDuration] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Cập nhật tiến trình audio
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setAudioProgress(audioRef.current.currentTime);
+      setAudioDuration(audioRef.current.duration || 0);
+    }
+  };
+
+  // Khi đổi bài preview thì reset tiến trình
+  React.useEffect(() => {
+    setAudioProgress(0);
+    setAudioDuration(0);
+    if (previewTrack && audioRef.current) {
+      audioRef.current.load();
+      audioRef.current.play();
+    }
+  }, [previewTrack]);
+
+  // Dừng nhạc khi đóng modal
+  React.useEffect(() => {
+    if (!isOpen && audioRef.current) {
+      audioRef.current.pause();
+      setPreviewTrack(null);
+    }
+  }, [isOpen]);
+
+  // Hàm play/pause
+  const handlePlayPause = (trackFile: string) => {
+    if (previewTrack === trackFile) {
+      if (audioRef.current?.paused) {
+        audioRef.current.play();
+      } else {
+        audioRef.current?.pause();
+      }
+    } else {
+      setPreviewTrack(trackFile);
+    }
+  };
+
+  // Xác định trạng thái phát của từng track
+  const isPlaying = (trackFile: string) =>
+    previewTrack === trackFile && !audioRef.current?.paused;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("playlistModal.title")}>
@@ -89,50 +147,85 @@ export const PlaylistModal: React.FC<Props> = ({
               {TRACKS.map((tItem) => (
                 <div
                   key={tItem.title}
-                  className="flex items-center justify-between bg-white/10 rounded-md px-4 py-3 text-sm"
+                  className="flex flex-col bg-white/10 rounded-md px-4 py-3 text-sm"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-md bg-gradient-to-br from-sky-300 to-sky-100 flex items-center justify-center text-xs text-slate-700">
-                      thumbnail
-                    </div>
-                    <div className="text-left">
-                      <div className="font-medium text-white">
-                        {tItem.title}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-md bg-gradient-to-br from-sky-300 to-sky-100 flex items-center justify-center text-xs text-slate-700">
+                        thumbnail
                       </div>
+                      <div className="text-left">
+                        <div className="font-medium text-white">
+                          {tItem.title}
+                        </div>
+                        <div className="text-slate-300 text-xs">
+                          {tItem.artist}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
                       <div className="text-slate-300 text-xs">
-                        {tItem.artist}
+                        {tItem.duration}
                       </div>
+                      <button
+                        className="text-xs text-[#0C1A57] bg-white/10 px-3 py-1 rounded-md flex items-center"
+                        onClick={() => handlePlayPause(tItem.file)}
+                        title={
+                          isPlaying(tItem.file)
+                            ? t("playlistModal.pause")
+                            : t("playlistModal.play")
+                        }
+                        type="button"
+                      >
+                        {isPlaying(tItem.file) ? (
+                          <PauseIcon size={16} />
+                        ) : (
+                          <PlayIcon size={16} />
+                        )}
+                      </button>
+                      <button
+                        className="text-xs text-green-700 bg-green-100 px-3 py-1 rounded-md"
+                        onClick={() => onTrackSelect(tItem.file)}
+                      >
+                        Chọn nhạc
+                      </button>
                     </div>
                   </div>
-
-                  <div className="flex items-center gap-4">
-                    <div className="text-slate-300 text-xs">
-                      {tItem.duration}
+                  {/* Thanh phát nhạc chỉ hiện ở item đang preview */}
+                  {previewTrack === tItem.file && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-xs text-white min-w-[40px]">
+                        {formatTime(audioProgress)}
+                      </span>
+                      <div className="flex-1 h-2 bg-white/20 rounded overflow-hidden relative">
+                        <div
+                          className="h-full bg-blue-400 transition-all"
+                          style={{
+                            width:
+                              audioDuration > 0
+                                ? `${(audioProgress / audioDuration) * 100}%`
+                                : "0%",
+                          }}
+                        />
+                      </div>
+                      <span className="text-xs text-white min-w-[40px]">
+                        {formatTime(audioDuration)}
+                      </span>
                     </div>
-                    <button
-                      className="text-xs text-[#0C1A57] bg-white/10 px-3 py-1 rounded-md"
-                      onClick={() => setPreviewTrack(tItem.file)}
-                    >
-                      {t("playlistModal.play")}
-                    </button>
-                    <button
-                      className="text-xs text-green-700 bg-green-100 px-3 py-1 rounded-md"
-                      onClick={() => onTrackSelect(tItem.file)}
-                    >
-                      Chọn nhạc
-                    </button>
-                  </div>
+                  )}
                 </div>
               ))}
-              {previewTrack && (
-                <audio
-                  src={previewTrack}
-                  autoPlay
-                  controls
-                  onEnded={() => setPreviewTrack(null)}
-                  className="w-full mt-2"
-                />
-              )}
+              {/* Audio ẩn, chỉ dùng để phát preview */}
+              <audio
+                ref={audioRef}
+                src={previewTrack || undefined}
+                autoPlay
+                controls={false}
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleTimeUpdate}
+                onEnded={() => setPreviewTrack(null)}
+                style={{ display: "none" }}
+              />
             </div>
           </div>
 
