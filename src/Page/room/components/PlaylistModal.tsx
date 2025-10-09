@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Modal from "@/Components/Modal";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ArrowRight, PlayIcon, PauseIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, PlayIcon, PauseIcon, X } from "lucide-react";
 
 declare global {
   interface Window {
@@ -12,12 +12,15 @@ declare global {
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onTrackSelect?: (track: { title: string; file: string }, staticBg?: number | null) => void;
+  onTrackSelect?: (
+    track: { title: string; file: string; type: "file" | "youtube" },
+    staticBg?: number | null
+  ) => void;
 };
 
 type Track = {
   title: string;
-  file: string;
+  file: string; 
   artist: string;
   duration: string;
 };
@@ -40,13 +43,22 @@ function formatTime(sec: number) {
   return `${m}:${s}`;
 }
 
+const extractYouTubeID = (url: string) => {
+  const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+};
+
+
 const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
   const { t } = useTranslation();
   const [previewTrack, setPreviewTrack] = useState<string | null>(null);
   const [audioProgress, setAudioProgress] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
   const [search, setSearch] = useState("");
-  const [selectedTrack, setSelectedTrack] = useState<string>(TRACKS[0].file);
+  const [youtubeLink, setYoutubeLink] = useState<string>("");
+  const [selectedTrack, setSelectedTrack] = useState<string | null>(TRACKS[0].file);
+  const [selectedType, setSelectedType] = useState<"file" | "youtube">("file");
   const [selectedBg, setSelectedBg] = useState<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
@@ -54,9 +66,11 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
   useEffect(() => {
     if (isOpen) {
       setSelectedTrack(TRACKS[0].file);
+      setSelectedType("file");
       setPreviewTrack(null);
       setSelectedBg(null);
       setSearch("");
+      setYoutubeLink("");
       setAudioProgress(0);
       setAudioDuration(0);
     }
@@ -70,6 +84,10 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
   };
 
   useEffect(() => {
+    if (selectedType === "youtube" && youtubeLink) {
+        setPreviewTrack(null);
+    }
+
     setAudioProgress(0);
     setAudioDuration(0);
     if (previewTrack && audioRef.current) {
@@ -80,7 +98,7 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
       audioRef.current.pause();
       audioRef.current.src = "";
     }
-  }, [previewTrack]);
+  }, [previewTrack, selectedType, youtubeLink]);
 
   useEffect(() => {
     if (!isOpen && audioRef.current) {
@@ -90,6 +108,8 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
   }, [isOpen]);
 
   const handlePlayPause = (trackFile: string) => {
+    if (selectedType === "youtube") return;
+
     if (previewTrack === trackFile) {
       if (audioRef.current?.paused) {
         audioRef.current.play().catch(() => {});
@@ -109,29 +129,96 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
       track.title.toLowerCase().includes(search.toLowerCase()) ||
       track.artist.toLowerCase().includes(search.toLowerCase())
   );
+  
+  const handleSelectTrack = (trackFile: string) => {
+    setYoutubeLink("");
+    setSelectedTrack(trackFile);
+    setSelectedType("file");
+  }
+
+  const handleYoutubeInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const link = e.target.value;
+    setYoutubeLink(link);
+    setSearch("");
+
+    const youtubeID = extractYouTubeID(link);
+    if (link && youtubeID) {
+        setSelectedTrack(youtubeID);
+        setSelectedType("youtube");
+        setPreviewTrack(null);
+    } else if (link && !youtubeID) {
+        setSelectedTrack(null);
+        setSelectedType("file");
+        setPreviewTrack(null);
+    } else {
+        setSelectedTrack(TRACKS[0].file);
+        setSelectedType("file");
+    }
+  }
+
+  const handleClearYoutubeLink = () => {
+    setYoutubeLink("");
+    setSelectedTrack(TRACKS[0].file);
+    setSelectedType("file");
+  }
 
   const handleConfirm = async () => {
-    const selected = TRACKS.find((t) => t.file === selectedTrack);
-    if (!selected) return alert("No track selected");
+    let finalTrack: { title: string; file: string; type: "file" | "youtube" };
 
-    // 🔹 Lưu đúng key trong localStorage
-    localStorage.setItem("selectedTrackFile", selected.file);
-    localStorage.setItem("selectedTrackTitle", selected.title);
-    localStorage.setItem("selectedBg", selectedBg ? String(selectedBg) : "");
-
-    try {
-      const newAudio = new Audio(selected.file);
-      newAudio.loop = true;
-      await newAudio.play();
-      window.__CURRENT_AUDIO = newAudio;
-    } catch (err) {
-      console.warn("Autoplay may be blocked:", err);
+    const youtubeID = extractYouTubeID(youtubeLink);
+    if (youtubeLink && youtubeID) {
+        finalTrack = {
+            title: "YouTube: " + youtubeID,
+            file: youtubeID,
+            type: "youtube",
+        };
+    } 
+    else {
+        const selected = TRACKS.find((t) => t.file === selectedTrack);
+        if (!selected) {
+             alert(t("playlistModal.noTrackSelected") || "No track selected");
+             return;
+        }
+        finalTrack = {
+            title: selected.title,
+            file: selected.file,
+            type: "file",
+        };
     }
 
-    if (onTrackSelect) onTrackSelect({ title: selected.title, file: selected.file }, selectedBg);
+    if (audioRef.current) {
+        audioRef.current.pause();
+    }
+    
+    if (window.__CURRENT_AUDIO) {
+        window.__CURRENT_AUDIO.pause();
+        window.__CURRENT_AUDIO = null;
+    }
+
+    localStorage.setItem("selectedTrackFile", finalTrack.file);
+    localStorage.setItem("selectedTrackTitle", finalTrack.title);
+    localStorage.setItem("selectedTrackType", finalTrack.type);
+    localStorage.setItem("selectedBg", selectedBg ? String(selectedBg) : "");
+
+    if (finalTrack.type === "file") {
+        try {
+            const newAudio = new Audio(finalTrack.file);
+            newAudio.loop = true;
+            await newAudio.play();
+            window.__CURRENT_AUDIO = newAudio;
+        } catch (err) {
+            console.warn("Autoplay may be blocked:", err);
+        }
+    }
+
+    if (onTrackSelect) onTrackSelect(finalTrack, selectedBg);
 
     onClose();
   };
+
+  const isYoutubeValid = youtubeLink && extractYouTubeID(youtubeLink);
+  const isYoutubeSelected = selectedType === "youtube" && isYoutubeValid;
+  const isFileSelected = selectedType === "file" && selectedTrack;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("playlistModal.title")}>
@@ -143,20 +230,33 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
               {t("playlistModal.addFavorite")}
             </h3>
 
-            <div className="mb-4 flex items-center gap-3 border-b border-white/20 pb-4">
-              <div className="flex-1">
+            {/* Input YouTube Link (Đã ẩn label và thông báo ID) */}
+            <div className="mb-4 flex flex-col gap-2 border-b border-white/20 pb-4">
+              {/* LABEL ĐÃ ẨN */}
+              <div className="flex items-center gap-2">
                 <input
-                  className="w-full px-3 py-2 rounded-md outline-none bg-white text-[#0C1A57]"
+                  className="w-full px-3 py-2 rounded-md outline-none bg-white text-[#0C1A57] disabled:opacity-50"
                   placeholder={t("playlistModal.youtubePlaceholder")}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  value={youtubeLink}
+                  onChange={handleYoutubeInputChange}
                 />
+                {youtubeLink && (
+                    <button
+                        className="p-2 bg-red-500 hover:bg-red-600 rounded-md text-white"
+                        onClick={handleClearYoutubeLink}
+                    >
+                        <X size={16} />
+                    </button>
+                )}
               </div>
-              <button className="px-4 py-2 bg-white text-[#0C1A57] rounded-md" disabled>
-                {t("playlistModal.search")}
-              </button>
+              {/* THÔNG BÁO ID ĐÃ ẨN */}
+               {youtubeLink && !isYoutubeValid && (
+                 <div className="text-sm text-red-400 mt-1">
+                    ❌ Link YouTube không hợp lệ
+                 </div>
+               )}
             </div>
-
+            
             <div className="mb-3 flex items-center gap-2 border-b border-white/20 pb-2">
               <span className="text-lg font-semibold">{t("playlistModal.default")}</span>
             </div>
@@ -166,9 +266,9 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
                 <div
                   key={tItem.title}
                   className={`flex flex-col bg-white/10 rounded-md px-4 py-3 text-sm border-2 ${
-                    selectedTrack === tItem.file ? "border-blue-400" : "border-transparent"
-                  }`}
-                  onClick={() => setSelectedTrack(tItem.file)}
+                    isFileSelected && selectedTrack === tItem.file ? "border-blue-400" : "border-transparent"
+                  } ${isYoutubeSelected ? 'opacity-50 pointer-events-none' : 'cursor-pointer'}`}
+                  onClick={() => handleSelectTrack(tItem.file)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
@@ -189,12 +289,13 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
                           handlePlayPause(tItem.file);
                         }}
                         type="button"
+                        disabled={!!isYoutubeSelected}
                       >
                         {isPlaying(tItem.file) ? <PauseIcon size={16} /> : <PlayIcon size={16} />}
                       </button>
                       <span
                         className={`ml-2 w-3 h-3 rounded-full border-2 ${
-                          selectedTrack === tItem.file ? "border-blue-400 bg-blue-400" : "border-white/30"
+                          isFileSelected && selectedTrack === tItem.file ? "border-blue-400 bg-blue-400" : "border-white/30"
                         }`}
                       />
                     </div>
