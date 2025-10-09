@@ -26,12 +26,11 @@ const SetupRoomPage = () => {
   const [showJoinModal, setShowJoinModal] = useState(false);
 
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
-  const [_selectedTrack, setSelectedTrack] = useState<string | null>(null);
-
-  const handleTrackSelected = async (track: string) => {
+  const [_selectedTrack, setSelectedTrack] = useState<{ title: string; file: string } | null>(null);
+  
+  const handleTrackSelected = async (track: { title: string; file: string }, _staticBg?: number | null) => {
     setSelectedTrack(track);
     setShowPlaylistModal(false);
-    // Sau khi chọn nhạc, tạo phòng cá nhân như cũ
     try {
       const response = await createPersonalRoom(
         setup.shortBreakMinutes,
