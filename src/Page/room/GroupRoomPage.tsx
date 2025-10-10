@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getGroupRoomById, leaveRoom } from "@/axios/room";
 import { RoomStatus } from "@/enum/room-status";
 import type { GroupRoom } from "@/types/room";
+import Button from "@/Components/Button";
 
 export default function GroupRoomPage() {
   const { roomId } = useParams();
@@ -49,6 +50,7 @@ export default function GroupRoomPage() {
     if (!currentRoom || !authenticatedUser) return;
     try {
       await leaveRoom(userId);
+      window.location.href = "/rooms";
     } catch (err) {
       console.error("Error leaving room:", err);
     }
@@ -110,7 +112,8 @@ export default function GroupRoomPage() {
     const channel = pusherClient.subscribe(`presence-room-${roomId}`);
     const privateChannel = pusherClient.subscribe(`private-room-${roomId}`);
 
-    privateChannel.bind("room-creator-leave", () => {
+    privateChannel.bind("room-creator-leave", (data: any) => {
+      console.log(data);
       handleQuit(authenticatedUser.id);
     });
 
@@ -179,6 +182,9 @@ export default function GroupRoomPage() {
             : "🏖️ Long Break"}
           — Cycle {cycle}
         </span>
+        <Button onClick={() => handleQuit(authenticatedUser?.id || "")}>
+          Leave
+        </Button>
       </div>
 
       <div className="bg-white/80 rounded-lg p-4 w-full max-w-md">
