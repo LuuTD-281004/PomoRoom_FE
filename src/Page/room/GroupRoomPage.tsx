@@ -108,6 +108,11 @@ export default function GroupRoomPage() {
     });
 
     const channel = pusherClient.subscribe(`presence-room-${roomId}`);
+    const privateChannel = pusherClient.subscribe(`private-room-${roomId}`);
+
+    privateChannel.bind("room-creator-leave", () => {
+      handleQuit(authenticatedUser.id);
+    });
 
     // Built-in presence events
     channel.bind("pusher:subscription_succeeded", (members: any) => {
@@ -141,6 +146,7 @@ export default function GroupRoomPage() {
     });
 
     return () => {
+      pusherClient.unsubscribe(`private-room-${roomId}`);
       pusherClient.unsubscribe(`presence-room-${roomId}`);
       pusherClient.disconnect();
     };
