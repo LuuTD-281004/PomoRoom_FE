@@ -28,7 +28,7 @@ interface PaymentPackage {
 
 export default function PaymentPage() {
   const [packages, setPackages] = useState<PaymentPackage[]>([]);
-  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<PaymentPackage>();
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
@@ -79,7 +79,7 @@ export default function PaymentPage() {
       setShowLoginPrompt(true);
       return;
     }
-    setSelectedPrice(pkg.price);
+    setSelectedPackage(pkg);
   };
 
   const handleCloseTransactionConfirmation = async () => {
@@ -137,15 +137,17 @@ export default function PaymentPage() {
 
       {/* Hiển thị QR */}
       <div className="mt-16 flex flex-col items-center justify-center">
-        {selectedPrice ? (
+        {selectedPackage ? (
           <>
             <img
               src={`https://qr.sepay.vn/img?acc=${settings?.bankAccount}&bank=${
                 settings?.bankType
-              }&amount=${selectedPrice}&des=${authenticatedUser?.id.replace(
+              }&amount=${
+                selectedPackage.price
+              }&des=${authenticatedUser?.id.replace(
                 /-/g,
                 ""
-              )}`}
+              )}-${selectedPackage.id.replace(/-/g, "")}`}
               alt="QR Code"
               className="w-64 h-64 mb-6 rounded-xl border shadow-md"
             />
