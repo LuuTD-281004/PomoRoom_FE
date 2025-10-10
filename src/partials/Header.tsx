@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Button from "./../Components/Button";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserDropdown } from "@/Components/UserDropdown";
-import logo from "../../public/logo.png";
 
 const Header: React.FC = () => {
   const { i18n } = useTranslation();
@@ -34,7 +33,7 @@ const Header: React.FC = () => {
           onClick={navigateToHome}
         >
           <img
-            src={logo}
+            src="/logo.png"
             alt="logo"
             className="h-10 w-10 object-contain"
           />
