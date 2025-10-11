@@ -10,7 +10,7 @@ const LayoutWithHeader: React.FC = () => {
   return (
     <div className="min-h-screen flex w-screen flex-col">
       {!isPrivateRoom && (
-        <div className="fixed top-0 left-0 w-full relative z-50">
+        <div className="fixed top-0 left-0 w-full z-50">
           <Header />
           <Navbar />
         </div>
