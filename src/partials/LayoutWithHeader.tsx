@@ -5,7 +5,7 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const LayoutWithHeader: React.FC = () => {
   const location = useLocation();
-  const isPrivateRoom = location.pathname.startsWith("/private-room");
+  const isPrivateRoom = location.pathname.startsWith("/private-room") || location.pathname.startsWith("/group-room");
 
   return (
     <div className="min-h-screen flex w-screen flex-col">
