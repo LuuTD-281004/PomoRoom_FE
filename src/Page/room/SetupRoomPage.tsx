@@ -28,7 +28,10 @@ const SetupRoomPage = () => {
   const [showPlaylistModal, setShowPlaylistModal] = useState(false);
   const [_selectedTrack, setSelectedTrack] = useState<{ title: string; file: string } | null>(null);
   
-  const handleTrackSelected = async (track: { title: string; file: string }, _staticBg?: number | null) => {
+  const handleTrackSelected = async (
+    track: { title: string; file: string; type: "file" | "youtube" },
+    _staticBg?: string | null
+  ) => {
     setSelectedTrack(track);
     setShowPlaylistModal(false);
     try {
@@ -38,7 +41,6 @@ const SetupRoomPage = () => {
         setup.focusMinutes
       );
       if (response.status === 200) {
-        // Có thể truyền selectedTrack qua localStorage/context nếu cần dùng ở PrivateRoomPage
         navigate("/private-room");
       } else if (response.status === 422) {
         setShowRemoveOldRoom(true);
