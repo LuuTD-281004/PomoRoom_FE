@@ -98,7 +98,7 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="relative z-[9999]">
+    <div className="relative z-[9999] isolate">
       <Modal
         isOpen={isOpen}
         onClose={onClose}

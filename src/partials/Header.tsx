@@ -26,7 +26,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="fixed w-full bg-white shadow-md">
+    <header className="fixed w-full z-10 bg-white shadow-md">
       <div className="mx-auto flex items-center justify-between px-6 py-3">
         <div
           className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity duration-200"
@@ -69,9 +69,7 @@ const Header: React.FC = () => {
           ) : (
             <>
               {!isAuthPage && (
-                <Button onClick={() => navigate("/login")}>
-                  {t("login")}
-                </Button>
+                <Button onClick={() => navigate("/login")}>{t("login")}</Button>
               )}
             </>
           )}
