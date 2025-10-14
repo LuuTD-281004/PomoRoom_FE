@@ -65,19 +65,16 @@ export default function GroupRoomPage() {
 
   // ================= QUIT ROOM =================
   const handleQuit = async (userId: string) => {
-  if (!currentRoom || !authenticatedUser) return;
-  try {
-    cleanupAudio();
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    await leaveRoom(userId);
-
-    // Thay navigate bằng reload
-    window.location.reload();
-  } catch (err) {
-    console.error("Error leaving room:", err);
-  }
-};
-
+    if (!currentRoom || !authenticatedUser) return;
+    try {
+      cleanupAudio();
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      await leaveRoom(userId);
+      navigate("/rooms");
+    } catch (err) {
+      console.error("Error leaving room:", err);
+    }
+  };
 
   // ================= UPDATE TIMER =================
   const updateRemainingTime = (room: GroupRoom) => {
@@ -196,7 +193,10 @@ export default function GroupRoomPage() {
     audio.volume = 0.3;
     audioRef.current = audio;
     window.__CURRENT_AUDIO = audio;
-    audio.play().then(() => setIsPlaying(true)).catch(() => console.warn("Audio autoplay blocked."));
+    audio
+      .play()
+      .then(() => setIsPlaying(true))
+      .catch(() => console.warn("Audio autoplay blocked."));
   };
 
   const stopAudio = () => {
@@ -235,14 +235,19 @@ export default function GroupRoomPage() {
 
     if (status === RoomStatus.ON_WORKING) {
       if (!isPlaying) playAudio(currentTrack);
-    } else if (status === RoomStatus.ON_REST || status === RoomStatus.ON_LONG_REST) {
+    } else if (
+      status === RoomStatus.ON_REST ||
+      status === RoomStatus.ON_LONG_REST
+    ) {
       if (isPlaying) stopAudio();
     }
   }, [status, running, remaining, currentTrack]);
 
   // ================= FORMAT TIME =================
   const formatTime = (sec: number) => {
-    const m = Math.floor(sec / 60).toString().padStart(2, "0");
+    const m = Math.floor(sec / 60)
+      .toString()
+      .padStart(2, "0");
     const s = (sec % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };

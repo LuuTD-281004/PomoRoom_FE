@@ -24,6 +24,7 @@ interface PaymentPackage {
   descriptionEn: string;
   price: number;
   status: boolean;
+  type: number;
 }
 
 export default function PaymentPage() {
@@ -147,7 +148,7 @@ export default function PaymentPage() {
               }&des=${authenticatedUser?.id.replace(
                 /-/g,
                 ""
-              )}-${selectedPackage.id.replace(/-/g, "")}`}
+              )}${selectedPackage.type}`}
               alt="QR Code"
               className="w-64 h-64 mb-6 rounded-xl border shadow-md"
             />
