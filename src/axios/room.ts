@@ -37,7 +37,7 @@ export async function getAllRooms(
         totalPages: number;
       };
     };
-  }>("/rooms/all-rooms", {
+  }>("/rooms/current-working-rooms", {
     params: {
       page,
       limit,
