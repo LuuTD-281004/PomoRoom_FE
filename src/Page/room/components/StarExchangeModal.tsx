@@ -61,7 +61,7 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
             src={item.filePath}
             alt={item.name}
             className={`object-cover w-full h-full transition-all duration-300 ${
-              item.isPremium ? "blur-sm scale-105" : ""
+              item.isPremium ? "blur-[2px] scale-105" : ""
             }`}
           />
           {item.isPremium && (
@@ -138,7 +138,7 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-4 gap-4">{renderItems()}</div>
+              <div className="grid grid-cols-4 gap-4 overflow-y-auto max-h-80 [scrollbar-gutter:stable]">{renderItems()}</div>
             </div>
           </div>
         </div>

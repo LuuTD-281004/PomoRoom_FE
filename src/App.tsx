@@ -21,6 +21,7 @@ import NotFound from "./Page/NotFound";
 import GroupRoomPage from "./Page/room/GroupRoomPage";
 import ProfilePage from "./Page/ProfilePage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import LayoutWithChatBot from "./partials/LayoutWithChatBot"; // Thêm import
 
 function App() {
   return (
@@ -31,8 +32,13 @@ function App() {
             <Router>
               <ScrollToTop />
               <Routes>
-                <Route element={<LayoutWithHeader />}>
+                <Route element={<LayoutWithChatBot />}>
                   <Route path="/" element={<HomePage />} />
+                  <Route path="/ranking" element={<RankingPage />} />
+                  <Route path="/plans" element={<ServicesPage />} />
+                </Route>
+
+                <Route element={<LayoutWithHeader />}>
                   <Route element={<RoomLayout />}>
                     <Route path="/rooms" element={<SetupRoomPage />} />
                     <Route path="/private-room" element={<PrivateRoomPage />} />
@@ -41,9 +47,8 @@ function App() {
                       element={<GroupRoomPage />}
                     />
                   </Route>
-                  <Route path="/ranking" element={<RankingPage />} />
-                  <Route path="/plans" element={<ServicesPage />} />
                 </Route>
+
                 <Route element={<LayoutWithMinimizedHeader />}>
                   <Route path="/packages" element={<PaymentPage />} />
                 </Route>

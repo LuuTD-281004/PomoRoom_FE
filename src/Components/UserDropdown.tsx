@@ -67,10 +67,6 @@ export function UserDropdown({ user }: UserDropdownProps) {
             <StarIcon className="mr-2 h-4 w-4" />
             <span>{t("roomLayout.starExchange")}</span>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <SettingsIcon className="mr-2 h-4 w-4" />
-            <span>{t("roomLayout.settings")}</span>
-          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => logout()}>
             <LogOut className="mr-2 h-4 w-4" />
