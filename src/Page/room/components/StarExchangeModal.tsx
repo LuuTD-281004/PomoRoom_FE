@@ -106,30 +106,29 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
         title={t("starExchange")}
       >
         <div className="w-[920px] max-w-full">
-          <div className="flex items-start -space-x-3">
-            {/* Left tabs */}
-            <div className="w-40 flex flex-col gap-1 mt-1">
-              <button
-                onClick={() => setTab("theme")}
-                className={`text-left flex items-center gap-2 !text-xl !py-1.5 px-3 rounded-lg ${
-                  tab === "theme" ? "!bg-[#B8D6FF]" : "hover:bg-[#B8D6FF]/60"
-                }`}
-              >
-                🎨 {t("tabs.theme")}
-              </button>
-
-              <button
-                onClick={() => setTab("avatar")}
-                className={`text-left flex items-center gap-2 !text-xl !py-1.5 px-3 rounded-lg ${
-                  tab === "avatar" ? "!bg-[#7274D3]" : "hover:bg-[#7274D3]/60"
-                }`}
-              >
-                🧑‍🚀 {t("tabs.avatar")}
-              </button>
+          <div className="flex items-start gap-5">
+            {/* Left tabs (sticky) */}
+            <div className="w-44 flex flex-col gap-2 mt-1 sticky top-0 self-start z-10">
+              {[
+                { key: "theme", label: "🎨 " + t("tabs.theme"), color: "#CFE4FF" },
+                { key: "avatar", label: "🧑‍🚀 " + t("tabs.avatar"), color: "#A8B4FF" },
+              ].map(({ key, label, color }) => (
+                <button
+                  key={key}
+                  onClick={() => setTab(key as "theme" | "avatar")}
+                  className={`text-left flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl transition-all duration-200 shadow-sm border ${
+                    tab === key
+                      ? "bg-white text-[#0C1A57] border-[#0C1A57]/30 shadow-md"
+                      : `bg-[${color}] text-[#0C1A57] hover:brightness-105 border-transparent`
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
 
-            {/* Main area */}
-            <div className="flex-1 bg-[#B8D6FF] rounded-md p-5">
+            {/* Main area with scroll */}
+            <div className="flex-1 bg-[#B8D6FF] rounded-md p-5 max-h-[500px] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-[#0C1A57]">
                   {t(`tabs.${tab}`)}

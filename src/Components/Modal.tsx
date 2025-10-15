@@ -24,7 +24,7 @@ const Modal: React.FC<ModalProps> = ({
       {isOpen && (
         <div
           className={cn(
-            "fixed inset-0 flex items-center justify-center bg-black/30 z-50",
+            "fixed inset-0 flex items-center justify-center bg-black/30 z-50 backdrop-blur-[2px]",
             className
           )}
           onClick={onClose}
@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="rounded-2xl shadow-lg relative overflow-hidden p-6"
+            className="rounded-2xl shadow-lg relative overflow-hidden p-6 max-h-[90vh] w-[90%] sm:w-[1000px]"
             style={{
               backgroundColor: variant === "default" ? "#0C1A57" : "#97E5FF",
             }}
@@ -64,15 +64,53 @@ const Modal: React.FC<ModalProps> = ({
               </div>
             )}
 
-            {/* Body */}
+            {/* Body with custom scrollbar */}
             <div
               className={cn(
+                "h-[500px] overflow-y-auto px-2 pr-3 rounded-lg",
                 variant === "default"
                   ? "text-white text-sm"
                   : "text-black text-base"
               )}
+              style={{
+                scrollbarWidth: "thin", // Firefox
+                scrollbarColor:
+                  variant === "default"
+                    ? "rgba(255,255,255,0.3) transparent"
+                    : "rgba(0,0,0,0.2) transparent",
+              }}
             >
-              {children}
+              <div />
+              <style>
+                {`
+                  /* Tùy chỉnh scrollbar chỉ áp dụng trong modal này */
+                  .custom-scroll::-webkit-scrollbar {
+                    width: 8px;
+                  }
+                  .custom-scroll::-webkit-scrollbar-track {
+                    background: transparent;
+                    border-radius: 10px;
+                  }
+                  .custom-scroll::-webkit-scrollbar-thumb {
+                    background: ${
+                      variant === "default"
+                        ? "rgba(255,255,255,0.25)"
+                        : "rgba(0,0,0,0.2)"
+                    };
+                    border-radius: 10px;
+                    transition: background 0.2s;
+                  }
+                  .custom-scroll::-webkit-scrollbar-thumb:hover {
+                    background: ${
+                      variant === "default"
+                        ? "rgba(255,255,255,0.4)"
+                        : "rgba(0,0,0,0.35)"
+                    };
+                  }
+                `}
+              </style>
+
+              <div className="custom-scroll">{children}</div>
             </div>
           </motion.div>
         </div>
