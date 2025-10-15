@@ -41,7 +41,11 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
   }, []);
 
   const renderItems = () => {
-    const items = tab === "avatar" ? avatars : backgrounds;
+    // Chỉ với tab avatar: ẩn các avatar có stars = 0
+    const items =
+      tab === "avatar"
+        ? avatars.filter((a) => (a?.stars ?? 0) > 0)
+        : backgrounds;
 
     if (!items?.length)
       return (
@@ -110,8 +114,16 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
             {/* Left tabs (sticky) */}
             <div className="w-44 flex flex-col gap-2 mt-1 sticky top-0 self-start z-10">
               {[
-                { key: "theme", label: "🎨 " + t("tabs.theme"), color: "#CFE4FF" },
-                { key: "avatar", label: "🧑‍🚀 " + t("tabs.avatar"), color: "#A8B4FF" },
+                {
+                  key: "theme",
+                  label: "🎨 " + t("tabs.theme"),
+                  color: "#CFE4FF",
+                },
+                {
+                  key: "avatar",
+                  label: "🧑‍🚀 " + t("tabs.avatar"),
+                  color: "#A8B4FF",
+                },
               ].map(({ key, label, color }) => (
                 <button
                   key={key}
@@ -128,7 +140,7 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Main area with scroll */}
-            <div className="flex-1 bg-[#B8D6FF] rounded-md p-5 max-h-[500px] overflow-y-auto">
+            <div className="flex-1 bg-[#B8D6FF] rounded-md p-5 h-fit overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-[#0C1A57]">
                   {t(`tabs.${tab}`)}
@@ -138,7 +150,9 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-4 gap-4 overflow-y-auto max-h-80 [scrollbar-gutter:stable]">{renderItems()}</div>
+              <div className="grid grid-cols-4 gap-4 overflow-y-auto h-full [scrollbar-gutter:stable]">
+                {renderItems()}
+              </div>
             </div>
           </div>
         </div>

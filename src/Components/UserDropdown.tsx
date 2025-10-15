@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/Components/ui/avatar";
-import { ClockIcon, LogOut, SettingsIcon, StarIcon, User } from "lucide-react";
+import { ClockIcon, LogOut, StarIcon, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import type { UserType } from "@/types/user";
 import { useAuth } from "@/contexts/AuthContext";
