@@ -1,27 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import Button from "@/Components/Button";
 import avatarDefault from "../assets/image/avatar.png";
 import { PenLineIcon } from "lucide-react";
 import Input from "@/Components/Input";
+import { updateUserProfile } from "@/axios/user";
+import { toast } from "sonner";
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
-  const { authenticatedUser } = useAuth();
+  const { authenticatedUser, refreshUser } = useAuth();
 
   const [editing, setEditing] = useState(false);
-  const [username, setUsername] = useState(authenticatedUser?.username ?? "");
-  const [email, setEmail] = useState(authenticatedUser?.email ?? "");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
-  const hours = 40;
+  useEffect(() => {
+    if (authenticatedUser) {
+      setUsername(authenticatedUser.username ?? "");
+    }
+  }, [authenticatedUser]);
+
+  const hours = 40; // Dữ liệu giả
   const stars = authenticatedUser?.userStar ?? 0;
-  const rank = 2; 
+  const rank = 2; // Dữ liệu giả
 
-  const handleSave = () => {
-    // TODO: call API to update profile
+  const handleSave = async () => {
+    if (!authenticatedUser || !authenticatedUser.email) {
+      toast.error("Không tìm thấy thông tin người dùng hoặc email.");
+      return;
+    }
+
+    const payload: {
+      username: string;
+      email: string;
+      avatarUrl: string;
+      oldPassword?: string;
+      newPassword?: string;
+    } = {
+      username,
+      email: authenticatedUser.email,
+      avatarUrl: authenticatedUser.avatarUrl || "",
+    };
+
+    if (newPassword) {
+      if (!oldPassword) {
+        toast.warn("Vui lòng nhập mật khẩu cũ để đổi mật khẩu mới.");
+        return;
+      }
+      payload.oldPassword = oldPassword;
+      payload.newPassword = newPassword;
+    }
+
+    try {
+      await updateUserProfile(payload);
+      toast.success("Cập nhật thông tin thành công!");
+      await refreshUser(); // Cập nhật lại thông tin người dùng toàn cục
+      setEditing(false);
+      setOldPassword("");
+      setNewPassword("");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Cập nhật thất bại.");
+    }
+  };
+
+  const handleCancel = () => {
     setEditing(false);
+    setUsername(authenticatedUser?.username ?? "");
+    setOldPassword("");
+    setNewPassword("");
   };
 
   return (
@@ -89,18 +138,27 @@ const ProfilePage: React.FC = () => {
                 <Input
                   label={t("email")}
                   placeholder={t("email")}
-                  value={email}
-                  disabled={!editing}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={authenticatedUser?.email ?? ""}
+                  disabled={true}
                 />
-                <Input
-                  label={t("password")}
-                  type="password"
-                  placeholder={t("password")}
-                  value={password}
-                  disabled={!editing}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                {editing && (
+                  <>
+                    <Input
+                      label="Mật khẩu cũ"
+                      type="password"
+                      placeholder="Nhập mật khẩu cũ nếu muốn thay đổi"
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                    />
+                    <Input
+                      label="Mật khẩu mới"
+                      type="password"
+                      placeholder="Nhập mật khẩu mới"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                  </>
+                )}
               </div>
                 <div className="text-right mt-6">
                   {!editing ? (
@@ -112,7 +170,7 @@ const ProfilePage: React.FC = () => {
                       <Button onClick={handleSave} size="small" className="bg-[#6AD5E8] text-[#0C1A57]">
                         Save
                       </Button>
-                      <Button onClick={() => setEditing(false)} size="small" className="bg-white text-[#0C1A57]">
+                      <Button onClick={handleCancel} size="small" className="bg-white text-[#0C1A57]">
                         Cancel
                       </Button>
                     </div>
