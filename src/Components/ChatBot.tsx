@@ -1,32 +1,33 @@
 import React, { useState } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
-
-const predefinedQuestions = [
-  "Nếu ngưng trả phí thì dữ liệu có bị mất không?",
-  "Có thể dùng chung gói trả phí với người khác không?",
-  "Mua bản Pro có giúp mình học hiệu quả hơn không?",
-  "Có nên nâng cấp không nếu mình chỉ học 1-2 tiếng mỗi ngày?",
-];
+import { useTranslation } from "react-i18next";
 
 export const ChatBot: React.FC = () => {
+  const { t } = useTranslation(); // ✅ Phải gọi trong component
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
 
+  // ✅ Lấy câu hỏi từ file ngôn ngữ
+  const predefinedQuestions = [
+    t("chatbot.q1"),
+    t("chatbot.q2"),
+    t("chatbot.q3"),
+    t("chatbot.q4"),
+  ];
+
   const handleQuestionClick = (question: string) => {
     setMessage(question);
-    // Có thể thêm logic gửi câu hỏi ở đây
   };
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
-    // Logic xử lý gửi tin nhắn
     console.log("Sending message:", message);
     setMessage("");
   };
 
   return (
     <>
-      {/* Float Button - brand gradient */}
+      {/* Nút mở chatbot */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -37,18 +38,18 @@ export const ChatBot: React.FC = () => {
         </button>
       </div>
 
-      {/* Chat Modal */}
+      {/* Khung Chat */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-40 w-80 bg-white rounded-lg shadow-xl border border-[#0C1A57]/20 overflow-hidden">
-          {/* Header - brand gradient */}
+          {/* Header */}
           <div className="bg-gradient-to-b from-[#6AD5E8] to-[#458895] text-white p-4">
-            <h3 className="font-semibold text-center">Xin chào!</h3>
+            <h3 className="font-semibold text-center">{t("chatbot.hi")}</h3>
             <p className="text-sm text-center mt-1 opacity-90">
-              Tôi có thể giúp gì cho bạn?
+              {t("chatbot.how_can_i_help")}
             </p>
           </div>
 
-          {/* Predefined Questions - brand borders/colors */}
+          {/* Danh sách câu hỏi */}
           <div className="p-4 space-y-3">
             {predefinedQuestions.map((question, index) => (
               <button
@@ -62,14 +63,14 @@ export const ChatBot: React.FC = () => {
             ))}
           </div>
 
-          {/* Input Area */}
+          {/* Input gửi tin nhắn */}
           <div className="p-4 border-t border-[#0C1A57]/10">
             <div className="flex gap-2">
               <input
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Hỏi gì đó về môn học..."
+                placeholder={t("chatbot.how_can_i_help")}
                 className="flex-1 px-3 py-2 border border-[#6AD5E8] rounded-lg text-sm
                            focus:outline-none focus:ring-2 focus:ring-[#6AD5E8]"
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}

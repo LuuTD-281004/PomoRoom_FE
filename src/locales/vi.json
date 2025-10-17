@@ -218,5 +218,13 @@
     "stop": "Dừng",
     "focus": "Đang tập trung",
     "break": "Thời gian nghỉ"
+  },
+  "chatbot": {
+    "hi": "Chào bạn!",
+    "how_can_i_help": "Tôi có thể giúp gì cho bạn?",
+    "q1": "Nếu ngưng trả phí thì dữ liệu có bị mất không?",
+    "q2": "Có thể dùng chung gói trả phí với người khác không?", 
+    "q3": "Mua bản Pro có giúp mình học hiệu quả hơn không?",
+    "q4": "Có nên nâng cấp không nếu mình chỉ học 1-2 tiếng mỗi ngày?"
   }
 }

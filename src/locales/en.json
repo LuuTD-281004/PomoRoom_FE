@@ -219,5 +219,13 @@
     "stop": "Stop",
     "focus": "Focusing",
     "break": "On Break"
+  },
+  "chatbot": {
+    "hi": "Hi!",
+    "how_can_i_help": "How can I help you?",
+    "q1": "If I stop paying, will my data be lost?",
+    "q2": "Can I share the paid plan with others?",
+    "q3": "Will upgrading to Pro help me study more effectively?",
+    "q4": "Should I upgrade if I only study 1–2 hours per day?"
   }
 }
