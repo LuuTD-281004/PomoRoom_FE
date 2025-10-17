@@ -11,3 +11,14 @@ export async function getUsersRanking(page: number = 1, limit: number = 10) {
   });
   return response.data;
 }
+
+export async function updateUserProfile(payload: {
+  username?: string;
+  email?: string;
+  oldPassword?: string;
+  newPassword?: string;
+  avatarUrl?: string;
+}) {
+  const response = await http.put("/users/user-profile", payload);
+  return response.data;
+}
