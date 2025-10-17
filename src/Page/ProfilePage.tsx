@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
-  const { authenticatedUser, refreshUser } = useAuth();
+  const { authenticatedUser } = useAuth();
 
   const [editing, setEditing] = useState(false);
   const [username, setUsername] = useState("");
@@ -47,7 +47,7 @@ const ProfilePage: React.FC = () => {
 
     if (newPassword) {
       if (!oldPassword) {
-        toast.warn("Vui lòng nhập mật khẩu cũ để đổi mật khẩu mới.");
+        toast.error("Vui lòng nhập mật khẩu cũ để đổi mật khẩu mới.");
         return;
       }
       payload.oldPassword = oldPassword;
@@ -57,7 +57,7 @@ const ProfilePage: React.FC = () => {
     try {
       await updateUserProfile(payload);
       toast.success("Cập nhật thông tin thành công!");
-      await refreshUser(); // Cập nhật lại thông tin người dùng toàn cục
+      // If your AuthContext provides a refresh function, call it here (e.g., refreshUser())
       setEditing(false);
       setOldPassword("");
       setNewPassword("");
@@ -139,8 +139,9 @@ const ProfilePage: React.FC = () => {
                   label={t("email")}
                   placeholder={t("email")}
                   value={authenticatedUser?.email ?? ""}
-                  disabled={true}
-                />
+                  disabled={true} onChange={function (_e: React.ChangeEvent<HTMLInputElement>): void {
+                    throw new Error("Function not implemented.");
+                  } }                />
                 {editing && (
                   <>
                     <Input
