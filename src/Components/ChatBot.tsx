@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
+import { askQuestion, getChatHistory } from "@/axios/chat";
+import { v4 as uuidv4 } from "uuid";
+
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
 
 export const ChatBot: React.FC = () => {
-  const { t } = useTranslation(); // ✅ Phải gọi trong component
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const { authenticatedUser } = useAuth();
 
-  // ✅ Lấy câu hỏi từ file ngôn ngữ
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+
   const predefinedQuestions = [
     t("chatbot.q1"),
     t("chatbot.q2"),
@@ -15,19 +26,47 @@ export const ChatBot: React.FC = () => {
     t("chatbot.q4"),
   ];
 
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const getChat = async () => {
+    if (authenticatedUser != null) {
+      const response = await getChatHistory(authenticatedUser.id);
+      if (response) {
+        setMessage(response.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getChat();
+  }, []);
+
   const handleQuestionClick = (question: string) => {
     setMessage(question);
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!message.trim()) return;
-    console.log("Sending message:", message);
+    const userMessage = message.trim();
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setMessage("");
+    let userId = uuidv4();
+    if (authenticatedUser != null) {
+      userId = authenticatedUser.id;
+    }
+    const response = await askQuestion(userId, userMessage);
+    if (response) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: response.data.response },
+      ]);
+    }
   };
 
   return (
     <>
-      {/* Nút mở chatbot */}
       <div className="fixed bottom-6 right-6 z-50">
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -38,9 +77,8 @@ export const ChatBot: React.FC = () => {
         </button>
       </div>
 
-      {/* Khung Chat */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-40 w-80 bg-white rounded-lg shadow-xl border border-[#0C1A57]/20 overflow-hidden">
+        <div className="fixed bottom-24 right-6 z-40 w-80 bg-white rounded-lg shadow-xl border border-[#0C1A57]/20 overflow-hidden flex flex-col">
           {/* Header */}
           <div className="bg-gradient-to-b from-[#6AD5E8] to-[#458895] text-white p-4">
             <h3 className="font-semibold text-center">{t("chatbot.hi")}</h3>
@@ -49,22 +87,45 @@ export const ChatBot: React.FC = () => {
             </p>
           </div>
 
-          {/* Danh sách câu hỏi */}
-          <div className="p-4 space-y-3">
+          {/* Predefined Questions */}
+          <div className="p-3 border-t border-[#0C1A57]/10 space-y-2 bg-[#F8FBFF]">
             {predefinedQuestions.map((question, index) => (
               <button
                 key={index}
                 onClick={() => handleQuestionClick(question)}
-                className="w-full p-3 text-left text-sm rounded-lg transition-colors
-                           text-[#0C1A57] border border-[#6AD5E8] hover:bg-[#EAF6FF]"
+                className="w-full text-left text-sm p-2 rounded-lg border border-[#6AD5E8]
+                           hover:bg-[#EAF6FF] text-[#0C1A57]"
               >
                 {question}
               </button>
             ))}
           </div>
 
-          {/* Input gửi tin nhắn */}
-          <div className="p-4 border-t border-[#0C1A57]/10">
+          {/* Chat Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`flex ${
+                  msg.role === "user" ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`max-w-[70%] px-3 py-2 rounded-lg text-sm shadow ${
+                    msg.role === "user"
+                      ? "bg-[#0C1A57] text-white"
+                      : "bg-[#EAF6FF] text-[#0C1A57]"
+                  }`}
+                >
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Input */}
+          <div className="p-3 border-t border-[#0C1A57]/10">
             <div className="flex gap-2">
               <input
                 type="text"
