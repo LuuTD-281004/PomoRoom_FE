@@ -9,6 +9,7 @@ type ModalProps = {
   isOpen: boolean;
   className?: string;
   variant?: "default" | "light";
+  size?: "default" | "sm";
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -18,7 +19,10 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   className,
   variant = "default",
+  size = "default",
 }) => {
+  const isSmall = size === "sm";
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -34,13 +38,17 @@ const Modal: React.FC<ModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="rounded-2xl modal-motion-div shadow-lg relative overflow-hidden p-6 max-h-[90vh] w-[90%] sm:w-[1000px]"
+            className={cn(
+              "rounded-2xl shadow-lg relative overflow-hidden p-6",
+              isSmall
+                ? "w-[90%] sm:w-[420px] max-h-[25vh]"
+                : "w-[92%] sm:w-[1000px] max-h-[90vh]"
+            )}
             style={{
               backgroundColor: variant === "default" ? "#0C1A57" : "#97E5FF",
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Nút đóng */}
             <span
               onClick={onClose}
               className={cn(
@@ -53,7 +61,6 @@ const Modal: React.FC<ModalProps> = ({
               ×
             </span>
 
-            {/* Title */}
             {variant === "default" ? (
               <h2 className="text-center text-white font-bold text-2xl mb-4">
                 {title}
@@ -64,16 +71,15 @@ const Modal: React.FC<ModalProps> = ({
               </div>
             )}
 
-            {/* Body with custom scrollbar */}
             <div
               className={cn(
-                "h-[500px] modal-motion-body overflow-y-auto px-2 pr-3 rounded-lg",
+                isSmall ? "h-[220px] overflow-y-auto px-2 pr-3 rounded-lg" : "h-[500px] overflow-y-auto px-2 pr-3 rounded-lg",
                 variant === "default"
                   ? "text-white text-sm"
                   : "text-black text-base"
               )}
               style={{
-                scrollbarWidth: "thin", // Firefox
+                scrollbarWidth: "thin",
                 scrollbarColor:
                   variant === "default"
                     ? "rgba(255,255,255,0.3) transparent"
