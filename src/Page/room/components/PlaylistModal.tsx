@@ -71,6 +71,9 @@ const TRACKS: Track[] = [
   },
 ];
 
+// Use the default background in /public (adjust the path if your file lives elsewhere)
+const DEFAULT_BG_URL = "/defaultBackground.png";
+
 function formatTime(sec: number) {
   if (!isFinite(sec)) return "00:00";
   const m = Math.floor(sec / 60)
@@ -241,16 +244,14 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
       window.__CURRENT_AUDIO = null;
     }
 
-    // Logic mới để lấy đường dẫn background
+    // Lấy background đã chọn, nếu không chọn thì dùng mặc định
     const selectedBackground = backgrounds.find((bg) => bg.id === selectedBg);
-    const selectedBgPath = selectedBackground
-      ? selectedBackground.filePath
-      : "";
+    const selectedBgPath = selectedBackground?.filePath || DEFAULT_BG_URL;
 
     localStorage.setItem("selectedTrackFile", finalTrack.file);
     localStorage.setItem("selectedTrackTitle", finalTrack.title);
     localStorage.setItem("selectedTrackType", finalTrack.type);
-    localStorage.setItem("selectedBg", selectedBgPath); // Lưu đường dẫn background
+    localStorage.setItem("selectedBg", selectedBgPath);
 
     if (finalTrack.type === "file") {
       try {
@@ -263,7 +264,7 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
       }
     }
 
-    if (onTrackSelect) onTrackSelect(finalTrack, selectedBgPath); // Gửi đường dẫn background qua props
+    if (onTrackSelect) onTrackSelect(finalTrack, selectedBgPath);
 
     onClose();
   };
