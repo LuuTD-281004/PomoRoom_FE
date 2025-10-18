@@ -12,8 +12,8 @@ const CancelModal: React.FC<Props> = ({ isOpen, onOK, onCancel }) => {
   const { t } = useTranslation();
 
   return (
-    <Modal isOpen={isOpen} onClose={onCancel} title="">
-      <div className="w-[420px] max-w-full">
+    <Modal isOpen={isOpen} onClose={onCancel} title="" className="[&_.modal-motion-div]:h-fit [&_.modal-motion-div]:w-full [&_.modal-motion-div]:sm:w-fit [&_.modal-motion-body]:h-fit">
+      <div className="w-[420px] max-w-full">  
         <div className="p-3 rounded-md text-white text-center">
           <div className="mb-4 text-lg font-medium">
             {t("cancelModal.message")}

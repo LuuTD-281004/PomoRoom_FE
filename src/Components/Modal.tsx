@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 50 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="rounded-2xl shadow-lg relative overflow-hidden p-6 max-h-[90vh] w-[90%] sm:w-[1000px]"
+            className="rounded-2xl modal-motion-div shadow-lg relative overflow-hidden p-6 max-h-[90vh] w-[90%] sm:w-[1000px]"
             style={{
               backgroundColor: variant === "default" ? "#0C1A57" : "#97E5FF",
             }}
@@ -67,7 +67,7 @@ const Modal: React.FC<ModalProps> = ({
             {/* Body with custom scrollbar */}
             <div
               className={cn(
-                "h-[500px] overflow-y-auto px-2 pr-3 rounded-lg",
+                "h-[500px] modal-motion-body overflow-y-auto px-2 pr-3 rounded-lg",
                 variant === "default"
                   ? "text-white text-sm"
                   : "text-black text-base"
