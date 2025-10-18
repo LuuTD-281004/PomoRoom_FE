@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Flame, Crown } from "lucide-react";
 import Footer from "../partials/Footer";
-import avatarDefault from "../assets/image/avatar.png";
 import { useTranslation } from "react-i18next";
 import Button from "@/Components/Button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -88,11 +87,19 @@ const RankingPage: React.FC = () => {
                 <Crown
                   className={`absolute -top-6 w-8 h-8 ${crownColors[2]}`}
                 />
-                <img
-                  src={top3[1]?.avatarUrl || avatarDefault}
-                  alt={top3[1] ? displayName(top3[1]) : ""}
-                  className="rounded-full w-28 h-28 border-4 border-gray-400 object-cover"
-                />
+                {top3[1]?.avatarUrl ? (
+                  <img
+                    src={top3[1].avatarUrl}
+                    alt={displayName(top3[1])}
+                    className="rounded-full w-28 h-28 border-4 border-gray-400 object-cover"
+                  />
+                ) : (
+                  <div className="rounded-full w-28 h-28 border-4 border-gray-400 bg-gray-200 flex items-center justify-center">
+                    <span className="text-4xl font-bold text-[#0C1A57]">
+                      {top3[1]?.username ? top3[1].username.charAt(0).toUpperCase() : ""}
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="bg-[#E3F2FD] rounded-2xl shadow-lg text-center -mt-8 w-56 p-8">
                 <p className="font-bold text-[#0C1A57] text-lg">
@@ -113,11 +120,19 @@ const RankingPage: React.FC = () => {
                 <Crown
                   className={`absolute -top-8 w-10 h-10 ${crownColors[1]}`}
                 />
-                <img
-                  src={top3[0]?.avatarUrl || avatarDefault}
-                  alt={top3[0] ? displayName(top3[0]) : ""}
-                  className="rounded-full w-32 h-32 border-4 border-yellow-400 object-cover"
-                />
+                {top3[0]?.avatarUrl ? (
+                  <img
+                    src={top3[0].avatarUrl}
+                    alt={displayName(top3[0])}
+                    className="rounded-full w-32 h-32 border-4 border-yellow-400 object-cover"
+                  />
+                ) : (
+                  <div className="rounded-full w-32 h-32 border-4 border-yellow-400 bg-gray-200 flex items-center justify-center">
+                    <span className="text-5xl font-bold text-[#0C1A57]">
+                      {top3[0]?.username ? top3[0].username.charAt(0).toUpperCase() : ""}
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="bg-[#E3F2FD] rounded-2xl shadow-lg text-center -mt-10 w-64 p-10">
                 <p className="font-bold text-[#0C1A57] text-xl">
@@ -138,11 +153,19 @@ const RankingPage: React.FC = () => {
                 <Crown
                   className={`absolute -top-6 w-8 h-8 ${crownColors[3]}`}
                 />
-                <img
-                  src={top3[2]?.avatarUrl || avatarDefault}
-                  alt={top3[2] ? displayName(top3[2]) : ""}
-                  className="rounded-full w-28 h-28 border-4 border-orange-400 object-cover"
-                />
+                {top3[2]?.avatarUrl ? (
+                  <img
+                    src={top3[2].avatarUrl}
+                    alt={displayName(top3[2])}
+                    className="rounded-full w-28 h-28 border-4 border-orange-400 object-cover"
+                  />
+                ) : (
+                  <div className="rounded-full w-28 h-28 border-4 border-orange-400 bg-gray-200 flex items-center justify-center">
+                    <span className="text-4xl font-bold text-[#0C1A57]">
+                      {top3[2]?.username ? top3[2].username.charAt(0).toUpperCase() : ""}
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="bg-[#E3F2FD] rounded-2xl shadow-lg text-center -mt-8 w-56 p-8">
                 <p className="font-bold text-[#0C1A57] text-lg">
@@ -173,11 +196,19 @@ const RankingPage: React.FC = () => {
                     <p className="text-gray-600 font-bold w-6 mr-4">
                       {rankNumber.toString().padStart(2, "0")}
                     </p>
-                    <img
-                      src={user.avatarUrl || avatarDefault}
-                      alt={displayName(user)}
-                      className="w-12 h-12 rounded-full border-2 border-[#0234A7]-300 object-cover"
-                    />
+                    {user.avatarUrl ? (
+                      <img
+                        src={user.avatarUrl}
+                        alt={displayName(user)}
+                        className="w-12 h-12 rounded-full border-2 border-[#0234A7]-300 object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full border-2 border-[#0234A7]-300 bg-gray-200 flex items-center justify-center">
+                        <span className="text-xl font-bold text-[#0C1A57]">
+                          {user.username ? user.username.charAt(0).toUpperCase() : ""}
+                        </span>
+                      </div>
+                    )}
                     <p className="font-bold text-[#0C1A57] ml-4">
                       {displayName(user)}
                     </p>
@@ -211,11 +242,19 @@ const RankingPage: React.FC = () => {
             <div className="max-w-xl mx-auto py-12 w-full">
               <div className="bg-[#EAF6FF] rounded-md py-10 px-12 border-t-8 border-[#567CB1]">
                 <div className="flex items-center justify-center gap-4">
-                  <img
-                    src={authenticatedUser.avatarUrl || avatarDefault}
-                    alt="avatar"
-                    className="w-40 h-40 rounded-lg object-cover border-4 border-white shadow-md"
-                  />
+                  {authenticatedUser.avatarUrl ? (
+                    <img
+                      src={authenticatedUser.avatarUrl}
+                      alt="avatar"
+                      className="w-40 h-40 rounded-lg object-cover border-4 border-white shadow-md"
+                    />
+                  ) : (
+                    <div className="w-40 h-40 rounded-lg border-4 border-white shadow-md bg-gray-200 flex items-center justify-center">
+                      <span className="text-6xl font-bold text-[#0C1A57]">
+                        {authenticatedUser.username ? authenticatedUser.username.charAt(0).toUpperCase() : ""}
+                      </span>
+                    </div>
+                  )}
                   <h2 className="text-4xl font-black text-[#0C1A57]">
                     {authenticatedUser?.username}
                   </h2>
