@@ -44,7 +44,7 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
     // Chỉ với tab avatar: ẩn các avatar có stars = 0
     const items =
       tab === "avatar"
-        ? avatars.filter((a) => (a?.stars ?? 0) > 0)
+        ? avatars.filter((a) => a.isPremium || (a.stars ?? 0) > 0)
         : backgrounds;
 
     if (!items?.length)
