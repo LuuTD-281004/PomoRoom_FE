@@ -22,49 +22,66 @@ import GroupRoomPage from "./Page/room/GroupRoomPage";
 import ProfilePage from "./Page/ProfilePage";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import LayoutWithChatBot from "./partials/LayoutWithChatBot"; // Thêm import
+import ProtectedRoute from "./Components/routes/ProtectedRoute";
+import PublicRoute from "./Components/routes/PublicRoute";
+import { Toaster } from "sonner";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <AuthProvider>
-        <SettingsProvider>
-          <RoomSetupProvider>
-            <Router>
-              <ScrollToTop />
-              <Routes>
-                <Route element={<LayoutWithChatBot />}>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/ranking" element={<RankingPage />} />
-                  <Route path="/plans" element={<ServicesPage />} />
-                </Route>
-
-                <Route element={<LayoutWithHeader />}>
-                  <Route element={<RoomLayout />}>
-                    <Route path="/rooms" element={<SetupRoomPage />} />
-                    <Route path="/private-room" element={<PrivateRoomPage />} />
-                    <Route
-                      path="/group-room/:roomId"
-                      element={<GroupRoomPage />}
-                    />
+    <>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <AuthProvider>
+          <SettingsProvider>
+            <RoomSetupProvider>
+              <Router>
+                <ScrollToTop />
+                <Routes>
+                  <Route element={<LayoutWithChatBot />}>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/ranking" element={<RankingPage />} />
+                    <Route path="/plans" element={<ServicesPage />} />
                   </Route>
-                </Route>
 
-                <Route element={<LayoutWithMinimizedHeader />}>
-                  <Route path="/packages" element={<PaymentPage />} />
-                </Route>
+                  <Route element={<ProtectedRoute />}>
+                    <Route element={<LayoutWithHeader />}>
+                      <Route element={<RoomLayout />}>
+                        <Route path="/rooms" element={<SetupRoomPage />} />
+                        <Route
+                          path="/private-room"
+                          element={<PrivateRoomPage />}
+                        />
+                        <Route
+                          path="/group-room/:roomId"
+                          element={<GroupRoomPage />}
+                        />
+                      </Route>
+                    </Route>
+                  </Route>
 
-                <Route element={<LayoutAuth />}>
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
-                </Route>
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Router>
-          </RoomSetupProvider>
-        </SettingsProvider>
-      </AuthProvider>
-    </GoogleOAuthProvider>
+                  <Route element={<ProtectedRoute />}>
+                    <Route element={<LayoutWithMinimizedHeader />}>
+                      <Route path="/packages" element={<PaymentPage />} />
+                    </Route>
+                  </Route>
+
+                  <Route element={<LayoutAuth />}>
+                    <Route element={<PublicRoute />}>
+                      <Route path="/login" element={<LoginPage />} />
+                      <Route path="/register" element={<RegisterPage />} />
+                    </Route>
+                    <Route element={<ProtectedRoute />}>
+                      <Route path="/profile" element={<ProfilePage />} />
+                    </Route>
+                  </Route>
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Router>
+            </RoomSetupProvider>
+          </SettingsProvider>
+        </AuthProvider>
+      </GoogleOAuthProvider>
+      <Toaster richColors position="top-center" />
+    </>
   );
 }
 
