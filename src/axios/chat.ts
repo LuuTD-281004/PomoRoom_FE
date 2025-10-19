@@ -2,7 +2,7 @@ import type { AxiosInstance } from "axios";
 import axios from "axios";
 
 const agentClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_CHATBOT_URL + "/api",
+  baseURL: import.meta.env.VITE_CHATBOT_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
