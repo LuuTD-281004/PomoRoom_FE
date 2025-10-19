@@ -22,3 +22,4 @@ export async function updateUserProfile(payload: {
   const response = await http.put("/users/user-profile", payload);
   return response.data;
 }
+
