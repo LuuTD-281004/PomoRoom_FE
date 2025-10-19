@@ -78,8 +78,7 @@ export const ChatBot: React.FC = () => {
       </div>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-40 w-80 bg-white rounded-lg shadow-xl border border-[#0C1A57]/20 overflow-hidden flex flex-col">
-          {/* Header */}
+        <div className="fixed bottom-24 right-6 z-40 w-80 h-[440px] bg-white rounded-lg shadow-xl border border-[#0C1A57]/20 overflow-hidden flex flex-col">
           <div className="bg-gradient-to-b from-[#6AD5E8] to-[#458895] text-white p-4">
             <h3 className="font-semibold text-center">{t("chatbot.hi")}</h3>
             <p className="text-sm text-center mt-1 opacity-90">
@@ -87,22 +86,22 @@ export const ChatBot: React.FC = () => {
             </p>
           </div>
 
-          {/* Predefined Questions */}
-          <div className="p-3 border-t border-[#0C1A57]/10 space-y-2 bg-[#F8FBFF]">
-            {predefinedQuestions.map((question, index) => (
-              <button
-                key={index}
-                onClick={() => handleQuestionClick(question)}
-                className="w-full text-left text-sm p-2 rounded-lg border border-[#6AD5E8]
-                           hover:bg-[#EAF6FF] text-[#0C1A57]"
-              >
-                {question}
-              </button>
-            ))}
-          </div>
-
-          {/* Chat Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {messages.length === 0 && message.trim() === "" && (
+              <div className="pb-3 mb-2 border-b border-[#0C1A57]/10 bg-[#F8FBFF] space-y-2">
+                {predefinedQuestions.map((question, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleQuestionClick(question)}
+                    className="w-full text-left text-sm p-2 rounded-lg border border-[#6AD5E8]
+                               hover:bg-[#EAF6FF] text-[#0C1A57]"
+                  >
+                    {question}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -121,10 +120,10 @@ export const ChatBot: React.FC = () => {
                 </div>
               </div>
             ))}
+
             <div ref={chatEndRef} />
           </div>
 
-          {/* Input */}
           <div className="p-3 border-t border-[#0C1A57]/10">
             <div className="flex gap-2">
               <input
