@@ -31,17 +31,19 @@ export const ChatBot: React.FC = () => {
   }, [messages]);
 
   const getChat = async () => {
+    console.log(authenticatedUser);
     if (authenticatedUser != null) {
       const response = await getChatHistory(authenticatedUser.id);
+      console.log(response);
       if (response) {
-        setMessage(response.data);
+        setMessages(response);
       }
     }
   };
 
   useEffect(() => {
     getChat();
-  }, []);
+  }, [authenticatedUser]);
 
   const handleQuestionClick = (question: string) => {
     setMessage(question);
@@ -57,10 +59,11 @@ export const ChatBot: React.FC = () => {
       userId = authenticatedUser.id;
     }
     const response = await askQuestion(userId, userMessage);
+    console.log(response);
     if (response) {
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: response.data.response },
+        { role: "assistant", content: response.response },
       ]);
     }
   };
