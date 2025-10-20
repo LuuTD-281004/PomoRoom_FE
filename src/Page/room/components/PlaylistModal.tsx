@@ -424,6 +424,8 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
                 {backgrounds.map((bg) => {
                   const isLocked =
                     bg.isPremium && !authenticatedUser?.isPersonalPremium;
+                  const showPremiumEffect =
+                    bg.isPremium && !authenticatedUser?.isPersonalPremium;
                   return (
                     <button
                       key={bg.id}
@@ -444,23 +446,20 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
                           src={bg.filePath}
                           alt={bg.name || "background"}
                           className={`object-cover w-full h-full rounded-md transition-all duration-300 ${
-                            bg.isPremium ? "blur-[2px] scale-105" : ""
+                            showPremiumEffect ? "blur-[2px] scale-105" : ""
                           }`}
                         />
-                        {bg.isPremium && (
+                        {showPremiumEffect && (
                           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 text-white font-semibold text-sm rounded-md">
-                            {t("premium")}
-                            {isLocked && (
-                              <span className="mt-1 text-xs text-yellow-300 font-semibold">
-                                🔒
-                              </span>
-                            )}
+                            <span className="mt-1 text-xs text-yellow-300 font-semibold">
+                              🔒
+                            </span>
                           </div>
                         )}
                       </div>
-                      {bg.isPremium && (
+                      {showPremiumEffect && (
                         <span className="text-xs text-yellow-300 font-semibold mt-1">
-                          Premium
+                          {t("premium")}
                         </span>
                       )}
                     </button>
