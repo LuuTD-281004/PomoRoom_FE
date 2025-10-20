@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPusherClient } from "@/lib/pusher";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,8 +13,13 @@ import CancelModal from "./components/CancelModal";
 declare global {
   interface Window {
     __CURRENT_AUDIO?: HTMLAudioElement | null;
+    YT: any;
+    onYouTubeIframeAPIReady: () => void;
   }
 }
+
+// YouTube player instance (module-scoped)
+let youtubePlayer: any = null;
 
 export default function GroupRoomPage() {
   const { roomId } = useParams();
@@ -28,11 +33,24 @@ export default function GroupRoomPage() {
   const [running, setRunning] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState<string | null>(null);
+  const [trackType, setTrackType] = useState<"file" | "youtube" | null>(null);
+  const [trackFile, setTrackFile] = useState<string | null>(null);
   const [currentRoom, setCurrentRoom] = useState<GroupRoom | null>(null);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [backgroundUrl, setBackgroundUrl] = useState<string | null>(null);
 
   const intervalRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isPlayerReady = useRef(false);
+  const isUserPaused = useRef(false);
+  const prevStatusRef = useRef<number | null>(null);
+  const prevRunningRef = useRef<boolean | null>(null);
+  const privateChannelRef = useRef<any>(null);
+  const presenceChannelRef = useRef<any>(null);
+
+  // Bell sound for transitions
+  const BellSound =
+    typeof window !== "undefined" ? new Audio("/sounds/ting.mp3") : null;
 
   // ================= FETCH ROOM =================
   const fetchRoom = async () => {
@@ -133,6 +151,8 @@ export default function GroupRoomPage() {
 
     const channel = pusherClient.subscribe(`presence-room-${roomId}`);
     const privateChannel = pusherClient.subscribe(`private-room-${roomId}`);
+    presenceChannelRef.current = channel;
+    privateChannelRef.current = privateChannel;
 
     privateChannel.bind("room-creator-leave", (data: any) => {
       console.log("Creator left room:", data);
@@ -152,6 +172,21 @@ export default function GroupRoomPage() {
         ...prev,
         { id: member.id, username: member.info.name },
       ]);
+      // After someone joins, if we already have media config locally, broadcast it so they sync
+      setTimeout(() => {
+        try {
+          const type = localStorage.getItem("selectedTrackType");
+          const file = localStorage.getItem("selectedTrackFile");
+          const bg = localStorage.getItem("selectedBg");
+          if (type && file) {
+            privateChannel.trigger("client-media-config", {
+              type,
+              file,
+              bg,
+            });
+          }
+        } catch {}
+      }, 300);
     });
 
     channel.bind("pusher:member_removed", (member: any) => {
@@ -166,6 +201,41 @@ export default function GroupRoomPage() {
       setRunning(true);
     });
 
+    // Receive media config from room creator/any member who has configuration
+    privateChannel.bind("client-media-config", (data: any) => {
+      try {
+        const incomingType = data?.type as "file" | "youtube" | null;
+        const incomingFile = data?.file as string | null;
+        const incomingBg = data?.bg as string | null;
+
+        // Persist and apply only if we don't already have a config
+        if (!trackType && incomingType) {
+          localStorage.setItem("selectedTrackType", incomingType);
+          setTrackType(incomingType);
+        }
+        if (!trackFile && incomingFile) {
+          localStorage.setItem("selectedTrackFile", incomingFile);
+          setTrackFile(incomingFile);
+          if (incomingType === "file") {
+            // Prepare audio element for resume behavior
+            if (!audioRef.current) {
+              const newAudio = new Audio(incomingFile);
+              newAudio.loop = true;
+              newAudio.volume = 0.3;
+              audioRef.current = newAudio;
+              window.__CURRENT_AUDIO = newAudio;
+            }
+          } else if (incomingType === "youtube") {
+            // Will be handled by youtubeId memo + initializer
+          }
+        }
+        if (!backgroundUrl && incomingBg) {
+          localStorage.setItem("selectedBg", incomingBg);
+          setBackgroundUrl(incomingBg);
+        }
+      } catch {}
+    });
+
     return () => {
       pusherClient.unsubscribe(`private-room-${roomId}`);
       pusherClient.unsubscribe(`presence-room-${roomId}`);
@@ -176,14 +246,124 @@ export default function GroupRoomPage() {
   // ================= INIT ROOM =================
   useEffect(() => {
     fetchRoom();
+    // Backward-compat single key
     const savedTrack = localStorage.getItem("selectedTrack");
     if (savedTrack) setCurrentTrack(savedTrack);
 
+    // New playlist keys (aligned with PrivateRoomPage)
+    const file = localStorage.getItem("selectedTrackFile");
+    const type = localStorage.getItem("selectedTrackType") as
+      | "file"
+      | "youtube"
+      | null;
+
+    setTrackType(type);
+    setTrackFile(file);
+
+    const bgUrl = localStorage.getItem("selectedBg");
+    if (bgUrl) setBackgroundUrl(bgUrl);
+
     return () => {
       cleanupAudio();
+      if (youtubePlayer && typeof youtubePlayer.destroy === "function") {
+        youtubePlayer.destroy();
+        youtubePlayer = null;
+      }
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [roomId]);
+
+  // Determine youtubeId from stored values or pasted link
+  const youtubeId = useMemo(() => {
+    if (trackType === "youtube" && trackFile) return trackFile;
+    if (currentTrack && /(youtube\.com|youtu\.be)/i.test(currentTrack)) {
+      // Parse ID from url
+      try {
+        const url = new URL(currentTrack);
+        if (url.hostname.includes("youtu.be")) return url.pathname.slice(1);
+        const v = url.searchParams.get("v");
+        if (v) return v;
+      } catch {}
+    }
+    return null;
+  }, [trackType, trackFile, currentTrack]);
+
+  // Load YouTube Iframe API once and init player when id available
+  useEffect(() => {
+    if (!youtubeId) return;
+
+    if (window.YT && window.YT.Player) {
+      isPlayerReady.current = true;
+      initializeYoutubePlayer(youtubeId);
+      return;
+    }
+
+    const tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName("script")[0];
+    if (firstScriptTag && firstScriptTag.parentNode) {
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    } else {
+      document.head.appendChild(tag);
+    }
+    window.onYouTubeIframeAPIReady = () => {
+      isPlayerReady.current = true;
+      initializeYoutubePlayer(youtubeId);
+    };
+  }, [youtubeId]);
+
+  const initializeYoutubePlayer = (videoId: string) => {
+    if (!window.YT || !isPlayerReady.current) return;
+
+    if (
+      youtubePlayer &&
+      typeof youtubePlayer.getVideoData === "function" &&
+      youtubePlayer.getVideoData().video_id === videoId
+    ) {
+      return;
+    }
+
+    if (youtubePlayer && typeof youtubePlayer.destroy === "function") {
+      youtubePlayer.destroy();
+    }
+
+    youtubePlayer = new window.YT.Player("group-youtube-player", {
+      height: "1",
+      width: "1",
+      videoId,
+      playerVars: {
+        playsinline: 1,
+        autoplay: 0,
+        loop: 1,
+        controls: 0,
+        modestbranding: 1,
+        fs: 0,
+        enablejsapi: 1,
+        rel: 0,
+        showinfo: 0,
+        playlist: videoId,
+      },
+      events: {
+        onReady: (event: any) => {
+          event.target.setVolume(100);
+          if (status === RoomStatus.ON_WORKING && !isUserPaused.current) {
+            try {
+              event.target.playVideo();
+            } catch {}
+          }
+        },
+        onStateChange: (event: any) => {
+          const YT = window.YT;
+          if (event.data === YT.PlayerState.PLAYING) setIsPlaying(true);
+          if (
+            event.data === YT.PlayerState.PAUSED ||
+            event.data === YT.PlayerState.ENDED
+          )
+            setIsPlaying(false);
+        },
+      },
+    });
+  };
 
   // ================= AUDIO HANDLERS =================
   const playAudio = (url: string) => {
@@ -199,49 +379,144 @@ export default function GroupRoomPage() {
       .catch(() => console.warn("Audio autoplay blocked."));
   };
 
+  // Pause without resetting position (for breaks)
+  const pauseAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    if (window.__CURRENT_AUDIO) {
+      window.__CURRENT_AUDIO.pause();
+    }
+    setIsPlaying(false);
+  };
+
+  // Fully stop and reset (for leaving/cleanup)
   const stopAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      audioRef.current = null;
     }
     if (window.__CURRENT_AUDIO) {
       window.__CURRENT_AUDIO.pause();
       window.__CURRENT_AUDIO.currentTime = 0;
-      window.__CURRENT_AUDIO = null;
     }
     setIsPlaying(false);
   };
 
   const cleanupAudio = () => {
     stopAudio();
+    audioRef.current = null;
+    if (window.__CURRENT_AUDIO) window.__CURRENT_AUDIO = null;
     setIsPlaying(false);
   };
 
   const toggleAudio = () => {
-    if (!currentTrack) return;
-    if (isPlaying) stopAudio();
-    else playAudio(currentTrack);
+    // Prefer explicit trackType if available
+    if (trackType === "youtube" && youtubeId && youtubePlayer) {
+      if (isPlaying) {
+        try {
+          youtubePlayer.pauseVideo();
+        } catch {}
+        isUserPaused.current = true;
+        setIsPlaying(false);
+      } else {
+        try {
+          youtubePlayer.playVideo();
+        } catch {}
+        isUserPaused.current = false;
+      }
+      return;
+    }
+
+    const urlToPlay = trackFile && trackType === "file" ? trackFile : currentTrack;
+    if (!urlToPlay) return;
+    if (isPlaying) {
+      stopAudio();
+      isUserPaused.current = true;
+    } else {
+      playAudio(urlToPlay);
+      isUserPaused.current = false;
+    }
   };
 
   // ================= AUTO PLAY / STOP NHẠC THEO ROOM STATUS =================
   useEffect(() => {
-    if (!currentTrack) return;
+    const prevStatus = prevStatusRef.current;
+    const prevRunning = prevRunningRef.current;
 
-    if (!running || remaining <= 0) {
-      stopAudio(); // nếu timer dừng → stop
-      return;
+    // Update refs for next run
+    prevStatusRef.current = status;
+    prevRunningRef.current = running;
+
+    // Handle running toggles
+    if (prevRunning !== running) {
+      if (!running) {
+        // Timer stopped
+        pauseAudio();
+        if (youtubePlayer && typeof youtubePlayer.pauseVideo === "function") {
+          try {
+            youtubePlayer.pauseVideo();
+          } catch {}
+        }
+        return;
+      }
+      // Timer just started → fall through to status handling
     }
 
-    if (status === RoomStatus.ON_WORKING) {
-      if (!isPlaying) playAudio(currentTrack);
+    // Only react when status actually changes
+    if (prevStatus === status) return;
+
+    if (status === RoomStatus.ON_WORKING && running) {
+      // bell on transition
+      if (BellSound) {
+        try {
+          BellSound.pause();
+          BellSound.currentTime = 0;
+          BellSound.play();
+        } catch {}
+      }
+      if (trackType === "youtube" && youtubeId && youtubePlayer) {
+        if (!isUserPaused.current) {
+          try {
+            youtubePlayer.playVideo();
+          } catch {}
+        }
+      } else {
+        const urlToPlay = trackFile && trackType === "file" ? trackFile : currentTrack;
+        // If an audio instance already exists, resume instead of recreating
+        if (audioRef.current && !isUserPaused.current) {
+          audioRef.current
+            .play()
+            .then(() => setIsPlaying(true))
+            .catch(() => {});
+        } else if (urlToPlay && !isUserPaused.current) {
+          playAudio(urlToPlay);
+        }
+      }
     } else if (
       status === RoomStatus.ON_REST ||
       status === RoomStatus.ON_LONG_REST
     ) {
-      if (isPlaying) stopAudio();
+      if (!isUserPaused.current) {
+        // bell on transition
+        if (BellSound) {
+          try {
+            BellSound.pause();
+            BellSound.currentTime = 0;
+            BellSound.play();
+          } catch {}
+        }
+        if (trackType === "youtube" && youtubePlayer) {
+          try {
+            youtubePlayer.pauseVideo();
+          } catch {}
+          setIsPlaying(false);
+        } else {
+          pauseAudio();
+        }
+      }
     }
-  }, [status, running, remaining, currentTrack]);
+  }, [status, running, currentTrack, trackType, trackFile, youtubeId]);
 
   // ================= FORMAT TIME =================
   const formatTime = (sec: number) => {
@@ -254,7 +529,19 @@ export default function GroupRoomPage() {
 
   // ================= RENDER UI =================
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-4">
+    <div
+      className="min-h-screen w-full flex flex-col items-center justify-center px-4 bg-cover bg-center transition-all duration-700"
+      style={{
+        backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : "none",
+        backgroundColor: !backgroundUrl ? "#0C1A57" : undefined,
+      }}
+    >
+      {youtubeId && (
+        <div
+          id="group-youtube-player"
+          className="absolute top-0 left-0 opacity-0 w-1 h-1 overflow-hidden"
+        />
+      )}
       <div className="text-8xl font-bold mb-8 text-white bg-blue-400/80 px-20 py-10 rounded-lg">
         {formatTime(remaining)}
       </div>
@@ -269,7 +556,7 @@ export default function GroupRoomPage() {
           — Cycle {cycle}
         </span>
 
-        {currentTrack && (
+        {(currentTrack || youtubeId) && (
           <button
             onClick={toggleAudio}
             className="p-2 bg-blue-200 rounded-full hover:bg-blue-300 transition"
