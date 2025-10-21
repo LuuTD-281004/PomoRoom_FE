@@ -13,6 +13,7 @@ import {
 } from "@/Components/ui/dialog";
 import { getPusherClient } from "@/lib/pusher";
 import { User, Users, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 
 interface PaymentPackage {
   id: string;
@@ -80,6 +81,17 @@ export default function PaymentPage() {
       setShowLoginPrompt(true);
       return;
     }
+    
+    // Kiểm tra nếu user đã mua gói này rồi
+    if (pkg.type === 1 && authenticatedUser?.isPersonalPremium) {
+      toast.warning("Bạn đã sở hữu gói Personal Premium, không thể mua lại.");
+      return;
+    }
+    if (pkg.type === 2 && authenticatedUser?.isGroupPremium) {
+      toast.warning("Bạn đã sở hữu gói Group Premium, không thể mua lại.");
+      return;
+    }
+    
     setSelectedPackage(pkg);
   };
 
@@ -127,10 +139,22 @@ export default function PaymentPage() {
 
             {/* Nút thanh toán */}
             <Button
-              className="mt-6 px-6 py-2 bg-white text-[#0C1A57] font-semibold rounded-full text-center hover:bg-gray-100 transition"
+              className={`mt-6 px-6 py-2 font-semibold rounded-full text-center transition ${
+                (pkg.type === 1 && authenticatedUser?.isPersonalPremium) ||
+                (pkg.type === 2 && authenticatedUser?.isGroupPremium)
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-white text-[#0C1A57] hover:bg-gray-100"
+              }`}
               onClick={() => handleSelectPackage(pkg)}
+              disabled={
+                (pkg.type === 1 && authenticatedUser?.isPersonalPremium) ||
+                (pkg.type === 2 && authenticatedUser?.isGroupPremium)
+              }
             >
-              Thanh toán
+              {(pkg.type === 1 && authenticatedUser?.isPersonalPremium) ||
+              (pkg.type === 2 && authenticatedUser?.isGroupPremium)
+                ? "Đã mua"
+                : "Thanh toán"}
             </Button>
           </Card>
         ))}
