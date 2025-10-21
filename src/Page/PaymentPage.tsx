@@ -78,10 +78,30 @@ export default function PaymentPage() {
     fetchPackages();
   }, []);
 
+  // Function to check if user can purchase Plus packages (type 2, 3)
+  const canPurchasePlusPackage = (pkg: PaymentPackage): boolean => {
+    if (!authenticatedUser) return false;
+    
+    // Plus packages (type 2, 3) chỉ có thể mua khi đã có Group Premium
+    if (pkg.type === 2 || pkg.type === 3) {
+      return authenticatedUser.isGroupPremium;
+    }
+    
+    return true; // Các gói khác không có điều kiện đặc biệt
+  };
+
   const handleSelectPackage = (pkg: PaymentPackage) => {
     if (!authenticatedUser) {
       setShowLoginPrompt(true);
       return;
+    }
+    
+    // Kiểm tra điều kiện mua gói Plus
+    if (!canPurchasePlusPackage(pkg)) {
+      if (pkg.type === 2 || pkg.type === 3) {
+        toast.warning(t("packages.needGroupPremiumFirst"));
+        return;
+      }
     }
     
     // Kiểm tra nếu user đã mua gói này rồi
@@ -89,7 +109,7 @@ export default function PaymentPage() {
       toast.warning(t("packages.personalPremiumOwned"));
       return;
     }
-    if (pkg.type === 2 && authenticatedUser?.isGroupPremium) {
+    if (pkg.type === 4 && authenticatedUser?.isGroupPremium) {
       toast.warning(t("packages.groupPremiumOwned"));
       return;
     }
@@ -113,7 +133,13 @@ export default function PaymentPage() {
 
       {/* Grid hiển thị các gói */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 max-w-6xl w-full justify-center">
-        {packages.map((pkg, index) => (
+        {packages
+          .sort((a, b) => {
+            // Sắp xếp theo thứ tự: Personal (1) → Group (4) → Plus 3 (2) → Plus 10 (3)
+            const order = { 1: 1, 4: 2, 2: 3, 3: 4 };
+            return (order[a.type as keyof typeof order] || 999) - (order[b.type as keyof typeof order] || 999);
+          })
+          .map((pkg, index) => (
           <Card
             key={pkg.id}
             className="flex flex-col justify-between items-center w-[280px] h-[350px] p-6 rounded-2xl shadow-md bg-gradient-to-b from-[#457FF7] to-[#B3C5EA] text-white"
@@ -130,7 +156,7 @@ export default function PaymentPage() {
               <div className="w-2/3 h-[2px] bg-white" />
 
               <p className="text-2xl md:text-3xl font-extrabold">
-                {pkg.price.toLocaleString("vi-VN")}₫/Tháng
+                {pkg.price.toLocaleString("vi-VN")}₫{t("packages.monthly")}
               </p>
             </div>
 
@@ -143,19 +169,23 @@ export default function PaymentPage() {
             <Button
               className={`mt-6 px-6 py-2 font-semibold rounded-full text-center transition ${
                 (pkg.type === 1 && authenticatedUser?.isPersonalPremium) ||
-                (pkg.type === 2 && authenticatedUser?.isGroupPremium)
+                (pkg.type === 4 && authenticatedUser?.isGroupPremium) ||
+                !canPurchasePlusPackage(pkg)
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-white text-[#0C1A57] hover:bg-gray-100"
               }`}
               onClick={() => handleSelectPackage(pkg)}
               disabled={
                 (pkg.type === 1 && authenticatedUser?.isPersonalPremium) ||
-                (pkg.type === 2 && authenticatedUser?.isGroupPremium)
+                (pkg.type === 4 && authenticatedUser?.isGroupPremium) ||
+                !canPurchasePlusPackage(pkg)
               }
             >
               {(pkg.type === 1 && authenticatedUser?.isPersonalPremium) ||
-              (pkg.type === 2 && authenticatedUser?.isGroupPremium)
+              (pkg.type === 4 && authenticatedUser?.isGroupPremium)
                 ? t("packages.alreadyPurchased")
+                : !canPurchasePlusPackage(pkg) && (pkg.type === 2 || pkg.type === 3)
+                ? t("packages.needGroupPremium")
                 : t("packages.paymentButton")}
             </Button>
           </Card>

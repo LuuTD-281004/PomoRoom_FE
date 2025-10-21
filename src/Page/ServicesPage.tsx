@@ -108,14 +108,27 @@ const ServicesPage: React.FC = () => {
     switch (pkg.type) {
       case 1: // Personal Premium
         return authenticatedUser.isPersonalPremium;
-      case 2: // Group Premium (theo logic PaymentPage)
+      case 2: // Plus 3 - chỉ có thể mua khi đã có Group Premium
+        return false; // Không kiểm tra đã mua, chỉ kiểm tra điều kiện
+      case 3: // Plus 10 - chỉ có thể mua khi đã có Group Premium
+        return false; // Không kiểm tra đã mua, chỉ kiểm tra điều kiện
+      case 4: // Group Premium
         return authenticatedUser.isGroupPremium;
-      case 3: // Plus 10 - chưa có logic kiểm tra cụ thể
-      case 4: // Group Premium khác - chưa có logic kiểm tra cụ thể
-        return false; // Tạm thời không khóa các gói này
       default:
         return false;
     }
+  };
+
+  // Function to check if user can purchase Plus packages (type 2, 3)
+  const canPurchasePlusPackage = (pkg: PaymentPackage): boolean => {
+    if (!authenticatedUser) return false;
+    
+    // Plus packages (type 2, 3) chỉ có thể mua khi đã có Group Premium
+    if (pkg.type === 2 || pkg.type === 3) {
+      return authenticatedUser.isGroupPremium;
+    }
+    
+    return true; // Các gói khác không có điều kiện đặc biệt
   };
 
   // Function to handle package click
@@ -125,10 +138,18 @@ const ServicesPage: React.FC = () => {
       return;
     }
 
+    // Kiểm tra điều kiện mua gói Plus
+    if (!canPurchasePlusPackage(pkg)) {
+      if (pkg.type === 2 || pkg.type === 3) {
+        toast.warning(t("packages.needGroupPremiumFirst"));
+        return;
+      }
+    }
+
     if (isPackagePurchased(pkg)) {
       const packageNames = {
         1: t("packages.personal.title"),
-        2: t("packages.group.title"),
+        2: t("packages.plus3.title"), 
         3: t("packages.plus10.title"), 
         4: t("packages.group.title")
       };
@@ -182,7 +203,13 @@ const ServicesPage: React.FC = () => {
             )}
 
             {!loading &&
-              packages.map((pkg) => {
+              packages
+                .sort((a, b) => {
+                  // Sắp xếp theo thứ tự: Personal (1) → Group (4) → Plus 3 (2) → Plus 10 (3)
+                  const order = { 1: 1, 4: 2, 2: 3, 3: 4 };
+                  return (order[a.type as keyof typeof order] || 999) - (order[b.type as keyof typeof order] || 999);
+                })
+                .map((pkg) => {
                 const title = isVi
                   ? pkg.nameVi || pkg.name
                   : pkg.nameEn || pkg.name;
@@ -210,7 +237,7 @@ const ServicesPage: React.FC = () => {
                       <div className="w-2/3 h-[2px] bg-white" />
 
                       <p className="text-2xl md:text-3xl font-extrabold">
-                        {pkg.price.toLocaleString("vi-VN")}₫/Tháng
+                        {pkg.price.toLocaleString("vi-VN")}₫{t("packages.monthly")}
                       </p>
                     </div>
 
@@ -223,13 +250,18 @@ const ServicesPage: React.FC = () => {
                     <button
                       onClick={() => handlePackageClick(pkg)}
                       className={`mt-6 px-6 py-2 font-semibold rounded-full text-center transition ${
-                        isPackagePurchased(pkg)
+                        isPackagePurchased(pkg) || !canPurchasePlusPackage(pkg)
                           ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                           : "bg-white text-[#0C1A57] hover:bg-gray-100"
                       }`}
-                      disabled={isPackagePurchased(pkg)}
+                      disabled={isPackagePurchased(pkg) || !canPurchasePlusPackage(pkg)}
                     >
-                      {isPackagePurchased(pkg) ? t("packages.alreadyPurchased") : t("packages.buyButton")}
+                      {isPackagePurchased(pkg) 
+                        ? t("packages.alreadyPurchased") 
+                        : !canPurchasePlusPackage(pkg) && (pkg.type === 2 || pkg.type === 3)
+                        ? t("packages.needGroupPremium")
+                        : t("packages.buyButton")
+                      }
                     </button>
                   </div>
                 );
