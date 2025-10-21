@@ -8,10 +8,12 @@ import Input from "@/Components/Input";
 import { updateUserProfile } from "@/axios/user";
 import { toast } from "sonner";
 import AvatarPickerModal from "@/Page/components/AvatarPickerModal";
+import { useLocation } from "react-router-dom";
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
   const { authenticatedUser } = useAuth();
+  const location = useLocation() as any;
 
   const [editing, setEditing] = useState(false);
   const [username, setUsername] = useState("");
@@ -26,6 +28,14 @@ const ProfilePage: React.FC = () => {
       setSelectedAvatarUrl(authenticatedUser.avatarUrl || "");
     }
   }, [authenticatedUser]);
+
+  useEffect(() => {
+    if (location?.state?.openAvatar) {
+      setEditing(true);
+      setShowAvatarModal(true);
+      // optionally clear state here if needed
+    }
+  }, [location?.state]);
 
   const hours = 40; // Dữ liệu giả
   const stars = authenticatedUser?.userStar ?? 0;

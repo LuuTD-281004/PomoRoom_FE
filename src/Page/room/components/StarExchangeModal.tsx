@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import Modal from "@/Components/Modal";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
-import { getAllAvatars, getAllBackgrounds } from "@/axios/files";
+import { getAllAvatars, getAllBackgrounds, purchaseAvatar, purchaseBackground } from "@/axios/files";
+import { getUserInfo } from "@/axios/user";
 import type { File } from "@/types/file";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 type Props = {
   isOpen: boolean;
@@ -15,7 +18,9 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const [tab, setTab] = useState<"theme" | "effect" | "avatar">("theme");
   const [backgrounds, setBackgrounds] = useState<File[]>([]);
   const [avatars, setAvatars] = useState<File[]>([]);
+  const [loading, setLoading] = useState<string | null>(null);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const fetchAvatars = async () => {
     try {
@@ -61,13 +66,71 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
         </div>
       );
 
+    const handleBuy = async (file: File) => {
+      if (loading) return; // Prevent double purchases
+      
+      try {
+        setLoading(file.id);
+        const userStars = authenticatedUser?.userStar ?? 0;
+        const cost = file.stars ?? 0;
+        if (userStars < cost) {
+          toast.warning(t("notEnoughStars"));
+          return;
+        }
+        
+        let res;
+        if (tab === "avatar") {
+          res = await purchaseAvatar(file.id);
+        } else {
+          res = await purchaseBackground(file.id);
+        }
+        
+        if (res?.result) {
+          // Refresh user data to update star count
+          try {
+            await getUserInfo();
+            // Force a page reload to update the user context
+            window.location.reload();
+          } catch (err) {
+            console.error("Failed to refresh user data:", err);
+          }
+          
+          // Refetch items to update the list
+          if (tab === "avatar") {
+            await fetchAvatars();
+          } else {
+            await fetchBackgrounds();
+          }
+          
+          toast.success(t("purchasedSuccessfully"));
+          onClose();
+          
+          if (tab === "avatar") {
+            navigate("/profile", { state: { openAvatar: true } });
+          } else {
+            navigate("/rooms", { state: { openJoinRooms: true } });
+          }
+        }
+      } catch (err: any) {
+        toast.error(err?.response?.data?.message || t("purchaseFailed"));
+      } finally {
+        setLoading(null);
+      }
+    };
+
     return items.map((item) => (
-      <div
+      <button
         key={item.id}
-        className="relative bg-[#A8A8A8] rounded-lg p-3 flex flex-col items-center gap-3"
+        type="button"
+        onClick={() => handleBuy(item)}
+        disabled={!!loading}
+        aria-busy={loading === item.id}
+className={`relative bg-[#A8A8A8] rounded-lg p-1 flex flex-col items-center gap-1 overflow-hidden transition-transform hover:scale-105 focus:outline-none ${
+  tab === "theme" ? "w-[210px]" : "w-[160px]"
+}`}
       >
-        {/* Preview Image */}
-        <div className="relative w-full h-28 rounded-md overflow-hidden bg-white flex items-center justify-center">
+        {/* Preview Image (lớn hơn) */}
+        <div className="relative w-full h-36 rounded-md overflow-hidden bg-white flex items-center justify-center">
           <img
             src={item.filePath}
             alt={item.name}
@@ -76,24 +139,32 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
             }`}
           />
           {item.isPremium && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 text-white font-semibold text-sm">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white font-semibold text-sm">
               {t("premium")}
             </div>
           )}
         </div>
 
-        {/* Item name */}
-        <div className="text-sm font-medium text-[#0234A7] text-center">
+        {/* Star badge: nhỏ, hiện bên dưới ảnh */}
+        <div className="w-full flex items-center justify-center mt-1">
+          <div className="inline-flex items-center gap-1 bg-[#0C1A57] text-white rounded-full px-2 py-0.5 text-xs font-semibold">
+            <span>⭐</span>
+            <span>{item.stars ?? 0}</span>
+          </div>
+        </div>
+
+        {/* Name: nhỏ gọn */}
+        <div className="text-xs font-medium text-[#0234A7] text-center py-1 w-full truncate">
           {item.name}
         </div>
 
-        {/* Price */}
-        <div className="mt-auto relative w-full flex justify-center">
-          <div className="flex items-center gap-2 bg-white/90 px-3 py-1 rounded-full text-[#0C1A57] font-semibold">
-            ⭐ <span>{item.stars}</span>
+        {/* loading overlay */}
+        {loading === item.id && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30 text-white">
+            ...
           </div>
-        </div>
-      </div>
+        )}
+      </button>
     ));
   };
 
@@ -145,11 +216,16 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   ⭐ <span>{authenticatedUser?.userStar || 0}</span>
                 </div>
               </div>
-
-              <div className="grid grid-cols-4 gap-4 overflow-y-auto h-full [scrollbar-gutter:stable]">
-                {renderItems()}
-              </div>
-            </div>
+<div
+  className={`overflow-y-auto h-full [scrollbar-gutter:stable] ${
+    tab === "theme"
+      ? "grid grid-cols-3 gap-4" // 🌟 background: 3 card 1 hàng
+      : "grid grid-cols-4 gap-4" // avatar: giữ 4 card như cũ
+  }`}
+>
+  {renderItems()}
+</div>
+           </div>
           </div>
         </div>
       </Modal>
