@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import Button from "@/Components/Button";
 import Footer from "@/partials/Footer";
 import { getAllPaymentPackages } from "@/axios/payment";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 type PaymentPackage = {
   id: string;
@@ -31,6 +33,7 @@ const ServicesPage: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [packages, setPackages] = useState<PaymentPackage[]>([]);
   const [loading, setLoading] = useState(false);
+  const { authenticatedUser } = useAuth();
 
   const features = [
     {
@@ -97,6 +100,45 @@ const ServicesPage: React.FC = () => {
   };
 
   const isVi = i18n.language === "vi";
+
+  // Function to check if user has already purchased a package
+  const isPackagePurchased = (pkg: PaymentPackage): boolean => {
+    if (!authenticatedUser) return false;
+    
+    switch (pkg.type) {
+      case 1: // Personal Premium
+        return authenticatedUser.isPersonalPremium;
+      case 2: // Group Premium (theo logic PaymentPage)
+        return authenticatedUser.isGroupPremium;
+      case 3: // Plus 10 - chưa có logic kiểm tra cụ thể
+      case 4: // Group Premium khác - chưa có logic kiểm tra cụ thể
+        return false; // Tạm thời không khóa các gói này
+      default:
+        return false;
+    }
+  };
+
+  // Function to handle package click
+  const handlePackageClick = (pkg: PaymentPackage) => {
+    if (!authenticatedUser) {
+      toast.warning("Vui lòng đăng nhập để mua gói dịch vụ.");
+      return;
+    }
+
+    if (isPackagePurchased(pkg)) {
+      const packageNames = {
+        1: "Personal Premium",
+        2: "Group Premium",
+        3: "Plus 10", 
+        4: "Group Premium"
+      };
+      toast.warning(`Bạn đã sở hữu gói ${packageNames[pkg.type as keyof typeof packageNames]}, không thể mua lại.`);
+      return;
+    }
+
+    // Navigate to payment page
+    window.location.href = "/packages";
+  };
 
   return (
     <div>
@@ -178,12 +220,17 @@ const ServicesPage: React.FC = () => {
                     </p>
 
                     {/* Nút mua */}
-                    <a
-                      href="/packages"
-                      className="mt-6 px-6 py-2 bg-white text-[#0C1A57] font-semibold rounded-full text-center hover:bg-gray-100 transition"
+                    <button
+                      onClick={() => handlePackageClick(pkg)}
+                      className={`mt-6 px-6 py-2 font-semibold rounded-full text-center transition ${
+                        isPackagePurchased(pkg)
+                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          : "bg-white text-[#0C1A57] hover:bg-gray-100"
+                      }`}
+                      disabled={isPackagePurchased(pkg)}
                     >
-                      {t("packages.buyButton")}
-                    </a>
+                      {isPackagePurchased(pkg) ? "Đã mua" : t("packages.buyButton")}
+                    </button>
                   </div>
                 );
               })}

@@ -22,6 +22,7 @@ export type UserType = {
   avatarUrl?: string;
   userStar: number;
   isPersonalPremium: boolean;
+  isGroupPremium: boolean;
   messages?: Message[];
   conversations?: Conversation[];
 };
