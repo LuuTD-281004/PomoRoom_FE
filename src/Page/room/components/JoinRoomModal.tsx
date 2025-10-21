@@ -10,6 +10,7 @@ import { useRoomSetup } from "@/contexts/RoomSetupContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import PlaylistModal from "@/Page/room/components/PlaylistModal";
+import defaultBackground from "@/assets/image/defaultBackground.png";
 
 type Props = {
   isOpen: boolean;
@@ -151,10 +152,10 @@ export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
                     onClick={() => handleJoinRoom(r)}
                     className="flex flex-col items-center bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition"
                   >
-                    <div className="w-full h-16 bg-gradient-to-br from-sky-200 to-sky-100 rounded-md mb-2 overflow-hidden flex items-center justify-center">
-                      <img 
-                        src="/src/assets/image/defaultBackground.png" 
-                        alt="Room background" 
+                    <div className="w-full h-16 rounded-md mb-2 overflow-hidden flex items-center justify-center bg-sky-100">
+                      <img
+                        src={defaultBackground}
+                        alt="Room background"
                         className="w-full h-full object-cover"
                       />
                     </div>
