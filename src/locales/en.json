@@ -94,7 +94,23 @@
       "title": "Plus 10",
       "desc": "Expand your room with 10 more members"
     },
-    "buyButton": "Buy Package"
+    "buyButton": "Buy Package",
+    "alreadyPurchased": "Already Purchased",
+    "paymentButton": "Payment",
+    "personalPremiumOwned": "You already own Personal Premium package, cannot purchase again.",
+    "groupPremiumOwned": "You already own Group Premium package, cannot purchase again.",
+    "pleaseLogin": "Please login to purchase service packages.",
+    "packageOwned": "You already own {{packageName}} package, cannot purchase again.",
+    "choosePaymentPackage": "Choose Payment Package",
+    "scanQRToComplete": "Scan QR code to complete payment",
+    "selectPackageToShowQR": "Please select a package to show QR code",
+    "paymentSuccess": "Payment Successful!",
+    "thankYouTransactionConfirmed": "Thank you, your transaction has been confirmed.",
+    "close": "Close",
+    "needToLogin": "You need to login",
+    "pleaseLoginToContinue": "Please login to continue purchasing service packages.",
+    "login": "Login",
+    "loadingPackages": "Loading service packages..."
   },
   "faq": {
     "questionPrefix": "Question",
