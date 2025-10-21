@@ -14,6 +14,7 @@ import {
 import { getPusherClient } from "@/lib/pusher";
 import { User, Users, UserPlus } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface PaymentPackage {
   id: string;
@@ -37,6 +38,7 @@ export default function PaymentPage() {
   const { settings } = useSettings();
   const { authenticatedUser, accessToken } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!authenticatedUser) return;
@@ -84,11 +86,11 @@ export default function PaymentPage() {
     
     // Kiểm tra nếu user đã mua gói này rồi
     if (pkg.type === 1 && authenticatedUser?.isPersonalPremium) {
-      toast.warning("Bạn đã sở hữu gói Personal Premium, không thể mua lại.");
+      toast.warning(t("packages.personalPremiumOwned"));
       return;
     }
     if (pkg.type === 2 && authenticatedUser?.isGroupPremium) {
-      toast.warning("Bạn đã sở hữu gói Group Premium, không thể mua lại.");
+      toast.warning(t("packages.groupPremiumOwned"));
       return;
     }
     
@@ -106,7 +108,7 @@ export default function PaymentPage() {
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-12">
       <h2 className="text-3xl md:text-4xl font-extrabold text-[#0C1A57] text-center mb-12">
-        Chọn gói thanh toán
+        {t("packages.choosePaymentPackage")}
       </h2>
 
       {/* Grid hiển thị các gói */}
@@ -153,8 +155,8 @@ export default function PaymentPage() {
             >
               {(pkg.type === 1 && authenticatedUser?.isPersonalPremium) ||
               (pkg.type === 2 && authenticatedUser?.isGroupPremium)
-                ? "Đã mua"
-                : "Thanh toán"}
+                ? t("packages.alreadyPurchased")
+                : t("packages.paymentButton")}
             </Button>
           </Card>
         ))}
@@ -177,12 +179,12 @@ export default function PaymentPage() {
               className="w-64 h-64 mb-6 rounded-xl border shadow-md"
             />
             <p className="text-gray-700 font-semibold">
-              Quét mã QR để hoàn tất thanh toán
+              {t("packages.scanQRToComplete")}
             </p>
           </>
         ) : (
           <p className="text-gray-600 italic">
-            Vui lòng chọn gói để hiển thị mã QR
+            {t("packages.selectPackageToShowQR")}
           </p>
         )}
       </div>
@@ -191,16 +193,16 @@ export default function PaymentPage() {
       <Dialog open={showSuccessPopup} onOpenChange={setShowSuccessPopup}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Thanh toán thành công!</DialogTitle>
+            <DialogTitle>{t("packages.paymentSuccess")}</DialogTitle>
           </DialogHeader>
           <p className="text-gray-700 mb-4">
-            Cảm ơn bạn, giao dịch của bạn đã được xác nhận.
+            {t("packages.thankYouTransactionConfirmed")}
           </p>
           <Button
             className="w-full bg-green-600 text-white hover:bg-green-700"
             onClick={handleCloseTransactionConfirmation}
           >
-            Đóng
+            {t("packages.close")}
           </Button>
         </DialogContent>
       </Dialog>
@@ -209,16 +211,16 @@ export default function PaymentPage() {
       <Dialog open={showLoginPrompt} onOpenChange={setShowLoginPrompt}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Bạn cần đăng nhập</DialogTitle>
+            <DialogTitle>{t("packages.needToLogin")}</DialogTitle>
           </DialogHeader>
           <p className="text-gray-700 mb-4">
-            Vui lòng đăng nhập để tiếp tục thanh toán gói dịch vụ.
+            {t("packages.pleaseLoginToContinue")}
           </p>
           <Button
             className="w-full bg-blue-600 text-white hover:bg-blue-700"
             onClick={() => navigate("/login")}
           >
-            Đăng nhập
+            {t("packages.login")}
           </Button>
         </DialogContent>
       </Dialog>

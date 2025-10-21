@@ -93,7 +93,23 @@
       "title": "Plus 10",
       "desc": "Số lượng thành viên trong phòng mở rộng thêm 10 người."
     },
-    "buyButton": "Mua gói"
+    "buyButton": "Mua gói",
+    "alreadyPurchased": "Đã mua",
+    "paymentButton": "Thanh toán",
+    "personalPremiumOwned": "Bạn đã sở hữu gói Personal Premium, không thể mua lại.",
+    "groupPremiumOwned": "Bạn đã sở hữu gói Group Premium, không thể mua lại.",
+    "pleaseLogin": "Vui lòng đăng nhập để mua gói dịch vụ.",
+    "packageOwned": "Bạn đã sở hữu gói {{packageName}}, không thể mua lại.",
+    "choosePaymentPackage": "Chọn gói thanh toán",
+    "scanQRToComplete": "Quét mã QR để hoàn tất thanh toán",
+    "selectPackageToShowQR": "Vui lòng chọn gói để hiển thị mã QR",
+    "paymentSuccess": "Thanh toán thành công!",
+    "thankYouTransactionConfirmed": "Cảm ơn bạn, giao dịch của bạn đã được xác nhận.",
+    "close": "Đóng",
+    "needToLogin": "Bạn cần đăng nhập",
+    "pleaseLoginToContinue": "Vui lòng đăng nhập để tiếp tục thanh toán gói dịch vụ.",
+    "login": "Đăng nhập",
+    "loadingPackages": "Đang tải gói dịch vụ..."
   },
   "faq": {
     "questionPrefix": "Câu",

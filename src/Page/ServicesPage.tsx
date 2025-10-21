@@ -121,18 +121,18 @@ const ServicesPage: React.FC = () => {
   // Function to handle package click
   const handlePackageClick = (pkg: PaymentPackage) => {
     if (!authenticatedUser) {
-      toast.warning("Vui lòng đăng nhập để mua gói dịch vụ.");
+      toast.warning(t("packages.pleaseLogin"));
       return;
     }
 
     if (isPackagePurchased(pkg)) {
       const packageNames = {
-        1: "Personal Premium",
-        2: "Group Premium",
-        3: "Plus 10", 
-        4: "Group Premium"
+        1: t("packages.personal.title"),
+        2: t("packages.group.title"),
+        3: t("packages.plus10.title"), 
+        4: t("packages.group.title")
       };
-      toast.warning(`Bạn đã sở hữu gói ${packageNames[pkg.type as keyof typeof packageNames]}, không thể mua lại.`);
+      toast.warning(t("packages.packageOwned", { packageName: packageNames[pkg.type as keyof typeof packageNames] }));
       return;
     }
 
@@ -177,7 +177,7 @@ const ServicesPage: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-16 max-w-6xl w-full">
             {loading && (
               <div className="col-span-4 text-center text-[#0C1A57]">
-                Đang tải gói dịch vụ...
+                {t("packages.loadingPackages")}
               </div>
             )}
 
@@ -229,7 +229,7 @@ const ServicesPage: React.FC = () => {
                       }`}
                       disabled={isPackagePurchased(pkg)}
                     >
-                      {isPackagePurchased(pkg) ? "Đã mua" : t("packages.buyButton")}
+                      {isPackagePurchased(pkg) ? t("packages.alreadyPurchased") : t("packages.buyButton")}
                     </button>
                   </div>
                 );
