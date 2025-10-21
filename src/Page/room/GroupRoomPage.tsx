@@ -451,13 +451,7 @@ export default function GroupRoomPage() {
     // Handle running toggles
     if (prevRunning !== running) {
       if (!running) {
-        // Timer stopped
-        pauseAudio();
-        if (youtubePlayer && typeof youtubePlayer.pauseVideo === "function") {
-          try {
-            youtubePlayer.pauseVideo();
-          } catch {}
-        }
+        // Avoid pausing immediately on transient sync; wait for explicit status change
         return;
       }
       // Timer just started → fall through to status handling
