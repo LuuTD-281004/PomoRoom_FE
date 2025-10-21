@@ -152,7 +152,11 @@ export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
                     className="flex flex-col items-center bg-white rounded-lg p-2 shadow-sm hover:shadow-md transition"
                   >
                     <div className="w-full h-16 bg-gradient-to-br from-sky-200 to-sky-100 rounded-md mb-2 overflow-hidden flex items-center justify-center">
-                      <span className="text-xs text-slate-600">ảnh</span>
+                      <img 
+                        src="/src/assets/image/defaultBackground.png" 
+                        alt="Room background" 
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div className="w-full flex justify-between items-center px-2">
                       <span className="text-sm font-medium text-slate-800 text-start flex-1 truncate">
