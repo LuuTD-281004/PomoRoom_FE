@@ -24,6 +24,7 @@ export function UserDropdown({ user }: UserDropdownProps) {
   const { logout } = useAuth();
   const { t } = useTranslation();
   const [showStarExchange, setShowStarExchange] = useState(false);
+  const isPremium = Boolean(user?.isPersonalPremium || user?.isGroupPremium);
 
   const handleOpenStarExchangeDialog = () => {
     setShowStarExchange(true);
@@ -33,15 +34,31 @@ export function UserDropdown({ user }: UserDropdownProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Avatar className="cursor-pointer">
-            {user.avatarUrl ? (
-              <AvatarImage src={user.avatarUrl} alt={user.username || "User"} />
+          {
+            isPremium ? (
+              <div className="p-[2px] rounded-full bg-gradient-to-tr from-blue-400 via-sky-500 to-indigo-500">
+                <Avatar className="cursor-pointer bg-white">
+                  {user.avatarUrl ? (
+                    <AvatarImage src={user.avatarUrl} alt={user.username || "User"} />
+                  ) : (
+                    <AvatarFallback>
+                      {user.username ? user.username.charAt(0).toUpperCase() : "U"}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </div>
             ) : (
-              <AvatarFallback>
-                {user.username ? user.username.charAt(0).toUpperCase() : "U"}
-              </AvatarFallback>
-            )}
-          </Avatar>
+              <Avatar className="cursor-pointer">
+                {user.avatarUrl ? (
+                  <AvatarImage src={user.avatarUrl} alt={user.username || "User"} />
+                ) : (
+                  <AvatarFallback>
+                    {user.username ? user.username.charAt(0).toUpperCase() : "U"}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+            )
+          }
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>
