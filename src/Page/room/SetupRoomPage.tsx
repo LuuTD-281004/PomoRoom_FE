@@ -9,7 +9,7 @@ import {
   stopPersonalRoom,
 } from "@/axios/room";
 import { RemovePersonalRoomModal } from "./components/RemovePersonalRoomModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import PlaylistModal from "./components/PlaylistModal";
 
 const FOCUS_OPTIONS = [1, 25, 50];
@@ -20,6 +20,7 @@ const SetupRoomPage = () => {
   const { setup, setSetup } = useRoomSetup();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation() as any;
 
   const [showRemoveOldRoom, setShowRemoveOldRoom] = useState(false);
   const [pendingStart, setPendingStart] = useState(false);
@@ -70,6 +71,12 @@ const SetupRoomPage = () => {
   useEffect(() => {
     fetchCurrentRoom();
   }, []);
+
+  useEffect(() => {
+    if (location?.state?.openJoinRooms) {
+      setShowJoinModal(true);
+    }
+  }, [location?.state]);
 
   // -------------------------------
   // Start Private Room
