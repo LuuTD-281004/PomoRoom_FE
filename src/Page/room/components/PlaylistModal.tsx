@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import Modal from "@/Components/Modal";
 import { useTranslation } from "react-i18next";
 import { PlayIcon, PauseIcon, X } from "lucide-react";
@@ -275,6 +275,16 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
   const isYoutubeSelected = selectedType === "youtube" && isYoutubeValid;
   const isFileSelected = selectedType === "file" && selectedTrack;
 
+  const visibleBackgrounds = useMemo(() => {
+    const hasPersonalPremium = !!authenticatedUser?.isPersonalPremium;
+    return backgrounds.filter((bg) => {
+      const starZero = (bg.stars ?? 0) === 0;
+      if (!starZero) return false; // hide items requiring stars
+      if (bg.isPremium) return hasPersonalPremium; // only for premium users
+      return true; // free zero-star items
+    });
+  }, [backgrounds, authenticatedUser?.isPersonalPremium]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("playlistModal.title")}>
       <div className="w-[980px] max-w-full">
@@ -421,50 +431,32 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                {backgrounds.map((bg) => {
-                  const isLocked =
-                    bg.isPremium && !authenticatedUser?.isPersonalPremium;
-                  const showPremiumEffect =
-                    bg.isPremium && !authenticatedUser?.isPersonalPremium;
-                  return (
-                    <button
-                      key={bg.id}
-                      className={`bg-white/5 rounded-lg w-full h-32 p-2 flex flex-col items-center gap-2 hover:scale-[1.02] transition border-2 ${
-                        selectedBg === bg.id
-                          ? "border-blue-400"
-                          : "border-transparent"
-                      } ${isLocked ? "opacity-60 cursor-not-allowed" : ""}`}
-                      onClick={() =>
-                        !isLocked
-                          ? setSelectedBg(selectedBg === bg.id ? null : bg.id)
-                          : undefined
-                      }
-                      disabled={isLocked}
-                    >
-                      <div className="w-full h-full rounded-md flex items-center justify-center overflow-hidden relative">
-                        <img
-                          src={bg.filePath}
-                          alt={bg.name || "background"}
-                          className={`object-cover w-full h-full rounded-md transition-all duration-300 ${
-                            showPremiumEffect ? "blur-[2px] scale-105" : ""
-                          }`}
-                        />
-                        {showPremiumEffect && (
-                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 text-white font-semibold text-sm rounded-md">
-                            <span className="mt-1 text-xs text-yellow-300 font-semibold">
-                              🔒
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      {showPremiumEffect && (
-                        <span className="text-xs text-yellow-300 font-semibold mt-1">
-                          {t("premium")}
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
+                {visibleBackgrounds.map((bg) => (
+                  <button
+                    key={bg.id}
+                    className={`bg-white/5 rounded-lg w-full h-32 p-2 flex flex-col items-center gap-2 hover:scale-[1.02] transition border-2 ${
+                      selectedBg === bg.id
+                        ? "border-blue-400"
+                        : "border-transparent"
+                    }`}
+                    onClick={() =>
+                      setSelectedBg(selectedBg === bg.id ? null : bg.id)
+                    }
+                  >
+                    <div className="w-full h-full rounded-md flex items-center justify-center overflow-hidden relative">
+                      <img
+                        src={bg.filePath}
+                        alt={bg.name || "background"}
+                        className="object-cover w-full h-full rounded-md transition-all duration-300"
+                      />
+                    </div>
+                    {bg.isPremium && (
+                      <span className="text-xs text-yellow-300 font-semibold mt-1">
+                        {t("premium")}
+                      </span>
+                    )}
+                  </button>
+                ))}
               </div>
             </div>
 

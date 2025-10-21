@@ -41,11 +41,18 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
   }, []);
 
   const renderItems = () => {
-    // Chỉ với tab avatar: ẩn các avatar có stars = 0
-    const items =
-      tab === "avatar"
-        ? avatars.filter((a) => a.isPremium || (a.stars ?? 0) > 0)
-        : backgrounds;
+    const isPersonalPremium = !!authenticatedUser?.isPersonalPremium;
+
+    // Nếu không premium: (isPremium && stars === 0) OR (stars > 0)
+    // Nếu premium: chỉ hiển thị items có stars > 0
+    const filterFn = (item: File) => {
+      const stars = item.stars ?? 0;
+      if (isPersonalPremium) return stars > 0;
+      return (item.isPremium && stars === 0) || stars > 0;
+    };
+
+    const source = tab === "avatar" ? avatars : backgrounds;
+    const items = source.filter(filterFn);
 
     if (!items?.length)
       return (
@@ -82,20 +89,9 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
         {/* Price */}
         <div className="mt-auto relative w-full flex justify-center">
-          <div
-            className={`flex items-center gap-2 bg-white/90 px-3 py-1 rounded-full text-[#0C1A57] font-semibold transition-all duration-300 ${
-              item.isPremium ? "blur-sm" : ""
-            }`}
-          >
+          <div className="flex items-center gap-2 bg-white/90 px-3 py-1 rounded-full text-[#0C1A57] font-semibold">
             ⭐ <span>{item.stars}</span>
           </div>
-
-          {/* Optional overlay to emphasize it's locked */}
-          {item.isPremium && (
-            <div className="absolute inset-0 flex items-center justify-center text-xs text-white bg-black/20 rounded-full">
-              🔒
-            </div>
-          )}
         </div>
       </div>
     ));
