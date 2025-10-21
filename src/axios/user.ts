@@ -19,7 +19,7 @@ export async function updateUserProfile(payload: {
   newPassword?: string;
   avatarUrl?: string;
 }) {
-  const response = await http.put("/users/user-profile", payload);
+  const response = await http.patch("/users/user-profile", payload);
   return response.data;
 }
 
