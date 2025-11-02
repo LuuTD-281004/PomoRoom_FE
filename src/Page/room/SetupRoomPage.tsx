@@ -12,9 +12,9 @@ import { RemovePersonalRoomModal } from "./components/RemovePersonalRoomModal";
 import { useNavigate, useLocation } from "react-router-dom";
 import PlaylistModal from "./components/PlaylistModal";
 
-const FOCUS_OPTIONS = [1, 25, 50];
-const SHORT_BREAK_OPTIONS = [1, 3, 5, 10];
-const LONG_BREAK_OPTIONS = [1, 10, 15, 20];
+const FOCUS_OPTIONS = [25];
+const SHORT_BREAK_OPTIONS = [5];
+const LONG_BREAK_OPTIONS = [10];
 
 const SetupRoomPage = () => {
   const { setup, setSetup } = useRoomSetup();
