@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { PlayIcon, PauseIcon, X } from "lucide-react";
 import { getAllBackgrounds } from "@/axios/files";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -95,7 +96,8 @@ const extractYouTubeID = (url: string) => {
 
 const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
   const { t } = useTranslation();
-  const { authenticatedUser } = useAuth(); // Thêm dòng này
+  const { authenticatedUser } = useAuth();
+  const navigate = useNavigate();
   const [previewTrack, setPreviewTrack] = useState<string | null>(null);
   const [audioProgress, setAudioProgress] = useState(0);
   const [audioDuration, setAudioDuration] = useState(0);
@@ -275,15 +277,14 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
   const isYoutubeSelected = selectedType === "youtube" && isYoutubeValid;
   const isFileSelected = selectedType === "file" && selectedTrack;
 
+  // Hiển thị tất cả background stars=0 (kể cả premium và không premium)
+  // Premium backgrounds sẽ được hiển thị để user biết cần mua premium
   const visibleBackgrounds = useMemo(() => {
-    const hasPremium = !!(authenticatedUser?.isPersonalPremium || authenticatedUser?.isGroupPremium);
     return backgrounds.filter((bg) => {
       const starZero = (bg.stars ?? 0) === 0;
-      if (!starZero) return false; // hide items requiring stars
-      if (bg.isPremium) return hasPremium; // only for premium users (personal or group)
-      return true; // free zero-star items
+      return starZero; // Hiển thị tất cả background stars=0
     });
-  }, [backgrounds, authenticatedUser?.isPersonalPremium, authenticatedUser?.isGroupPremium]);
+  }, [backgrounds]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("playlistModal.title")}>
@@ -431,32 +432,51 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                {visibleBackgrounds.map((bg) => (
-                  <button
-                    key={bg.id}
-                    className={`bg-white/5 rounded-lg w-full h-32 p-2 flex flex-col items-center gap-2 hover:scale-[1.02] transition border-2 ${
-                      selectedBg === bg.id
-                        ? "border-blue-400"
-                        : "border-transparent"
-                    }`}
-                    onClick={() =>
-                      setSelectedBg(selectedBg === bg.id ? null : bg.id)
-                    }
-                  >
-                    <div className="w-full h-full rounded-md flex items-center justify-center overflow-hidden relative">
-                      <img
-                        src={bg.filePath}
-                        alt={bg.name || "background"}
-                        className="object-cover w-full h-full rounded-md transition-all duration-300"
-                      />
-                    </div>
-                    {bg.isPremium && (
-                      <span className="text-xs text-yellow-300 font-semibold mt-1">
-                        {t("premium")}
-                      </span>
-                    )}
-                  </button>
-                ))}
+                {visibleBackgrounds.map((bg) => {
+                  const hasPremium = !!(authenticatedUser?.isPersonalPremium || authenticatedUser?.isGroupPremium);
+                  const isPremiumItem = bg.isPremium;
+                  const canSelect = !isPremiumItem || hasPremium;
+
+                  return (
+                    <button
+                      key={bg.id}
+                      className={`bg-white/5 rounded-lg w-full h-32 p-2 flex flex-col items-center gap-2 hover:scale-[1.02] transition border-2 ${
+                        selectedBg === bg.id
+                          ? "border-blue-400"
+                          : "border-transparent"
+                      } ${!canSelect ? "opacity-75 cursor-pointer" : ""}`}
+                      onClick={() => {
+                        if (!canSelect) {
+                          // Nếu là premium và user chưa có premium, navigate to /packages
+                          onClose();
+                          navigate("/packages");
+                        } else {
+                          setSelectedBg(selectedBg === bg.id ? null : bg.id);
+                        }
+                      }}
+                    >
+                      <div className="w-full h-full rounded-md flex items-center justify-center overflow-hidden relative">
+                        <img
+                          src={bg.filePath}
+                          alt={bg.name || "background"}
+                          className={`object-cover w-full h-full rounded-md transition-all duration-300 ${
+                            !canSelect ? "blur-[2px]" : ""
+                          }`}
+                        />
+                        {!canSelect && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/40 text-white font-semibold text-xs">
+                            {t("premium")}
+                          </div>
+                        )}
+                      </div>
+                      {bg.isPremium && (
+                        <span className="text-xs text-yellow-300 font-semibold mt-1">
+                          {t("premium")}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

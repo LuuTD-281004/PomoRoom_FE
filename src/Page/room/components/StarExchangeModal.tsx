@@ -84,6 +84,13 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const handleBuy = async (file: File) => {
       if (loading) return; // Prevent double purchases
       
+      // Nếu là premium item (isPremium && stars === 0) và user chưa có premium, navigate to /packages
+      if (file.isPremium && (file.stars ?? 0) === 0 && !hasAnyPremium) {
+        onClose();
+        navigate("/packages");
+        return;
+      }
+      
       try {
         setLoading(file.id);
         const userStars = authenticatedUser?.userStar ?? 0;
