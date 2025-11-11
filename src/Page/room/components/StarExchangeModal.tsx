@@ -47,13 +47,28 @@ export const StarExchangeModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const renderItems = () => {
     const isPersonalPremium = !!authenticatedUser?.isPersonalPremium;
+    const isGroupPremium = !!authenticatedUser?.isGroupPremium;
+    const hasAnyPremium = isPersonalPremium || isGroupPremium;
 
-    // Nếu không premium: (isPremium && stars === 0) OR (stars > 0)
-    // Nếu premium: chỉ hiển thị items có stars > 0
+    // Logic filter:
+    // - Items có thể mua bằng sao (stars > 0) luôn hiển thị
+    // - Items premium miễn phí (isPremium && stars === 0): 
+    //   + Nếu user có premium (personal hoặc group): KHÔNG hiển thị (vì đã có sẵn)
+    //   + Nếu user không có premium: hiển thị để biết cần mua premium
+    // - Items free (không premium, stars === 0) không hiển thị trong StarExchange
     const filterFn = (item: File) => {
       const stars = item.stars ?? 0;
-      if (isPersonalPremium) return stars > 0;
-      return (item.isPremium && stars === 0) || stars > 0;
+      
+      // Items có thể mua bằng sao luôn hiển thị
+      if (stars > 0) return true;
+      
+      // Items premium miễn phí: chỉ hiển thị nếu user chưa có premium
+      if (item.isPremium && stars === 0) {
+        return !hasAnyPremium;
+      }
+      
+      // Items free (không premium, stars === 0) không hiển thị trong StarExchange
+      return false;
     };
 
     const source = tab === "avatar" ? avatars : backgrounds;

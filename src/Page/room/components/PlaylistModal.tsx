@@ -276,14 +276,14 @@ const PlaylistModal: React.FC<Props> = ({ isOpen, onClose, onTrackSelect }) => {
   const isFileSelected = selectedType === "file" && selectedTrack;
 
   const visibleBackgrounds = useMemo(() => {
-    const hasPersonalPremium = !!authenticatedUser?.isPersonalPremium;
+    const hasPremium = !!(authenticatedUser?.isPersonalPremium || authenticatedUser?.isGroupPremium);
     return backgrounds.filter((bg) => {
       const starZero = (bg.stars ?? 0) === 0;
       if (!starZero) return false; // hide items requiring stars
-      if (bg.isPremium) return hasPersonalPremium; // only for premium users
+      if (bg.isPremium) return hasPremium; // only for premium users (personal or group)
       return true; // free zero-star items
     });
-  }, [backgrounds, authenticatedUser?.isPersonalPremium]);
+  }, [backgrounds, authenticatedUser?.isPersonalPremium, authenticatedUser?.isGroupPremium]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={t("playlistModal.title")}>

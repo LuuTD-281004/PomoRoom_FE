@@ -33,16 +33,16 @@ const AvatarPickerModal: React.FC<Props> = ({
 
   // Lọc:
   // - Không premium: chỉ avatar stars=0 và isPremium=false
-  // - Có personal premium: avatar stars=0 (kể cả isPremium=true/false)
+  // - Có premium (personal hoặc group): tất cả avatar stars=0 (kể cả isPremium=true/false)
   const visibleAvatars = useMemo(() => {
-    const hasPremium = !!authenticatedUser?.isPersonalPremium;
+    const hasPremium = !!(authenticatedUser?.isPersonalPremium || authenticatedUser?.isGroupPremium);
     return avatars.filter((a) => {
       const zero = (a.stars ?? 0) === 0;
       if (!zero) return false;
       if (a.isPremium) return hasPremium;
       return true;
     });
-  }, [avatars, authenticatedUser?.isPersonalPremium]);
+  }, [avatars, authenticatedUser?.isPersonalPremium, authenticatedUser?.isGroupPremium]);
 
   const selected = useMemo(
     () => visibleAvatars.find((a) => a.id === selectedId) || null,
