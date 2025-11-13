@@ -10,6 +10,7 @@ import {
 } from "@/axios/room";
 import type { PersonalRoom } from "@/types/room";
 import { RoomStatus } from "@/enum/room-status";
+import { useAuth } from "@/contexts/AuthContext";
 
 declare global {
   interface Window {
@@ -27,6 +28,7 @@ const BellSound =
 
 const PrivateRoomPage = () => {
   const { t } = useTranslation();
+  const { refreshUser } = useAuth();
   const [remaining, setRemaining] = useState(0);
   const [running, setRunning] = useState(false);
   const [showCancel, setShowCancel] = useState(false);
@@ -317,6 +319,7 @@ const PrivateRoomPage = () => {
 
         // 2. ĐIỀU KHIỂN NHẠC
         // Chuyển từ WORKING -> BREAK: TỰ ĐỘNG DỪNG NHẠC
+        // Đây là lúc hoàn thành 25 phút pomodoro, BE có thể đã tính sao
         if (
           currentRoomStatus === RoomStatus.ON_WORKING &&
           (nextRoomStatus === RoomStatus.ON_REST ||
@@ -324,6 +327,14 @@ const PrivateRoomPage = () => {
         ) {
           if (!isUserPaused.current) {
             musicControl("pause");
+          }
+          // Refresh user info để cập nhật số sao sau khi hoàn thành pomodoro
+          if (refreshUser) {
+            try {
+              await refreshUser();
+            } catch (err) {
+              console.error("Failed to refresh user info after completing pomodoro:", err);
+            }
           }
         }
         // Chuyển từ BREAK -> WORKING: TỰ ĐỘNG TIẾP TỤC

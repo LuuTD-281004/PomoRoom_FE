@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPusherClient } from "@/lib/pusher";
 import { useAuth } from "@/contexts/AuthContext";
-import { getGroupRoomById, leaveRoom } from "@/axios/room";
+import { getGroupRoomById, leaveRoom, updateRoomStatus } from "@/axios/room";
 import { RoomStatus } from "@/enum/room-status";
 import type { GroupRoom } from "@/types/room";
 import { PlayIcon, PauseIcon } from "lucide-react";
@@ -24,7 +24,7 @@ let youtubePlayer: any = null;
 export default function GroupRoomPage() {
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const { authenticatedUser, accessToken } = useAuth();
+  const { authenticatedUser, accessToken, refreshUser } = useAuth();
 
   const [members, setMembers] = useState<any[]>([]);
   const [status, setStatus] = useState<number>(RoomStatus.ON_WORKING);
@@ -47,6 +47,7 @@ export default function GroupRoomPage() {
   const prevRunningRef = useRef<boolean | null>(null);
   const privateChannelRef = useRef<any>(null);
   const presenceChannelRef = useRef<any>(null);
+  const statusRef = useRef<number>(RoomStatus.ON_WORKING);
 
   // Bell sound for transitions
   const BellSound =
@@ -109,9 +110,94 @@ export default function GroupRoomPage() {
 
     setRemaining(remainingTime);
     setStatus(room.roomStatus);
+    statusRef.current = room.roomStatus;
     setCycle(room.loopCount || 1);
     setRunning(remainingTime > 0);
   };
+
+  // ================= UPDATE GROUP ROOM STATUS =================
+  // Tương tự như Personal Room, gọi API update room status khi timer kết thúc
+  const updateGroupRoom = useCallback(async () => {
+    try {
+      const response = await updateRoomStatus();
+      
+      if (response.status === 200 && response.data?.result) {
+        const nextRoomStatus = response.data.result.roomStatus as RoomStatus;
+        const prevStatus = statusRef.current;
+        
+        // Phát chuông báo
+        if (BellSound) {
+          BellSound.pause();
+          BellSound.currentTime = 0;
+          BellSound.play().catch((err) =>
+            console.warn("Failed to play bell sound:", err)
+          );
+        }
+        
+        // ĐIỀU KHIỂN NHẠC
+        // Chuyển từ WORKING -> BREAK: TỰ ĐỘNG DỪNG NHẠC
+        if (
+          prevStatus === RoomStatus.ON_WORKING &&
+          (nextRoomStatus === RoomStatus.ON_REST ||
+            nextRoomStatus === RoomStatus.ON_LONG_REST)
+        ) {
+          if (!isUserPaused.current) {
+            if (trackType === "youtube" && youtubePlayer) {
+              try {
+                youtubePlayer.pauseVideo();
+              } catch {}
+              setIsPlaying(false);
+            } else {
+              pauseAudio();
+            }
+          }
+          // Refresh user info để cập nhật số sao sau khi hoàn thành pomodoro
+          if (refreshUser) {
+            try {
+              await refreshUser();
+              console.log("Refreshed user info after completing pomodoro in group room");
+            } catch (err) {
+              console.error("Failed to refresh user info after completing pomodoro:", err);
+            }
+          }
+        }
+        // Chuyển từ BREAK -> WORKING: TỰ ĐỘNG TIẾP TỤC NHẠC
+        else if (
+          (prevStatus === RoomStatus.ON_REST ||
+            prevStatus === RoomStatus.ON_LONG_REST) &&
+          nextRoomStatus === RoomStatus.ON_WORKING
+        ) {
+          if (!isUserPaused.current) {
+            // Tính youtubeId trực tiếp từ trackType và trackFile
+            const currentYoutubeId = trackType === "youtube" && trackFile ? trackFile : null;
+            if (trackType === "youtube" && currentYoutubeId && youtubePlayer) {
+              try {
+                youtubePlayer.playVideo();
+                setIsPlaying(true);
+              } catch {}
+            } else {
+              const urlToPlay = trackFile && trackType === "file" ? trackFile : currentTrack;
+              // Nếu audio instance đã tồn tại, resume thay vì tạo mới
+              if (audioRef.current) {
+                audioRef.current
+                  .play()
+                  .then(() => setIsPlaying(true))
+                  .catch(() => {});
+              } else if (urlToPlay) {
+                playAudio(urlToPlay);
+              }
+            }
+          }
+        }
+        
+        // Cập nhật status
+        setStatus(nextRoomStatus);
+        statusRef.current = nextRoomStatus;
+      }
+    } catch (err) {
+      console.error("Error updating group room status:", err);
+    }
+  }, [refreshUser, trackType, trackFile, currentTrack]);
 
   // ================= TIMER INTERVAL =================
   useEffect(() => {
@@ -123,6 +209,11 @@ export default function GroupRoomPage() {
         if (r <= 1) {
           clearInterval(intervalRef.current!);
           intervalRef.current = null;
+          
+          // Khi timer kết thúc, gọi API update room status (giống Personal Room)
+          // Điều này sẽ trigger BE tính sao cho group room
+          setTimeout(() => updateGroupRoom(), 200);
+          
           return 0;
         }
         return r - 1;
@@ -132,7 +223,7 @@ export default function GroupRoomPage() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [running, remaining]);
+  }, [running, remaining, updateGroupRoom]);
 
   // ================= PUSHER SETUP =================
   useEffect(() => {
@@ -194,11 +285,31 @@ export default function GroupRoomPage() {
       setMembers((prev) => prev.filter((m) => m.id !== member.id));
     });
 
-    channel.bind("room_status_changed", (data: any) => {
-      setStatus(parseInt(data.status));
+    channel.bind("room_status_changed", async (data: any) => {
+      const newStatus = parseInt(data.status);
+      const prevStatus = statusRef.current;
+      
+      setStatus(newStatus);
+      statusRef.current = newStatus;
       setCycle(data.cycle);
       setRemaining(parseInt(data.remaining) / 1000);
       setRunning(true);
+      
+      // Nếu chuyển từ ON_WORKING sang ON_REST hoặc ON_LONG_REST
+      // Đây là lúc hoàn thành 25 phút pomodoro, BE có thể đã tính sao
+      if (
+        prevStatus === RoomStatus.ON_WORKING &&
+        (newStatus === RoomStatus.ON_REST || newStatus === RoomStatus.ON_LONG_REST)
+      ) {
+        // Refresh user info để cập nhật số sao sau khi hoàn thành pomodoro
+        if (refreshUser) {
+          try {
+            await refreshUser();
+          } catch (err) {
+            console.error("Failed to refresh user info after completing pomodoro:", err);
+          }
+        }
+      }
     });
 
     // Receive media config from room creator/any member who has configuration
@@ -237,11 +348,26 @@ export default function GroupRoomPage() {
     });
 
     return () => {
-      pusherClient.unsubscribe(`private-room-${roomId}`);
-      pusherClient.unsubscribe(`presence-room-${roomId}`);
-      pusherClient.disconnect();
+      try {
+        // Kiểm tra xem Pusher client còn active không trước khi cleanup
+        if (pusherClient && pusherClient.connection && pusherClient.connection.state !== 'disconnected') {
+          if (presenceChannelRef.current) {
+            pusherClient.unsubscribe(`presence-room-${roomId}`);
+          }
+          if (privateChannelRef.current) {
+            pusherClient.unsubscribe(`private-room-${roomId}`);
+          }
+          // Chỉ disconnect nếu chưa disconnected
+          if (pusherClient.connection.state !== 'disconnected' && pusherClient.connection.state !== 'disconnecting') {
+            pusherClient.disconnect();
+          }
+        }
+      } catch (err) {
+        // Ignore errors during cleanup
+        console.warn("Error during Pusher cleanup:", err);
+      }
     };
-  }, [roomId, authenticatedUser]);
+  }, [roomId, authenticatedUser, accessToken]);
 
   // ================= INIT ROOM =================
   useEffect(() => {
