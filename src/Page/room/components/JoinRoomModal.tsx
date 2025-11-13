@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import PlaylistModal from "@/Page/room/components/PlaylistModal";
 import defaultBackground from "@/assets/image/defaultBackground.png";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Props = {
   isOpen: boolean;
@@ -20,6 +21,7 @@ type Props = {
 export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
   const { t } = useTranslation();
   const { setup } = useRoomSetup();
+  const { refreshUser } = useAuth();
   const [rooms, setRooms] = useState<GroupRoom[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -85,6 +87,10 @@ export const JoinRoomModal = ({ isOpen, onClose }: Props) => {
 
       if (response.status === 200 && response.data) {
         const roomId = response.data.result.id;
+        // Refresh user info để cập nhật số sao (nếu BE tính sao khi join room)
+        if (refreshUser) {
+          await refreshUser();
+        }
         navigate(`/group-room/${roomId}`);
       } else if (response.status === 400) {
         toast.warning("You cannot join this room.");

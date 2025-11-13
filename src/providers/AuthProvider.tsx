@@ -17,6 +17,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setCurrentUser(user);
   };
 
+  const refreshUser = async () => {
+    try {
+      const user = await getUserInfo();
+      setCurrentUser(user);
+    } catch (error) {
+      console.error("Failed to refresh user info:", error);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -91,6 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         accessToken: accessTokenState,
         currentRoleUsing: currentRole,
         setCurrentRoleUsing: setCurrentRole,
+        refreshUser,
       }}
     >
       {children}

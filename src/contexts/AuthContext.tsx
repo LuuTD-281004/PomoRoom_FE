@@ -10,6 +10,7 @@ interface AuthContextType {
   accessToken: string | null;
   currentRoleUsing: string | null;
   setCurrentRoleUsing: any;
+  refreshUser?: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
